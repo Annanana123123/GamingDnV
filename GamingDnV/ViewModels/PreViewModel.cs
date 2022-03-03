@@ -16,10 +16,11 @@ namespace GamingDnV.ViewModels
     public class PreViewModel : ViewModelBase
     {
         #region Свойства
-        string PathHero = AppDomain.CurrentDomain.BaseDirectory + "/Images/Heros/";
-        string PathNPC = AppDomain.CurrentDomain.BaseDirectory + "/Images/NPC/";
-        string PathInterface = AppDomain.CurrentDomain.BaseDirectory + "/Images/Interface/";
+        string PathHero = AppDomain.CurrentDomain.BaseDirectory + "/Media/Heros/";
+        string PathNPC = AppDomain.CurrentDomain.BaseDirectory + "/Media/NPC/";
+        string PathInterface = AppDomain.CurrentDomain.BaseDirectory + "/Media/Interface/";
         #endregion
+
         #region Конструктор
 
         public PreViewModel()
@@ -352,7 +353,6 @@ namespace GamingDnV.ViewModels
         }
         #endregion
        
-
         #region Методы
         public void StartTimer()
         {

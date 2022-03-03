@@ -469,8 +469,8 @@ namespace GamingDnV
             }
         }
 
-        private RoomsModel _currentEvent;
-        public RoomsModel CurrentEvent
+        private EventsModel _currentEvent;
+        public EventsModel CurrentEvent
         {
             get { return _currentEvent; }
             set
@@ -1087,18 +1087,21 @@ namespace GamingDnV
             CurrEvent = TypeEven.Room;
             if (CurrentRoom.Sounds != "")
                 BackSEn = true;
-            int id = CurrentRoom.Id;
-            Events = new ObservableCollection<EventsModel>(ListEvent.Where(x => x.RoomId == id).ToList());
+
+            Events = new ObservableCollection<EventsModel>(ListEvent.Where(x => x.RoomId == CurrentRoom.Id).ToList());
         }
 
         public void CurrentE()
         {
-            BackSEn = false;
-            AtacSEn = false;
-            TrackSEn = false;
-            CurrEvent = TypeEven.Event;
-            if (CurrentEvent.Sounds != "")
-                BackSEn = true;
+            if (CurrentEvent != null)
+            {
+                BackSEn = false;
+                AtacSEn = false;
+                TrackSEn = false;
+                CurrEvent = TypeEven.Event;
+                if (!String.IsNullOrEmpty(CurrentEvent.Sounds))
+                    BackSEn = true;
+            }
         }
 
         public void ViewNPC()

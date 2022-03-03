@@ -1246,7 +1246,7 @@
                       GridLinesVisibility="all"
                       VerticalGridLinesBrush="#32323d"
                       RowEditEnding="GridNPC_RowEditEnding"
-                      SelectedItem="{Binding CurrentEvent, Mode=TwoWay}"
+                      SelectedItem="{Binding CurrentEvent}"
                       FontSize="20">
                 <DataGrid.Resources>
                     <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type DataGrid}">
