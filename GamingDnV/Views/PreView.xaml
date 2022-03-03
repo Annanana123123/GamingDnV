@@ -1,0 +1,254 @@
+﻿<Window x:Class="GamingDnV.Views.PreView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GamingDnV.Views"
+        mc:Ignorable="d"
+        Title="PreView" 
+        Left="0"
+        WindowState="Maximized"
+        Topmost="True"
+        Width="1024" Height="720" AllowsTransparency="True" WindowStyle="None">
+    <Window.Background>
+        <SolidColorBrush Opacity="0.0" Color="White"/>
+    </Window.Background>
+    <!--WindowStyle="None"-->
+    <Grid ShowGridLines="false">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Image Source="{Binding ImageView}"
+               Grid.Column="0"
+               Grid.Row="0"
+               Margin="50"
+               Visibility="{Binding VisibilityImageView}"/>
+        <!--<TextBox Text="{Binding Text}"
+                 Grid.Row="1"
+                 Width="100"
+                 Height="50"
+                 FontSize="20"
+                 VerticalContentAlignment="Center"
+                 HorizontalContentAlignment="Center"
+                 BorderBrush="#2A72E9"
+                 BorderThickness="3"
+                 Foreground="#2A72E9"
+                 Background="#12131A"
+                 Opacity="1"/>-->
+        <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Opacity="0.1"  Width="10" HorizontalAlignment="Stretch" Height="3"/>
+        <Grid Grid.Row="1" ShowGridLines="false">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid  ShowGridLines="false" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Visibility="{Binding LeftVisibility}">
+                <Image Source="{Binding L0}"/>
+                <Grid  ShowGridLines="false">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Image Grid.RowSpan="2" Margin="20 5 20 0" VerticalAlignment="Top" Source="{Binding AvaLeft}"/>
+                    <Image Grid.RowSpan="2" Margin="20 5 20 0" VerticalAlignment="Top" Visibility="{Binding VisibilityL}" Opacity="{Binding OpacityL}" Source="{Binding ScratchesL}"/>
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="23*"/>
+                            <RowDefinition Height="23*"/>
+                            <RowDefinition Height="27*"/>
+                            <RowDefinition Height="25*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="1" Margin="0,0.6,0.4,1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding NameLeft}"
+                                     TextWrapping="Wrap"
+                                     FontSize="20"
+                                     BorderThickness="0"
+                                     Foreground="#ffebbb"
+                                     Margin="0 0 12 0"
+                                     VerticalContentAlignment="Center"
+                                     Background="#00000000"
+                                     HorizontalContentAlignment="Center"
+                                     HorizontalAlignment="Center"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Image Source="{Binding L1}"/>
+                <Grid  ShowGridLines="false">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid  ShowGridLines="false" Grid.Column="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0" 
+                           Source="{Binding LShitImg}"
+                           Margin="5 0 5 0"/>
+                        <TextBox Grid.Row="0" 
+                             IsReadOnly="True" 
+                             Text="{Binding ShitL}"
+                             Visibility="{Binding ShitLVisibility}"
+                             Background="#00000000"
+                             FontSize="27"
+                             FontWeight="Bold"
+                             BorderThickness="0"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"/>
+                        <Image Grid.Row="1" 
+                               Margin="25 5 25 0" 
+                               Source="{Binding H}"/>
+                        <TextBox Grid.Row="1" 
+                             IsReadOnly="True"
+                             Text="{Binding HealthL}"
+                             Visibility="{Binding HealthLVisibility}"
+                             Background="#00000000"
+                             FontSize="27"
+                             Foreground="White"
+                             FontWeight="Bold"
+                             BorderThickness="0"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid  ShowGridLines="false" Grid.Column="3" Visibility="{Binding RightVisibility}">
+                <Image Source="{Binding L0}"/>
+                <Grid  ShowGridLines="false">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Image Grid.RowSpan="2" Margin="20 5 20 0" VerticalAlignment="Top" Source="{Binding AvaRight}"/>
+                    <Image Grid.RowSpan="2" Margin="20 5 20 0" VerticalAlignment="Top" Visibility="{Binding VisibilityR}" Opacity="{Binding OpacityR}" Source="{Binding ScratchesR}"/>
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="23*"/>
+                            <RowDefinition Height="23*"/>
+                            <RowDefinition Height="27*"/>
+                            <RowDefinition Height="25*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="1" Margin="0,0.6,0.4,1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="1"
+                                     BorderThickness="0"
+                                     Text="{Binding NameRight}"
+                                     TextWrapping="Wrap"
+                                     FontSize="20"
+                                     Foreground="#ffebbb"
+                                     VerticalContentAlignment="Center"
+                                     Margin="0 0 12 0"
+                                     Background="#00000000"
+                                     HorizontalContentAlignment="Center"
+                                     HorizontalAlignment="Center"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Image Source="{Binding L1}"/>
+                <Grid  ShowGridLines="false">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid  ShowGridLines="false" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0" Source="{Binding RShitImg}"
+                           Margin="5 0 5 0"/>
+                        <TextBox Grid.Row="0" 
+                             IsReadOnly="True" 
+                             Text="{Binding ShitR}"
+                             Visibility="{Binding ShitRVisibility}"
+                             Background="#00000000"
+                             FontSize="27"
+                             FontWeight="Bold"
+                             BorderThickness="0"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"/>
+                        <!--<Image Grid.Row="1" 
+                               Margin="25 5 25 0" 
+                               Source="{Binding H}"/>
+                        <TextBox Grid.Row="1" 
+                             IsReadOnly="True"
+                             Text="{Binding HealthR}"
+                             Visibility="{Binding HealthRVisibility}"
+                             Background="#00000000"
+                             FontSize="27"
+                             Foreground="White"
+                             FontWeight="Bold"
+                             BorderThickness="0"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"/>-->
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid ShowGridLines="false" Grid.Column="2" Visibility="{Binding VersusVisibility}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Image Grid.Row="2" 
+                       VerticalAlignment="Center"
+                       Source="{Binding Cen}"/>
+                <TextBox Text="{Binding VersusCH}"
+                         Background="#00000000"
+                         BorderThickness="0"
+                         Grid.Row="2"
+                         FontSize="60"
+                         Foreground="#2e2e2e"
+                         FontFamily="DFMincho-SU"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Center"/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="10"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="X"
+                    Grid.Column="1"
+                    FontSize="20"
+                    Background="#FC595A"
+                    Foreground="White"
+                    Command="{Binding CloseWindow}"/>
+        </Grid>
+    </Grid>
+</Window>
