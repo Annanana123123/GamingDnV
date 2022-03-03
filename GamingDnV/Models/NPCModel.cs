@@ -11,6 +11,8 @@ namespace GamingDnV.Models
     {
         //ID
         public int Id { get; set; }
+        //Комната
+        public int RoomId { get; set; }
         //Имя героя
         public string Name { get; set; }
         //Примечание
@@ -68,8 +70,6 @@ namespace GamingDnV.Models
             }
         }
         //Музыка
-        public string BackSound { get; set; }
         public string AtacSound { get; set; }
-        public string TrackSound { get; set; }
     }
 }

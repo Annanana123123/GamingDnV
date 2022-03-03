@@ -73,7 +73,7 @@ namespace GamingDnV
             NPCStep = new RelayCommand(() => EditStep());
             ActionBtn = new RelayCommand(() => CalcAction());
             CleanActionBtn = new RelayCommand(() => CleanAct());
-            ViewInfo = new RelayCommand(() => VisibleInfo());
+            ViewInfo = new RelayCommand(() => VisibleInfo(CurrEvent));
             CloseInfoBtn = new RelayCommand(() => NoVisibleInfo());
             ImagBtn1 = new RelayCommand(() => ShowImag(0));
             ImagBtn2 = new RelayCommand(() => ShowImag(1));
@@ -93,7 +93,6 @@ namespace GamingDnV
             BackSEn = false;
             AtacSEn = false;
             TrackSEn = false;
-            Health = PathInterface + "Hard.png";
     }
 
         #endregion
@@ -589,6 +588,7 @@ namespace GamingDnV
 
         string PathHero = "";
         string PathNPC = "";
+        string PathImag = "";
         string PathInterface = "";
         string PathMedia = "";
 
@@ -598,11 +598,12 @@ namespace GamingDnV
         int temp = -1;
 
         ObservableCollection<EventsModel> ListEvent = new ObservableCollection<EventsModel>();
+        ObservableCollection<NPCModel> ListNpc = new ObservableCollection<NPCModel>();
 
         #endregion
 
         #region Методы
-    
+
         public void LoadHystory(int n)
         {
             //if (SelectItem is null)
@@ -614,11 +615,13 @@ namespace GamingDnV
                 VisibilityLoad = Visibility.Hidden;
                 PathHero = AppDomain.CurrentDomain.BaseDirectory + "Media\\Heros\\";
                 PathNPC = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\NPC\\";
+                PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\Images\\";
                 PathInterface = AppDomain.CurrentDomain.BaseDirectory + "Media\\Interface\\";
                 PathMedia = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\Sounds\\";
-                
-                Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE  HistoryId = " + n + " ORDER BY tRooms.Order;");
+            Health = PathInterface + "Hard.png";
+            Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE  HistoryId = " + n + " ORDER BY tRooms.Order;");
             ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
+            ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Item, Abilities, Ulta, History, Imag, AtacSound, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
             //NPCTable = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, BackSound, AtacSound, TrackSound FROM tNPC Order by OrderBy;");
             HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, UserName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tUsers WHERE HistoryId =" + n);
             //}
@@ -655,14 +658,8 @@ namespace GamingDnV
                     case TypeEven.NPC:
                         switch (type)
                         {
-                            case TypeSound.Back:
-                                Sound += CurrentNPC.BackSound;
-                                break;
                             case TypeSound.Atac:
                                 Sound += CurrentNPC.AtacSound;
-                                break;
-                            case TypeSound.Track:
-                                Sound += CurrentNPC.TrackSound;
                                 break;
                         }
                         break;
@@ -689,43 +686,58 @@ namespace GamingDnV
             //PreVeiwWindow.NoShowImag();
         }
 
-        public void VisibleInfo()
+        public void VisibleInfo(TypeEven eventT)
         {
             ClearImages();
             arr = null;
-            string s = CurrentNPC.Imag;
+            string s = "";
+            switch (eventT)
+            {
+                case TypeEven.Event:
+                    s = CurrentEvent.Images;
+                    HistoryText = CurrentEvent.TextEvent;
+                    break;
+                case TypeEven.NPC:
+                    s = CurrentNPC.Imag;
+                    HistoryText = CurrentNPC.History;
+                    break;
+                case TypeEven.Room:
+                    s = CurrentRoom.Images;
+                    HistoryText = CurrentRoom.TextRoom;
+                    break;
+            }
             arr = s.Split(';');
             for (int i = 0; i < arr.Length; i++)
             {
                 switch(i)
                 {
                     case 0:
-                        Imag1 = PathNPC + arr[i];
+                        Imag1 = PathImag + arr[i];
                         EnBtn1 = true;
                         break;
                     case 1:
-                        Imag2 = PathNPC + arr[i];
+                        Imag2 = PathImag + arr[i];
                         EnBtn2 = true;
                         break;
                     case 2:
-                        Imag3 = PathNPC + arr[i];
+                        Imag3 = PathImag + arr[i];
                         EnBtn3 = true;
                         break;
                     case 3:
-                        Imag4 = PathNPC + arr[i];
+                        Imag4 = PathImag + arr[i];
                         EnBtn4 = true;
                         break;
                     case 4:
-                        Imag5 = PathNPC + arr[i];
+                        Imag5 = PathImag + arr[i];
                         EnBtn5 = true;
                         break;
                     case 5:
-                        Imag6 = PathNPC + arr[i];
+                        Imag6 = PathImag + arr[i];
                         EnBtn6 = true;
                         break;
                 }
             }
-            HistoryText = CurrentNPC.History;
+            
             VisibilityInfo = Visibility.Visible;
         }
         public void ClearImages()
@@ -1087,8 +1099,8 @@ namespace GamingDnV
             CurrEvent = TypeEven.Room;
             if (CurrentRoom.Sounds != "")
                 BackSEn = true;
-
             Events = new ObservableCollection<EventsModel>(ListEvent.Where(x => x.RoomId == CurrentRoom.Id).ToList());
+            NPCTable = new ObservableCollection<NPCModel>(ListNpc.Where(x => x.RoomId == CurrentRoom.Id).ToList());
         }
 
         public void CurrentE()
@@ -1116,12 +1128,8 @@ namespace GamingDnV
                 ItemText = CurrentNPC.Item;
                 TollTipNPS = CurrentNPC.Notee;
                 ImageInfo = PathNPC + CurrentNPC.Imag;
-                if (CurrentNPC.BackSound != "")
-                    BackSEn = true;
                 if (CurrentNPC.AtacSound != "")
                     AtacSEn = true;
-                if (CurrentNPC.TrackSound != "")
-                    TrackSEn = true;
             };
         }
         public void ViewUser()

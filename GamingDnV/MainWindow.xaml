@@ -1275,8 +1275,9 @@
                     <DataGridTextColumn Header="Событие" Width="*" Binding="{Binding Name}"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <!--<DataGrid Grid.Row="2"
+            <DataGrid Grid.Row="2"
                       Grid.Column="1"
+                      Grid.ColumnSpan="3"
                       Background="#12131A"
                       x:Name="GridNPC"
                       ItemsSource="{Binding NPCTable, Mode=TwoWay}"
@@ -1327,7 +1328,7 @@
                     <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Charisma}" CellStyle="{StaticResource NameCellStyle}"/>
                     <DataGridTextColumn Header="AT" Width="35" Binding="{Binding Atac}" CellStyle="{StaticResource NameCellStyle}"/>
                 </DataGrid.Columns>
-            </DataGrid>-->
+            </DataGrid>
             <Grid Grid.Row="0"
                   Grid.Column="5"
                   Grid.RowSpan="3">

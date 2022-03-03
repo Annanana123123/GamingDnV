@@ -149,9 +149,8 @@ namespace GamingDnV.Services
                     Ulta = Convert.ToString(reader[15].ToString()),
                     History = Convert.ToString(reader[16].ToString()),
                     Imag = Convert.ToString(reader[17].ToString()),
-                    BackSound = Convert.ToString(reader[18].ToString()),
-                    AtacSound = Convert.ToString(reader[19].ToString()),
-                    TrackSound = Convert.ToString(reader[20].ToString())
+                    AtacSound = Convert.ToString(reader[18].ToString()),
+                    RoomId = Convert.ToInt32(reader[19].ToString())
                 });
             }
             myConnect.Close();
