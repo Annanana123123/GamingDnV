@@ -1649,12 +1649,12 @@
         </Grid>
 
 
-        <!--<Grid Grid.Row="0"
-              Grid.RowSpan="3"
-              Visibility="{Binding VisibilityLoad}">-->
         <Grid Grid.Row="0"
               Grid.RowSpan="3"
-              Visibility="Hidden">
+              Visibility="{Binding VisibilityLoad}">
+            <!--<Grid Grid.Row="0"
+              Grid.RowSpan="3"
+              Visibility="Hidden">-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="*"/>
@@ -1705,13 +1705,13 @@
                     IsEnabled="{Binding EnComboOk}"
                     Command="{Binding ComboOk}"/>
         </Grid>
-        <!--<Grid Grid.Row="0"
+        <Grid Grid.Row="0"
               Grid.RowSpan="3"
-              Visibility="{Binding VisibilityInfo}">-->
+              Visibility="{Binding VisibilityInfo}">
 
-            <Grid Grid.Row="0"
+            <!--<Grid Grid.Row="0"
               Grid.RowSpan="3"
-              Visibility="Hidden">
+              Visibility="Hidden">-->
                 <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>

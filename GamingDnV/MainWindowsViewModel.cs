@@ -606,25 +606,24 @@ namespace GamingDnV
 
         public void LoadHystory(int n)
         {
-            //if (SelectItem is null)
-            //{
-            //    MessageBox.Show("Выбери историю");
-            //}
-            //else
-            //{
+            if (SelectItem is null)
+            {
+                MessageBox.Show("Выбери историю");
+            }
+            else
+            {
                 VisibilityLoad = Visibility.Hidden;
                 PathHero = AppDomain.CurrentDomain.BaseDirectory + "Media\\Heros\\";
                 PathNPC = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\NPC\\";
                 PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\Images\\";
                 PathInterface = AppDomain.CurrentDomain.BaseDirectory + "Media\\Interface\\";
                 PathMedia = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\Sounds\\";
-            Health = PathInterface + "Hard.png";
-            Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE  HistoryId = " + n + " ORDER BY tRooms.Order;");
-            ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
-            ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Item, Abilities, Ulta, History, Imag, AtacSound, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
-            //NPCTable = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, BackSound, AtacSound, TrackSound FROM tNPC Order by OrderBy;");
-            HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, UserName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tUsers WHERE HistoryId =" + n);
-            //}
+                Health = PathInterface + "Hard.png";
+                Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE  HistoryId = " + n + " ORDER BY tRooms.Order;");
+                ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
+                ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Item, Abilities, Ulta, History, Imag, AtacSound, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
+                HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, UserName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tUsers WHERE HistoryId =" + n);
+            }
         }
 
         public string WhereIn()
@@ -963,60 +962,74 @@ namespace GamingDnV
 
         public void ResultCheckHealth()
         {
-            string sql = "";
-            string table = "";
-            int result = 0;
-            int id = 0;
-            if (NpcStep == false)
+            if (CurrentNPC != null && CurrentUser != null)
             {
-                //Ход Героя
-                id = CurrentNPC.Id;
-                result = CurrentNPC.Health - summa;
-                NPCTable.First(x => x.Id == CurrentNPC.Id).Health = result;
-                HP = result.ToString();
-                table = "tNPC";
-                PreVeiwWindow.CrashR();
+                string sql = "";
+                string table = "";
+                int result = 0;
+                int id = 0;
+                if (NpcStep == false)
+                {
+                    //Ход Героя
+                    id = CurrentNPC.Id;
+                    result = CurrentNPC.Health - summa;
+                    NPCTable.First(x => x.Id == CurrentNPC.Id).Health = result;
+                    HP = result.ToString();
+                    table = "tNPC";
+                    PreVeiwWindow.CrashR();
+                }
+                else
+                {
+                    //Ход NPC
+                    id = CurrentUser.Id;
+                    result = CurrentUser.Health - summa;
+                    HerosTable.First(x => x.Id == CurrentUser.Id).Health = result;
+                    table = "tUsers";
+                    PreVeiwWindow.CrashL();
+
+                }
+                PreVeiwWindow.EditHP(NpcStep, result);
+                sql = "UPDATE " + table + " SET Health = '" + result + "' WHERE Id = " + id;
+                UpdataBD.UpdataInDb(sql);
             }
             else
             {
-                //Ход NPC
-                id = CurrentUser.Id;
-                result = CurrentUser.Health - summa;
-                HerosTable.First(x => x.Id == CurrentUser.Id).Health = result;
-                table = "tUsers";
-                PreVeiwWindow.CrashL();
-
+                MessageBox.Show("Выбери соперника в таблице");
             }
-            PreVeiwWindow.EditHP(NpcStep, result);
-            sql = "UPDATE " + table + " SET Health = '"+ result + "' WHERE Id = " + id;
-            UpdataBD.UpdataInDb(sql);
         }
 
         public void ResultCheckDefence()
         {
-            if (NpcStep)
+            if (CurrentNPC != null && CurrentUser != null)
             {
-                //Ход NPC
-                if (CurrentUser.Defence - summa <= 0)
+                if (NpcStep)
                 {
-                    PreVeiwWindow.EditShit(NpcStep, 2);
+                    //Ход NPC
+                    if (CurrentUser.Defence - summa <= 0)
+                    {
+                        PreVeiwWindow.EditShit(NpcStep, 2);
+                    }
+                    else
+                    {
+                        PreVeiwWindow.EditShit(NpcStep, 1);
+                    }
                 }
                 else
                 {
-                    PreVeiwWindow.EditShit(NpcStep, 1);
+                    //Ход Героя
+                    if (CurrentNPC.Defence - summa <= 0)
+                    {
+                        PreVeiwWindow.EditShit(NpcStep, 2);
+                    }
+                    else
+                    {
+                        PreVeiwWindow.EditShit(NpcStep, 1);
+                    }
                 }
             }
             else
             {
-                //Ход Героя
-                if (CurrentNPC.Defence - summa <= 0)
-                {
-                    PreVeiwWindow.EditShit(NpcStep, 2);
-                }
-                else
-                {
-                    PreVeiwWindow.EditShit(NpcStep, 1);
-                }
+                MessageBox.Show("Выбери соперника в таблице");
             }
         }
 
@@ -1070,7 +1083,8 @@ namespace GamingDnV
             {
                 ShowWin = true;
                 VisibilityWin = true;
-                PreVeiwWindow.ShowWindowVS();
+                PreVeiwWindow.ShowWindowVS(SelectItem.Id);
+                //PreVeiwWindow.ShowWindowVS(1);
             }
         }
 
@@ -1096,6 +1110,10 @@ namespace GamingDnV
             BackSEn = false;
             AtacSEn = false;
             TrackSEn = false;
+            arr = null;
+            arr = CurrentRoom.Images.Split(';');
+            TextNPC = CurrentRoom.TextRoom;
+            ImageInfo = PathImag + arr[0];
             CurrEvent = TypeEven.Room;
             if (CurrentRoom.Sounds != "")
                 BackSEn = true;
@@ -1110,6 +1128,10 @@ namespace GamingDnV
                 BackSEn = false;
                 AtacSEn = false;
                 TrackSEn = false;
+                arr = null;
+                arr = CurrentEvent.Images.Split(';');
+                TextNPC = CurrentEvent.TextEvent;
+                ImageInfo = PathImag + arr[0];
                 CurrEvent = TypeEven.Event;
                 if (!String.IsNullOrEmpty(CurrentEvent.Sounds))
                     BackSEn = true;
@@ -1138,7 +1160,6 @@ namespace GamingDnV
             {
                 UserInfo = "Оружие:\r\n" + CurrentUser.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentUser.Equip + "\r\n\r\nИнвинтарь:\r\n" + CurrentUser.Item + "\r\n\r\nСпособности:\r\n" + CurrentUser.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentUser.Ulta + "\r\n\r\nОписание:\r\n" + CurrentUser.Description;
                 UserIcon = PathHero + CurrentUser.Imag;
-                //UserIcon = @"C:\Users\genii\source\repos\GamingDnV\GamingDnV\bin\Debug\Images\Heros\" + CurrentUser.Imag;
             }
         }
         public void ViewImagIn()

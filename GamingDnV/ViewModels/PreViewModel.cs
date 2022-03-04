@@ -16,15 +16,16 @@ namespace GamingDnV.ViewModels
     public class PreViewModel : ViewModelBase
     {
         #region Свойства
-        string PathHero = AppDomain.CurrentDomain.BaseDirectory + "/Media/Heros/";
-        string PathNPC = AppDomain.CurrentDomain.BaseDirectory + "/Media/NPC/";
-        string PathInterface = AppDomain.CurrentDomain.BaseDirectory + "/Media/Interface/";
+        string PathHero = "";
+        string PathNPC = "";
+        string PathInterface = "";
         #endregion
 
         #region Конструктор
 
         public PreViewModel()
         {
+            PathInterface = AppDomain.CurrentDomain.BaseDirectory + "/Media/Interface/";
             CloseWindow = new RelayCommand(() => Close());
             RightVisibility = Visibility.Hidden;
             LeftVisibility = Visibility.Hidden;
@@ -468,10 +469,13 @@ namespace GamingDnV.ViewModels
             VisibilityImageView = Visibility.Hidden;
         }
 
-        public void ShowWindowVS()
+        public void ShowWindowVS(int n)
         {
             pv = new PreView(this);
             pv.Show();
+            PathHero = AppDomain.CurrentDomain.BaseDirectory + "/Media/Heros/";
+            PathNPC = AppDomain.CurrentDomain.BaseDirectory + "/Media/Histotys_" + n + "/NPC/";
+            
             VersusVisibility = Visibility.Visible;
         }
         public void Close()
