@@ -18,6 +18,7 @@ namespace GamingDnV.ViewModels
         #region Свойства
         string PathHero = "";
         string PathNPC = "";
+        string PathImag = "";
         string PathInterface = "";
         #endregion
 
@@ -425,21 +426,34 @@ namespace GamingDnV.ViewModels
             VersusCH += text;
         }
 
-        public void LeftInBattleVeiw(string imag, string name, string _shit, string _health)
+        public void LeftInBattleVeiw(string imag, string name, string _shit, string _health, string person)
         {
-            AvaLeft = PathHero + imag;
+            if (person == "Hero")
+            {
+                AvaLeft = PathHero + imag;
+            }
+            else
+            {
+                AvaLeft = PathNPC + imag;
+            }
             NameLeft = name;
             ShitL = _shit;
             HealthL = _health;
-            //LeftVisibility = Visibility.Visible;
         }
-        public void RightInBattleVeiw(string imag, string name, string _shit, string _health)
+        public void RightInBattleVeiw(string imag, string name, string _shit, string _health, string person)
         {
-            AvaRight = PathNPC + imag;
+            if (person == "Hero")
+            {
+                AvaRight = PathHero + imag;
+            }
+            else
+            {
+                AvaRight = PathNPC + imag;
+            }
+            
             NameRight = name;
             ShitR = _shit;
             HealthR = _health;
-            //RightVisibility = Visibility.Visible;
         }
         public void EndBattle()
         {
@@ -449,8 +463,8 @@ namespace GamingDnV.ViewModels
         }
         public void Clien()
         {
-            LeftInBattleVeiw("", "", "", "");
-            RightInBattleVeiw("", "", "", "");
+            LeftInBattleVeiw("", "", "", "", "");
+            RightInBattleVeiw("", "", "", "", "");
         }
         public void StartBattle()
         {
@@ -460,7 +474,7 @@ namespace GamingDnV.ViewModels
         }
         public void ShowImag(string name)
         {
-            ImageView = PathNPC + name;
+            ImageView = PathImag + name;
             //ImageView = "../Images/NPC/" +name;
             VisibilityImageView = Visibility.Visible;
         }
@@ -473,8 +487,9 @@ namespace GamingDnV.ViewModels
         {
             pv = new PreView(this);
             pv.Show();
-            PathHero = AppDomain.CurrentDomain.BaseDirectory + "/Media/Heros/";
-            PathNPC = AppDomain.CurrentDomain.BaseDirectory + "/Media/Histotys_" + n + "/NPC/";
+            PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\Images\\";
+            PathHero = AppDomain.CurrentDomain.BaseDirectory + "Media\\Heros/";
+            PathNPC = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\NPC\\";
             
             VersusVisibility = Visibility.Visible;
         }

@@ -85,8 +85,14 @@ namespace GamingDnV
             AtacSound = new RelayCommand(() => PlayAndStop(TypeSound.Atac, CurrEvent));
             TrackSound = new RelayCommand(() => PlayAndStop(TypeSound.Track, CurrEvent));
             ComboOk = new RelayCommand(() => LoadHystory(SelectItem.Id));
+            CloseVersus = new RelayCommand(() => VisibilityVersus = Visibility.Hidden);
+            BtnL = new RelayCommand(() => CurrentV(1));
+            BtnR = new RelayCommand(() => CurrentV(2));
             VisibilityInfo = Visibility.Hidden;
             VisibilityLoad = Visibility.Visible;
+            VisibilityVersus = Visibility.Visible;
+            VR = Visibility.Hidden;
+            VL = Visibility.Visible;
             TextButton = "Ход Героя";
             ViewImagText = "Показать";
             ViewBattle = "Показать";
@@ -98,6 +104,8 @@ namespace GamingDnV
         #endregion
 
         #region Свойства
+
+        public bool versus = true;
 
         public PreViewModel PreVeiwWindow { get; set; }
 
@@ -126,6 +134,18 @@ namespace GamingDnV
                 _comboBoxItem = value;
 
                 RaisePropertyChanged(nameof(ComboBoxItem));
+            }
+        }
+
+        private string _textView;
+        public string TextView
+        {
+            get { return _textView; }
+            set
+            {
+                _textView = value;
+
+                RaisePropertyChanged(nameof(TextView));
             }
         }
 
@@ -183,6 +203,39 @@ namespace GamingDnV
             {
                 _tarckSEn = value;
                 RaisePropertyChanged(nameof(TrackSEn));
+            }
+        }
+
+        private Visibility _vR;
+        public Visibility VR
+        {
+            get { return _vR; }
+            set
+            {
+                _vR = value;
+                RaisePropertyChanged(nameof(VR));
+            }
+        }
+
+        private Visibility _vL;
+        public Visibility VL
+        {
+            get { return _vL; }
+            set
+            {
+                _vL = value;
+                RaisePropertyChanged(nameof(VL));
+            }
+        }
+
+        private Visibility _visibilityVersus;
+        public Visibility VisibilityVersus
+        {
+            get { return _visibilityVersus; }
+            set
+            {
+                _visibilityVersus = value;
+                RaisePropertyChanged(nameof(VisibilityVersus));
             }
         }
 
@@ -274,6 +327,18 @@ namespace GamingDnV
                 _events = value;
 
                 RaisePropertyChanged(nameof(Events));
+            }
+        }
+
+        private ObservableCollection<ActionModel> _versusTable;
+        public ObservableCollection<ActionModel> VersusTable
+        {
+            get { return _versusTable; }
+            set
+            {
+                _versusTable = value;
+
+                RaisePropertyChanged(nameof(VersusTable));
             }
         }
 
@@ -468,6 +533,16 @@ namespace GamingDnV
             }
         }
 
+        private ActionModel _currentVersus;
+        public ActionModel CurrentVersus
+        {
+            get { return _currentVersus; }
+            set
+            {
+                _currentVersus = value;
+            }
+        }
+
         private EventsModel _currentEvent;
         public EventsModel CurrentEvent
         {
@@ -599,6 +674,7 @@ namespace GamingDnV
 
         ObservableCollection<EventsModel> ListEvent = new ObservableCollection<EventsModel>();
         ObservableCollection<NPCModel> ListNpc = new ObservableCollection<NPCModel>();
+        ObservableCollection<ActionModel> Versus = new ObservableCollection<ActionModel>();
 
         #endregion
 
@@ -622,7 +698,7 @@ namespace GamingDnV
                 Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE  HistoryId = " + n + " ORDER BY tRooms.Order;");
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
                 ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Item, Abilities, Ulta, History, Imag, AtacSound, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
-                HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, UserName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tUsers WHERE HistoryId =" + n);
+                HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tHeros WHERE HistoryId =" + n);
             }
         }
 
@@ -653,6 +729,7 @@ namespace GamingDnV
                         Sound += CurrentRoom.Sounds;
                         break;
                     case TypeEven.Event:
+                        Sound += CurrentEvent.Sounds;
                         break;
                     case TypeEven.NPC:
                         switch (type)
@@ -761,6 +838,8 @@ namespace GamingDnV
 
         public void CleanAct()
         {
+            VersusTable = new ObservableCollection<ActionModel>();
+            Versus = new ObservableCollection<ActionModel>();
             foreach (var w in HerosTable)
             {
                 w.Atac = null;
@@ -779,73 +858,137 @@ namespace GamingDnV
         
         public void CalcAction()
         {
-            List<ActionModel> Act = new List<ActionModel>();
-            foreach (var e in HerosTable)
+            if (versus)
             {
-                if (e.Atac != null)
+                foreach (var e in HerosTable)
                 {
-                    Act.Add(new ActionModel()
+                    if (e.Atac != null)
                     {
-                        Id = e.Id,
-                        Action = Convert.ToInt32(e.Atac),
-                        Person = "Hero"
-                    });
-                }
-            }
-            foreach (var e in NPCTable)
-            {
-                if (e.Atac != null)
-                {
-                    Act.Add(new ActionModel()
-                    {
-                        Id = e.Id,
-                        Action = Convert.ToInt32(e.Atac),
-                        Person = "NPC"
-                    });
-                }
-            }
-            List<ActionModel> ActO = Act.OrderByDescending(x => x.Action).ToList();
-            int i = 0;
-            int a = -1;
-            int ie = 1;
-            bool f = true;
-            foreach (var w in ActO)
-            {
-                if (f)
-                {
-                    if (i != ActO.Count-1)
-                    {
-                        if (ActO[i].Action != ActO[i + 1].Action)
+                        Versus.Add(new ActionModel()
                         {
-                            ActO[i].Order = ie;
+                            Id = e.Id,
+                            Action = Convert.ToInt32(e.Atac),
+                            Person = "Hero",
+                            Name = e.HeroName,
+                            Notee = e.Notee,
+                            Defence = e.Defence,
+                            Health = e.Health,
+                            Power = e.Power,
+                            Dexterity = e.Dexterity,
+                            Endurance = e.Endurance,
+                            Wisdom = e.Wisdom,
+                            Intelligence = e.Intelligence,
+                            Charisma = e.Charisma,
+                            Item = e.Item,
+                            Abilities = e.Abilities,
+                            Ulta = e.Ulta,
+                            Imag = e.Imag,
+                            Arms = e.Arms,
+                            Equip = e.Equip,
+                            Passiv = e.Passiv,
+                            Description = e.Description
+                        });
+                    }
+                }
+                foreach (var e in NPCTable)
+                {
+                    if (e.Atac != null)
+                    {
+                        Versus.Add(new ActionModel()
+                        {
+                            Id = e.Id,
+                            Action = Convert.ToInt32(e.Atac),
+                            Person = "NPC",
+                            Name = e.Name,
+                            Notee = e.Notee,
+                            Defence = e.Defence,
+                            Health = e.Health,
+                            Power = e.Power,
+                            Dexterity = e.Dexterity,
+                            Endurance = e.Endurance,
+                            Wisdom = e.Wisdom,
+                            Intelligence = e.Intelligence,
+                            Charisma = e.Charisma,
+                            Item = e.Item,
+                            Abilities = e.Abilities,
+                            Ulta = e.Ulta,
+                            Imag = e.Imag,
+                        });
+                    }
+                }
+                Versus = new ObservableCollection<ActionModel>(Versus.OrderByDescending(x => x.Action).ToList());
+                int i = 0;
+                int a = -1;
+                int ie = 1;
+                bool f = true;
+                foreach (var w in Versus)
+                {
+                    if (f)
+                    {
+                        if (i != Versus.Count - 1)
+                        {
+                            if (Versus[i].Action != Versus[i + 1].Action)
+                            {
+                                Versus[i].Order = ie;
+                            }
+                            else
+                            {
+                                a = (i + 1) * (-1);
+                                Versus[i].Order = a;
+                                versus = false;
+                                f = false;
+                            }
                         }
                         else
                         {
-                            a = ( i + 1 ) * ( -1 );
-                            ActO[i].Order = a;
-                            f = false;
+                            Versus[i].Order = ie;
                         }
                     }
                     else
                     {
-                        ActO[i].Order = ie;
+                        Versus[i].Order = a;
+                        f = true;
+                    }
+                    i++;
+                    ie++;
+                }
+                foreach (var w in Versus.Where(x => x.Person == "Hero"))
+                {
+                    HerosTable.First(x => x.Id == w.Id).Atac = w.Order.ToString();
+                }
+                foreach (var w in Versus.Where(x => x.Person == "NPC"))
+                {
+                    NPCTable.First(x => x.Id == w.Id).Atac = w.Order.ToString();
+                }
+            }
+            else
+            {
+                foreach (var w in Versus)
+                {
+                    if (w.Order<0)
+                    {
+                        switch(w.Person)
+                        {
+                            case "Hero":
+                                Versus.First(x => x.Id == w.Id).Order = Convert.ToInt32(HerosTable.First(x => x.Id == w.Id).Atac);
+                                break;
+                            case "NPC":
+                                Versus.First(x => x.Id == w.Id).Order = Convert.ToInt32(NPCTable.First(x => x.Id == w.Id).Atac);
+                                break;
+                        }
+                       
                     }
                 }
-                else
-                {
-                    ActO[i].Order = a;
-                    f = true;
-                }
-                i++;
-                ie++;
+                versus = true;
             }
-            foreach (var w in Act.Where(x => x.Person == "Hero"))
+            if (versus)
             {
-                HerosTable.First(x => x.Id == w.Id).Atac = w.Order.ToString();
+                VersusTable = new ObservableCollection<ActionModel>(Versus.OrderByDescending(x => x.Action).ToList());
+                VisibilityVersus = Visibility.Visible;
             }
-            foreach (var w in Act.Where(x => x.Person == "NPC"))
+            else
             {
-                NPCTable.First(x => x.Id == w.Id).Atac = w.Order.ToString();
+                MessageBox.Show("Есть пересечения!");
             }
         }
 
@@ -958,6 +1101,7 @@ namespace GamingDnV
                     break;
             }
             PreVeiwWindow.ViewVersus(text);
+            TextView = text;
         }
 
         public void ResultCheckHealth()
@@ -984,7 +1128,7 @@ namespace GamingDnV
                     id = CurrentUser.Id;
                     result = CurrentUser.Health - summa;
                     HerosTable.First(x => x.Id == CurrentUser.Id).Health = result;
-                    table = "tUsers";
+                    table = "tHeros";
                     PreVeiwWindow.CrashL();
 
                 }
@@ -1041,6 +1185,8 @@ namespace GamingDnV
                 PreVeiwWindow.EditShit(0);
                 NpcStep = false;
                 ClianTextBoxVeiw();
+                VR = Visibility.Hidden;
+                VL = Visibility.Visible;
             }
             else
             {
@@ -1048,17 +1194,19 @@ namespace GamingDnV
                 PreVeiwWindow.EditShit(0);
                 NpcStep = true;
                 ClianTextBoxVeiw();
+                VR = Visibility.Visible;
+                VL = Visibility.Hidden;
             }
         }
 
         public void HeroInBattle()
         {
-            PreVeiwWindow.LeftInBattleVeiw(CurrentUser.Imag, CurrentUser.HeroName, CurrentUser.Defence.ToString(), CurrentUser.Health.ToString());
+            PreVeiwWindow.LeftInBattleVeiw(CurrentUser.Imag, CurrentUser.HeroName, CurrentUser.Defence.ToString(), CurrentUser.Health.ToString(), "Hero");
             PreVeiwWindow.EditShit(0);
         }
         public void NPCInBattle()
         {
-            PreVeiwWindow.RightInBattleVeiw(CurrentNPC.Imag, CurrentNPC.Name, CurrentNPC.Defence.ToString(), CurrentNPC.Health.ToString());
+            PreVeiwWindow.RightInBattleVeiw(CurrentNPC.Imag, CurrentNPC.Name, CurrentNPC.Defence.ToString(), CurrentNPC.Health.ToString(), "NPC");
             PreVeiwWindow.EditShit(0);
         }
         public void ShowWindowVS()
@@ -1098,11 +1246,26 @@ namespace GamingDnV
         {
             List<ComboBoxModel> Combo = ReadBD.ReadHistory("SELECT Id, Name FROM tHistotys;");
             ComboBoxItem = Combo;
-            LoadHystory(1);
+            //LoadHystory(1);
         }
         public void RunSql()
         {
             ReadBD.WriteBD(SqlText);
+        }
+
+        public void CurrentV(int n)
+        {
+            switch (n)
+            {
+                case 1:
+                    PreVeiwWindow.LeftInBattleVeiw(CurrentVersus.Imag, CurrentVersus.Name, CurrentVersus.Defence.ToString(), CurrentVersus.Health.ToString(), CurrentVersus.Person);
+                    PreVeiwWindow.EditShit(0);
+                    break;
+                case 2:
+                    PreVeiwWindow.RightInBattleVeiw(CurrentVersus.Imag, CurrentVersus.Name, CurrentVersus.Defence.ToString(), CurrentVersus.Health.ToString(), CurrentVersus.Person);
+                    PreVeiwWindow.EditShit(0);
+                    break;
+            }
         }
 
         public void CurrentR()
@@ -1117,7 +1280,7 @@ namespace GamingDnV
             CurrEvent = TypeEven.Room;
             if (CurrentRoom.Sounds != "")
                 BackSEn = true;
-            Events = new ObservableCollection<EventsModel>(ListEvent.Where(x => x.RoomId == CurrentRoom.Id).ToList());
+            Events = new ObservableCollection<EventsModel>(ListEvent.Where(x => x.RoomId == CurrentRoom.Id).OrderBy(x => x.Order).ToList());
             NPCTable = new ObservableCollection<NPCModel>(ListNpc.Where(x => x.RoomId == CurrentRoom.Id).ToList());
         }
 
@@ -1244,6 +1407,9 @@ namespace GamingDnV
         public ICommand BackSound { get; set; }
         public ICommand AtacSound { get; set; }
         public ICommand TrackSound { get; set; }
+        public ICommand CloseVersus { get; set; }
+        public ICommand BtnL { get; set; }
+        public ICommand BtnR { get; set; }
 
         #endregion
     }
