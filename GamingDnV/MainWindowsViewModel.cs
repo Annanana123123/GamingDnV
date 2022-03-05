@@ -69,7 +69,9 @@ namespace GamingDnV
             Intelligence = new RelayCommand(() => SummaCh(5, 1));
             Charisma = new RelayCommand(() => SummaCh(6, 1));
             ResultDefence = new RelayCommand(() => SummaCh(0, 2));
-            ResultHealth = new RelayCommand(() => SummaCh(0, 3));
+            ResultHealth1 = new RelayCommand(() => SummaCh(0, 3, 1));
+            ResultHealth2 = new RelayCommand(() => SummaCh(0, 3, 2));
+            ResultHealth3 = new RelayCommand(() => SummaCh(0, 3, 3));
             NPCStep = new RelayCommand(() => EditStep());
             ActionBtn = new RelayCommand(() => CalcAction());
             CleanActionBtn = new RelayCommand(() => CleanAct());
@@ -112,7 +114,30 @@ namespace GamingDnV
         ObservableCollection<UsersModel> Users = new ObservableCollection<UsersModel>();
         ObservableCollection<NPCModel> NPC = new ObservableCollection<NPCModel>();
 
-        
+        private string _iL;
+        public string IL
+        {
+            get { return _iL; }
+            set
+            {
+                _iL = value;
+
+                RaisePropertyChanged(nameof(IL));
+            }
+        }
+
+        private string _iR;
+        public string IR
+        {
+            get { return _iR; }
+            set
+            {
+                _iR = value;
+
+                RaisePropertyChanged(nameof(IR));
+            }
+        }
+
         private ComboBoxModel _selectItem;
         public ComboBoxModel SelectItem
         {
@@ -425,6 +450,51 @@ namespace GamingDnV
             }
         }
 
+        private string _dL;
+        public string DL
+        {
+            get { return _dL; }
+            set
+            {
+                _dL = value;
+
+                RaisePropertyChanged(nameof(DL));
+            }
+        }
+        private string _hL;
+        public string HL
+        {
+            get { return _hL; }
+            set
+            {
+                _hL = value;
+
+                RaisePropertyChanged(nameof(HL));
+            }
+        }
+        private string _dR;
+        public string DR
+        {
+            get { return _dR; }
+            set
+            {
+                _dR = value;
+
+                RaisePropertyChanged(nameof(DR));
+            }
+        }
+        private string _hR;
+        public string HR
+        {
+            get { return _hR; }
+            set
+            {
+                _hR = value;
+
+                RaisePropertyChanged(nameof(HR));
+            }
+        }
+
         private string _imag1;
         public string Imag1
         {
@@ -533,16 +603,6 @@ namespace GamingDnV
             }
         }
 
-        private ActionModel _currentVersus;
-        public ActionModel CurrentVersus
-        {
-            get { return _currentVersus; }
-            set
-            {
-                _currentVersus = value;
-            }
-        }
-
         private EventsModel _currentEvent;
         public EventsModel CurrentEvent
         {
@@ -584,6 +644,17 @@ namespace GamingDnV
             {
                 _currentUser = value;
                 ViewUser();
+            }
+        }
+
+        private ActionModel _currentVerusu;
+        public ActionModel CurrentVersus
+        {
+            get { return _currentVerusu; }
+            set
+            {
+                _currentVerusu = value;
+                ViewVersus();
             }
         }
 
@@ -1055,7 +1126,7 @@ namespace GamingDnV
             return res;
         }
 
-        public void SummaCh(int n, int type)
+        public void SummaCh(int n, int type, int s = 0)
         {
             string text = "";
             switch (type)
@@ -1097,14 +1168,14 @@ namespace GamingDnV
                     break;
                 case 3:
                     text = "= " + summa;
-                    ResultCheckHealth();
+                    ResultCheckHealth(s);
                     break;
             }
             PreVeiwWindow.ViewVersus(text);
-            TextView = text;
+            TextView += text;
         }
 
-        public void ResultCheckHealth()
+        public void ResultCheckHealth(int s)
         {
             if (CurrentNPC != null && CurrentUser != null)
             {
@@ -1120,7 +1191,7 @@ namespace GamingDnV
                     NPCTable.First(x => x.Id == CurrentNPC.Id).Health = result;
                     HP = result.ToString();
                     table = "tNPC";
-                    PreVeiwWindow.CrashR();
+                    PreVeiwWindow.CrashR(s);
                 }
                 else
                 {
@@ -1129,7 +1200,7 @@ namespace GamingDnV
                     result = CurrentUser.Health - summa;
                     HerosTable.First(x => x.Id == CurrentUser.Id).Health = result;
                     table = "tHeros";
-                    PreVeiwWindow.CrashL();
+                    PreVeiwWindow.CrashL(s);
 
                 }
                 PreVeiwWindow.EditHP(NpcStep, result);
@@ -1239,6 +1310,7 @@ namespace GamingDnV
         public void ClianTextBoxVeiw()
         {
             PreVeiwWindow.VersusCH = "";
+            TextView = "";
             summa = 0;
         }
 
@@ -1258,10 +1330,30 @@ namespace GamingDnV
             switch (n)
             {
                 case 1:
+                    if (CurrentVersus.Person == "Hero")
+                    {
+                        IL = PathHero + CurrentVersus.Imag;
+                    }
+                    else
+                    {
+                        IL = PathNPC + CurrentVersus.Imag;
+                    }
+                    DL = CurrentVersus.Defence.ToString();
+                    HL = CurrentVersus.Health.ToString();
                     PreVeiwWindow.LeftInBattleVeiw(CurrentVersus.Imag, CurrentVersus.Name, CurrentVersus.Defence.ToString(), CurrentVersus.Health.ToString(), CurrentVersus.Person);
                     PreVeiwWindow.EditShit(0);
                     break;
                 case 2:
+                    if (CurrentVersus.Person == "Hero")
+                    {
+                        IR = PathHero + CurrentVersus.Imag;
+                    }
+                    else
+                    {
+                        IR = PathNPC + CurrentVersus.Imag;
+                    }
+                    DR = CurrentVersus.Defence.ToString();
+                    HR = CurrentVersus.Health.ToString();
                     PreVeiwWindow.RightInBattleVeiw(CurrentVersus.Imag, CurrentVersus.Name, CurrentVersus.Defence.ToString(), CurrentVersus.Health.ToString(), CurrentVersus.Person);
                     PreVeiwWindow.EditShit(0);
                     break;
@@ -1325,6 +1417,22 @@ namespace GamingDnV
                 UserIcon = PathHero + CurrentUser.Imag;
             }
         }
+        public void ViewVersus()
+        {
+            if (CurrentVersus != null)
+            {
+                UserInfo = "Оружие:\r\n" + CurrentVersus.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentVersus.Equip + "\r\n\r\nИнвинтарь:\r\n" + CurrentVersus.Item + "\r\n\r\nСпособности:\r\n" + CurrentVersus.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentVersus.Ulta + "\r\n\r\nОписание:\r\n" + CurrentVersus.Description;
+                if (CurrentVersus.Person == "Hero")
+                {
+                    UserIcon = PathHero + CurrentVersus.Imag;
+                }
+                else
+                {
+                    UserIcon = PathNPC + CurrentVersus.Imag;
+                }
+               
+            }
+        }
         public void ViewImagIn()
         {
             if (VisibilityImag)
@@ -1386,7 +1494,9 @@ namespace GamingDnV
         public ICommand Charisma { get; set; }
         public ICommand NPCStep { get; set; }
         public ICommand ResultDefence { get; set; }
-        public ICommand ResultHealth { get; set; }
+        public ICommand ResultHealth1 { get; set; }
+        public ICommand ResultHealth2 { get; set; }
+        public ICommand ResultHealth3 { get; set; }
         public ICommand ActionBtn { get; set; }
         public ICommand D4 { get; set; }
         public ICommand D6 { get; set; }

@@ -37,8 +37,6 @@ namespace GamingDnV.ViewModels
             L1 = PathInterface + "layer_1.png";
             H = PathInterface + "Hard.png";
             Cen = PathInterface + "CenterPanel.png";
-            ScratchesR = PathInterface + "scratchesR.png";
-            ScratchesL = PathInterface + "scratchesL.png";
             VisibilityR = Visibility.Hidden;
             VisibilityL = Visibility.Hidden;
             OpacityR = 1;
@@ -378,15 +376,45 @@ namespace GamingDnV.ViewModels
             }
         }
 
-        public void CrashR()
+        public void CrashR(int s)
         {
             OpacityR = 1;
+            switch (s)
+            {
+                case 1:
+                    ScratchesR = PathInterface + "scratches1R.png";
+                    ScratchesL = PathInterface + "scratches1L.png";
+                    break;
+                case 2:
+                    ScratchesR = PathInterface + "scratches2R.png";
+                    ScratchesL = PathInterface + "scratches2L.png";
+                    break;
+                case 3:
+                    ScratchesR = PathInterface + "scratches3R.png";
+                    ScratchesL = PathInterface + "scratches3L.png";
+                    break;
+            }
             VisibilityR = Visibility.Visible;
             Timer.Start();
         }
-        public void CrashL()
+        public void CrashL(int s)
         {
             OpacityL = 1;
+            switch (s)
+            {
+                case 1:
+                    ScratchesR = PathInterface + "scratches1R.png";
+                    ScratchesL = PathInterface + "scratches1L.png";
+                    break;
+                case 2:
+                    ScratchesR = PathInterface + "scratches2R.png";
+                    ScratchesL = PathInterface + "scratches2L.png";
+                    break;
+                case 3:
+                    ScratchesR = PathInterface + "scratches3R.png";
+                    ScratchesL = PathInterface + "scratches3L.png";
+                    break;
+            }
             VisibilityL = Visibility.Visible;
             Timer.Start();
         }
