@@ -86,13 +86,13 @@ namespace GamingDnV
             BackSound = new RelayCommand(() => PlayAndStop(TypeSound.Back, CurrEvent));
             AtacSound = new RelayCommand(() => PlayAndStop(TypeSound.Atac, CurrEvent));
             TrackSound = new RelayCommand(() => PlayAndStop(TypeSound.Track, CurrEvent));
-            ComboOk = new RelayCommand(() => LoadHystory(SelectItem.Id));
-            CloseVersus = new RelayCommand(() => VisibilityVersus = Visibility.Hidden);
+            ComboOk = new RelayCommand(() => LoadHystory());
+            CloseVersus = new RelayCommand(() => CloseVersusWin());
             BtnL = new RelayCommand(() => CurrentV(1));
             BtnR = new RelayCommand(() => CurrentV(2));
             VisibilityInfo = Visibility.Hidden;
             VisibilityLoad = Visibility.Visible;
-            VisibilityVersus = Visibility.Visible;
+            VisibilityVersus = Visibility.Hidden;
             VR = Visibility.Hidden;
             VL = Visibility.Visible;
             TextButton = "Ход Героя";
@@ -747,11 +747,20 @@ namespace GamingDnV
         ObservableCollection<NPCModel> ListNpc = new ObservableCollection<NPCModel>();
         ObservableCollection<ActionModel> Versus = new ObservableCollection<ActionModel>();
 
+        public ActionModel LCurr = new ActionModel();
+        public ActionModel RCurr = new ActionModel();
+
         #endregion
 
         #region Методы
 
-        public void LoadHystory(int n)
+        public void CloseVersusWin()
+        {
+            VisibilityVersus = Visibility.Hidden;
+            //foreach (var w in )
+        }
+
+        public void LoadHystory()
         {
             if (SelectItem is null)
             {
@@ -761,15 +770,15 @@ namespace GamingDnV
             {
                 VisibilityLoad = Visibility.Hidden;
                 PathHero = AppDomain.CurrentDomain.BaseDirectory + "Media\\Heros\\";
-                PathNPC = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\NPC\\";
-                PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\Images\\";
+                PathNPC = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + SelectItem.Id + "\\NPC\\";
+                PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + SelectItem.Id + "\\Images\\";
                 PathInterface = AppDomain.CurrentDomain.BaseDirectory + "Media\\Interface\\";
-                PathMedia = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\Sounds\\";
+                PathMedia = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + SelectItem.Id + "\\Sounds\\";
                 Health = PathInterface + "Hard.png";
-                Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE  HistoryId = " + n + " ORDER BY tRooms.Order;");
+                Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE  HistoryId = " + SelectItem.Id + " ORDER BY tRooms.Order;");
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
                 ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Item, Abilities, Ulta, History, Imag, AtacSound, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
-                HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tHeros WHERE HistoryId =" + n);
+                HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tHeros WHERE HistoryId =" + SelectItem.Id);
             }
         }
 
@@ -1126,6 +1135,60 @@ namespace GamingDnV
             return res;
         }
 
+        public int WhoVS(int n)
+        {
+            int res = 0;
+            if (NpcStep == false)
+            {
+                switch (n)
+                {
+                    case 1:
+                        res = LCurr.Power;
+                        break;
+                    case 2:
+                        res = LCurr.Dexterity;
+                        break;
+                    case 3:
+                        res = LCurr.Endurance;
+                        break;
+                    case 4:
+                        res = LCurr.Wisdom;
+                        break;
+                    case 5:
+                        res = LCurr.Intelligence;
+                        break;
+                    case 6:
+                        res = LCurr.Charisma;
+                        break;
+                }
+            }
+            else
+            {
+                switch (n)
+                {
+                    case 1:
+                        res = RCurr.Power;
+                        break;
+                    case 2:
+                        res = RCurr.Dexterity;
+                        break;
+                    case 3:
+                        res = RCurr.Endurance;
+                        break;
+                    case 4:
+                        res = RCurr.Wisdom;
+                        break;
+                    case 5:
+                        res = RCurr.Intelligence;
+                        break;
+                    case 6:
+                        res = RCurr.Charisma;
+                        break;
+                }
+            }
+            return res;
+        }
+
         public void SummaCh(int n, int type, int s = 0)
         {
             string text = "";
@@ -1150,7 +1213,15 @@ namespace GamingDnV
                     summa += n;
                     break;
                 case 1:
-                    int t = Who(n);
+                    int t = 0;
+                    if (VisibilityVersus == Visibility.Visible)
+                    {
+                        t = WhoVS(n);
+                    }
+                    else
+                    {
+                        t = Who(n);
+                    }
                     if (t < 0)
                     {
                         text = t + " ";
@@ -1186,9 +1257,24 @@ namespace GamingDnV
                 if (NpcStep == false)
                 {
                     //Ход Героя
-                    id = CurrentNPC.Id;
-                    result = CurrentNPC.Health - summa;
-                    NPCTable.First(x => x.Id == CurrentNPC.Id).Health = result;
+                    if (VisibilityVersus == Visibility.Visible)
+                    {
+                        result = RCurr.Health - summa;
+                        if (RCurr.Person == "Hero")
+                        {
+                            HerosTable.First(x => x.Id == RCurr.Id).Health = result;
+                        }
+                        else
+                        {
+                            NPCTable.First(x => x.Id == RCurr.Id).Health = result;
+                        }
+                        VersusTable.First(x => x.Id == RCurr.Id).Health = result;
+                    }
+                    else
+                    {
+                        result = CurrentNPC.Health - summa;
+                        NPCTable.First(x => x.Id == CurrentNPC.Id).Health = result;
+                    }
                     HP = result.ToString();
                     table = "tNPC";
                     PreVeiwWindow.CrashR(s);
@@ -1196,9 +1282,24 @@ namespace GamingDnV
                 else
                 {
                     //Ход NPC
-                    id = CurrentUser.Id;
-                    result = CurrentUser.Health - summa;
-                    HerosTable.First(x => x.Id == CurrentUser.Id).Health = result;
+                    if (VisibilityVersus == Visibility.Visible)
+                    {
+                        result = LCurr.Health - summa;
+                        if (LCurr.Person == "Hero")
+                        {
+                            HerosTable.First(x => x.Id == LCurr.Id).Health = result;
+                        }
+                        else
+                        {
+                            NPCTable.First(x => x.Id == LCurr.Id).Health = result;
+                        }
+                        VersusTable.First(x => x.Id == LCurr.Id).Health = result;
+                    }
+                    else
+                    {
+                        result = CurrentUser.Health - summa;
+                        NPCTable.First(x => x.Id == CurrentUser.Id).Health = result;
+                    }
                     table = "tHeros";
                     PreVeiwWindow.CrashL(s);
 
@@ -1338,6 +1439,7 @@ namespace GamingDnV
                     {
                         IL = PathNPC + CurrentVersus.Imag;
                     }
+                    LCurr = CurrentVersus;
                     DL = CurrentVersus.Defence.ToString();
                     HL = CurrentVersus.Health.ToString();
                     PreVeiwWindow.LeftInBattleVeiw(CurrentVersus.Imag, CurrentVersus.Name, CurrentVersus.Defence.ToString(), CurrentVersus.Health.ToString(), CurrentVersus.Person);
@@ -1352,6 +1454,7 @@ namespace GamingDnV
                     {
                         IR = PathNPC + CurrentVersus.Imag;
                     }
+                    RCurr = CurrentVersus;
                     DR = CurrentVersus.Defence.ToString();
                     HR = CurrentVersus.Health.ToString();
                     PreVeiwWindow.RightInBattleVeiw(CurrentVersus.Imag, CurrentVersus.Name, CurrentVersus.Defence.ToString(), CurrentVersus.Health.ToString(), CurrentVersus.Person);

@@ -920,17 +920,17 @@
             </StackPanel>
         </Grid>
 
-        <!--<Grid Grid.Row="1"
-              Grid.RowSpan="3"
-              Grid.Column="1"
-              Grid.ColumnSpan="5"
-              Visibility="{Binding VisibilityInfo}">-->
-
         <Grid Grid.Row="1"
               Grid.RowSpan="3"
               Grid.Column="1"
               Grid.ColumnSpan="5"
-              Visibility="Hidden">
+              Visibility="{Binding VisibilityInfo}">
+
+        <!--<Grid Grid.Row="1"
+              Grid.RowSpan="3"
+              Grid.Column="1"
+              Grid.ColumnSpan="5"
+              Visibility="Hidden">-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
