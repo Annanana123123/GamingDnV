@@ -114,6 +114,186 @@ namespace GamingDnV
         ObservableCollection<UsersModel> Users = new ObservableCollection<UsersModel>();
         ObservableCollection<NPCModel> NPC = new ObservableCollection<NPCModel>();
 
+        private string _imagPrint;
+        public string ImagPrint
+        {
+            get { return _imagPrint; }
+            set
+            {
+                _imagPrint = value;
+
+                RaisePropertyChanged(nameof(ImagPrint));
+            }
+        }
+
+        private string _namePrint;
+        public string NamePrint
+        {
+            get { return _namePrint; }
+            set
+            {
+                _namePrint = value;
+
+                RaisePropertyChanged(nameof(NamePrint));
+            }
+        }
+
+        private string _classPrint;
+        public string ClassPrint
+        {
+            get { return _classPrint; }
+            set
+            {
+                _classPrint = value;
+
+                RaisePropertyChanged(nameof(ClassPrint));
+            }
+        }
+
+        private string _dFPrint;
+        public string DFPrint
+        {
+            get { return _dFPrint; }
+            set
+            {
+                _dFPrint = value;
+
+                RaisePropertyChanged(nameof(DFPrint));
+            }
+        }
+
+        private string _hPPrint;
+        public string HPPrint
+        {
+            get { return _hPPrint; }
+            set
+            {
+                _hPPrint = value;
+
+                RaisePropertyChanged(nameof(HPPrint));
+            }
+        }
+
+        private string _pPrint;
+        public string PPrint
+        {
+            get { return _pPrint; }
+            set
+            {
+                _pPrint = value;
+
+                RaisePropertyChanged(nameof(PPrint));
+            }
+        }
+
+        private string _dPrint;
+        public string DPrint
+        {
+            get { return _dPrint; }
+            set
+            {
+                _dPrint = value;
+
+                RaisePropertyChanged(nameof(DPrint));
+            }
+        }
+
+        private string _ePrint;
+        public string EPrint
+        {
+            get { return _ePrint; }
+            set
+            {
+                _ePrint = value;
+
+                RaisePropertyChanged(nameof(EPrint));
+            }
+        }
+
+        private string _wPrint;
+        public string WPrint
+        {
+            get { return _wPrint; }
+            set
+            {
+                _wPrint = value;
+
+                RaisePropertyChanged(nameof(WPrint));
+            }
+        }
+
+        private string _iPrint;
+        public string IPrint
+        {
+            get { return _iPrint; }
+            set
+            {
+                _iPrint = value;
+
+                RaisePropertyChanged(nameof(IPrint));
+            }
+        }
+
+        private string _cPrint;
+        public string CPrint
+        {
+            get { return _cPrint; }
+            set
+            {
+                _cPrint = value;
+
+                RaisePropertyChanged(nameof(CPrint));
+            }
+        }
+
+        private string _eqPrint;
+        public string EqPrint
+        {
+            get { return _eqPrint; }
+            set
+            {
+                _eqPrint = value;
+
+                RaisePropertyChanged(nameof(EqPrint));
+            }
+        }
+
+        private string _abPrint;
+        public string AbPrint
+        {
+            get { return _abPrint; }
+            set
+            {
+                _abPrint = value;
+
+                RaisePropertyChanged(nameof(AbPrint));
+            }
+        }
+
+        private string _hiPrint;
+        public string HiPrint
+        {
+            get { return _hiPrint; }
+            set
+            {
+                _hiPrint = value;
+
+                RaisePropertyChanged(nameof(HiPrint));
+            }
+        }
+
+        private string _dePrint;
+        public string DePrint
+        {
+            get { return _dePrint; }
+            set
+            {
+                _dePrint = value;
+
+                RaisePropertyChanged(nameof(DePrint));
+            }
+        }
+
         private string _iL;
         public string IL
         {
@@ -770,12 +950,12 @@ namespace GamingDnV
             {
                 VisibilityLoad = Visibility.Hidden;
                 PathHero = AppDomain.CurrentDomain.BaseDirectory + "Media\\Heros\\";
-                PathNPC = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + SelectItem.Id + "\\NPC\\";
-                PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + SelectItem.Id + "\\Images\\";
+                PathNPC = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + SelectItem.Id + "\\NPC\\";
+                PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + SelectItem.Id + "\\Images\\";
                 PathInterface = AppDomain.CurrentDomain.BaseDirectory + "Media\\Interface\\";
-                PathMedia = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + SelectItem.Id + "\\Sounds\\";
+                PathMedia = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + SelectItem.Id + "\\Sounds\\";
                 Health = PathInterface + "Hard.png";
-                Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE  HistoryId = " + SelectItem.Id + " ORDER BY tRooms.Order;");
+                Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE HistoryId = " + SelectItem.Id + " ORDER BY tRooms.Order;");
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
                 ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Item, Abilities, Ulta, History, Imag, AtacSound, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
                 HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tHeros WHERE HistoryId =" + SelectItem.Id);
@@ -1417,7 +1597,7 @@ namespace GamingDnV
 
         public void OnLoad()
         {
-            List<ComboBoxModel> Combo = ReadBD.ReadHistory("SELECT Id, Name FROM tHistotys;");
+            List<ComboBoxModel> Combo = ReadBD.ReadHistory("SELECT Id, Name FROM tHistorys;");
             ComboBoxItem = Combo;
             //LoadHystory(1);
         }

@@ -515,9 +515,9 @@ namespace GamingDnV.ViewModels
         {
             pv = new PreView(this);
             pv.Show();
-            PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\Images\\";
+            PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + n + "\\Images\\";
             PathHero = AppDomain.CurrentDomain.BaseDirectory + "Media\\Heros/";
-            PathNPC = AppDomain.CurrentDomain.BaseDirectory + "Media\\Histotys_" + n + "\\NPC\\";
+            PathNPC = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + n + "\\NPC\\";
             
             VersusVisibility = Visibility.Visible;
         }
