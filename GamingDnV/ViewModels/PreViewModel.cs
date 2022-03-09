@@ -523,7 +523,9 @@ namespace GamingDnV.ViewModels
         }
         public void Close()
         {
-            pv.Close();
+            RightVisibility = Visibility.Hidden;
+            VersusVisibility = Visibility.Hidden;
+            LeftVisibility = Visibility.Hidden;
         }
         #endregion
 

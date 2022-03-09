@@ -244,6 +244,7 @@
                 <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             <Button Content="X"
+                    Visibility="Hidden"
                     Grid.Column="1"
                     FontSize="20"
                     Background="#FC595A"
