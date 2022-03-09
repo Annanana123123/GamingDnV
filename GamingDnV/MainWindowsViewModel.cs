@@ -90,9 +90,11 @@ namespace GamingDnV
             CloseVersus = new RelayCommand(() => CloseVersusWin());
             BtnL = new RelayCommand(() => CurrentV(1));
             BtnR = new RelayCommand(() => CurrentV(2));
+            IntoBattlePrint = new RelayCommand(() => Print());
             VisibilityInfo = Visibility.Hidden;
             VisibilityLoad = Visibility.Visible;
             VisibilityVersus = Visibility.Hidden;
+            VisibilityPrint = Visibility.Hidden;
             VR = Visibility.Hidden;
             VL = Visibility.Visible;
             TextButton = "Ход Героя";
@@ -282,18 +284,6 @@ namespace GamingDnV
             }
         }
 
-        private string _dePrint;
-        public string DePrint
-        {
-            get { return _dePrint; }
-            set
-            {
-                _dePrint = value;
-
-                RaisePropertyChanged(nameof(DePrint));
-            }
-        }
-
         private string _iL;
         public string IL
         {
@@ -408,6 +398,16 @@ namespace GamingDnV
             {
                 _tarckSEn = value;
                 RaisePropertyChanged(nameof(TrackSEn));
+            }
+        }
+        private Visibility _visibilityPrint;
+        public Visibility VisibilityPrint
+        {
+            get { return _visibilityPrint; }
+            set
+            {
+                _visibilityPrint = value;
+                RaisePropertyChanged(nameof(VisibilityPrint));
             }
         }
 
@@ -934,10 +934,29 @@ namespace GamingDnV
 
         #region Методы
 
+        public void Print()
+        {
+            ImagPrint = PathHero + CurrentUser.Imag;
+            NamePrint = CurrentUser.HeroName;
+            ClassPrint = CurrentUser.Species + " " + CurrentUser.Class;
+            DFPrint = CurrentUser.Defence.ToString();
+            HPPrint = CurrentUser.Health.ToString();
+            PPrint = CurrentUser.Power.ToString();
+            DPrint = CurrentUser.Dexterity.ToString();
+            EPrint = CurrentUser.Endurance.ToString();
+            WPrint = CurrentUser.Wisdom.ToString();
+            IPrint = CurrentUser.Intelligence.ToString();
+            CPrint = CurrentUser.Charisma.ToString();
+            EqPrint = "Оружие:\n" + CurrentUser.Arms + "\n\rСнаряжение:\n" + CurrentUser.Equip;
+            AbPrint = "Способности:\n" + CurrentUser.Abilities + "\n\rЗаклинания:\n" + CurrentUser.Ulta;
+            HiPrint = "История: Я "+ CurrentUser.Species + " " + CurrentUser.Class + " по имени " + CurrentUser.HeroName + ". " + CurrentUser.History + "\n\rОписание способностей:\n" + CurrentUser.Description;
+            VisibilityPrint = Visibility.Visible;
+        }
+
         public void CloseVersusWin()
         {
             VisibilityVersus = Visibility.Hidden;
-            //foreach (var w in )
+            VisibilityPrint = Visibility.Hidden;
         }
 
         public void LoadHystory()
@@ -1803,6 +1822,7 @@ namespace GamingDnV
         public ICommand CloseVersus { get; set; }
         public ICommand BtnL { get; set; }
         public ICommand BtnR { get; set; }
+        public ICommand IntoBattlePrint { get; set; }
 
         #endregion
     }
