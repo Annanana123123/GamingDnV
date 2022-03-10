@@ -109,7 +109,6 @@ namespace GamingDnV
         #endregion
 
         #region Свойства
-
         public bool logo = false;
         public bool versus = true;
 
@@ -1043,7 +1042,7 @@ namespace GamingDnV
         {
             if (temp != i)
             {
-                PreVeiwWindow.ShowImag(arr[i]);
+                PreVeiwWindow.ShowImag(arr[i], TypeEven.Event);
                 temp = i;
             }
             else
@@ -1760,13 +1759,76 @@ namespace GamingDnV
             else
             {
                 ViewImagText = "Скрыть";
-                PreVeiwWindow.ShowImag(CurrentNPC.Imag);
+                PreVeiwWindow.ShowImag(CurrentNPC.Imag, TypeEven.NPC);
                 VisibilityImag = true;
             }
             
         }
 
-    #endregion
+        public bool CheckPushBtn(string x)
+        {
+            switch(x)
+            {
+                case "NumPad":
+                    if(VisibilityInfo == Visibility.Hidden)
+                    {
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        public void Push(int e)
+        {
+            switch(e)
+            {
+                case 0:
+                    if (CheckPushBtn("NumPad"))
+                    {
+                        if (arr.Count() >= e+1)
+                            ShowImag(e);
+                    }
+                    break;
+                case 1:
+                    if (CheckPushBtn("NumPad"))
+                    {
+                        if (arr.Count() >= e+1)
+                            ShowImag(e);
+                    }
+                    break;
+                case 2:
+                    if (CheckPushBtn("NumPad"))
+                    {
+                        if (arr.Count() >= e+1)
+                            ShowImag(e);
+                    }
+                    break;
+                case 3:
+                    if (CheckPushBtn("NumPad"))
+                    {
+                        if (arr.Count() >= e+1)
+                            ShowImag(e);
+                    }
+                    break;
+                case 4:
+                    if (CheckPushBtn("NumPad"))
+                    {
+                        if (arr.Count() >= e+1)
+                            ShowImag(e);
+                    }
+                    break;
+                case 5:
+                    if (CheckPushBtn("NumPad"))
+                    {
+                        if (arr.Count() >= e+1)
+                            ShowImag(e);
+                    }
+                    break;
+            }
+        }
+        //PlayAndStop(TypeSound.Back, CurrEvent)
+        #endregion
 
         #region Команды
 
@@ -1838,6 +1900,90 @@ namespace GamingDnV
         public ICommand BtnR { get; set; }
         public ICommand IntoBattlePrint { get; set; }
         public ICommand Logo { get; set; }
+        private ICommand _push1Btn;
+        public ICommand Push1Btn
+        {
+            get
+            {
+                return _push1Btn
+                    ?? (_push1Btn = new ActionCommand(() =>
+                    {
+                        Push(0);
+                    }));
+            }
+        }
+        private ICommand _push2Btn;
+        public ICommand Push2Btn
+        {
+            get
+            {
+                return _push2Btn
+                    ?? (_push2Btn = new ActionCommand(() =>
+                    {
+                        Push(1);
+                    }));
+            }
+        }
+        private ICommand _push3Btn;
+        public ICommand Push3Btn
+        {
+            get
+            {
+                return _push3Btn
+                    ?? (_push3Btn = new ActionCommand(() =>
+                    {
+                        Push(2);
+                    }));
+            }
+        }
+        private ICommand _push4Btn;
+        public ICommand Push4Btn
+        {
+            get
+            {
+                return _push4Btn
+                    ?? (_push4Btn = new ActionCommand(() =>
+                    {
+                        Push(3);
+                    }));
+            }
+        }
+        private ICommand _push5Btn;
+        public ICommand Push5Btn
+        {
+            get
+            {
+                return _push5Btn
+                    ?? (_push5Btn = new ActionCommand(() =>
+                    {
+                        Push(4);
+                    }));
+            }
+        }
+        private ICommand _push6Btn;
+        public ICommand Push6Btn
+        {
+            get
+            {
+                return _push6Btn
+                    ?? (_push6Btn = new ActionCommand(() =>
+                    {
+                        Push(5);
+                    }));
+            }
+        }
+        private ICommand _push7Btn;
+        public ICommand Push7Btn
+        {
+            get
+            {
+                return _push7Btn
+                    ?? (_push7Btn = new ActionCommand(() =>
+                    {
+                        PlayAndStop(TypeSound.Back, CurrEvent);
+                    }));
+            }
+        }
 
         #endregion
     }

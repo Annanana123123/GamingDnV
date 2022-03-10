@@ -7,8 +7,21 @@
         mc:Ignorable="d"
         Title="MainWindow" 
         WindowState="Maximized"
-        Width="1920" Height="1080">
+        Width="1920" Height="1080"
+        WindowStyle="None">
     <!--WindowState="Maximized"-->
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding Push1Btn}" Key="NumPad1"/>
+        <KeyBinding Command="{Binding Push2Btn}" Key="NumPad2"/>
+        <KeyBinding Command="{Binding Push3Btn}" Key="NumPad3"/>
+        <KeyBinding Command="{Binding Push4Btn}" Key="NumPad4"/>
+        <KeyBinding Command="{Binding Push5Btn}" Key="NumPad5"/>
+        <KeyBinding Command="{Binding Push6Btn}" Key="NumPad6"/>
+        <KeyBinding Command="{Binding Push7Btn}" Key="NumPad7"/>
+        <KeyBinding Command="{Binding Push8Btn}" Key="NumPad8"/>
+        <KeyBinding Command="{Binding Push9Btn}" Key="NumPad9"/>
+        <KeyBinding Command="{Binding Push0Btn}" Key="NumPad0"/>
+    </Window.InputBindings>
     <Window.Resources>
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
             <Grid>
@@ -738,7 +751,7 @@
                       ScrollViewer.CanContentScroll="True"
                       SelectionMode="Single"
                       CanUserAddRows="False"
-                      IsReadOnly="False"
+                      IsReadOnly="True"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                       GridLinesVisibility="all"
@@ -782,7 +795,7 @@
                       ScrollViewer.CanContentScroll="True"
                       SelectionMode="Single"
                       CanUserAddRows="False"
-                      IsReadOnly="False"
+                      IsReadOnly="True"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                       GridLinesVisibility="all"
@@ -1694,7 +1707,7 @@
                 <TextBox Grid.Column="0"
                          Grid.Row="2"
                          Text="{Binding ClassPrint}"
-                         FontSize="40"
+                         FontSize="30"
                          Background="#00000000"
                          BorderThickness="0"
                          VerticalAlignment="Center"

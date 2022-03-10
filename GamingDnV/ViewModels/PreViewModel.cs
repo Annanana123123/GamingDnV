@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Command;
 using System.Windows;
 using System.Threading;
 using System.Windows.Threading;
+using GamingDnV.Enums;
 
 namespace GamingDnV.ViewModels
 {
@@ -534,9 +535,21 @@ namespace GamingDnV.ViewModels
             VersusVisibility = Visibility.Visible;
             LeftVisibility = Visibility.Visible;
         }
-        public void ShowImag(string name)
+        public void ShowImag(string name, TypeEven type)
         {
-            ImageView = PathImag + name;
+            switch (type)
+            {
+                case TypeEven.Event:
+                    ImageView = PathImag + name;
+                    break;
+                case TypeEven.Room:
+                    ImageView = PathImag + name;
+                    break;
+                case TypeEven.NPC:
+                    ImageView = PathNPC + name;
+                    break;
+            }
+            //ImageView = PathImag + name;
             //ImageView = "../Images/NPC/" +name;
             VisibilityImageView = Visibility.Visible;
         }
