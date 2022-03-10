@@ -1984,6 +1984,18 @@ namespace GamingDnV
                     }));
             }
         }
+        private ICommand _push0Btn;
+        public ICommand Push0Btn
+        {
+            get
+            {
+                return _push0Btn
+                    ?? (_push0Btn = new ActionCommand(() =>
+                    {
+                        VisibilitzLogo();
+                    }));
+            }
+        }
 
         #endregion
     }
