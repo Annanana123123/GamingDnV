@@ -1590,6 +1590,7 @@ namespace GamingDnV
                     PreVeiwWindow.EndBattle();
                     ViewBattle = "Показать";
                     VisibilityWin = false;
+                    PreVeiwWindow.VisibilityLogo();
                 }
                 else
                 {

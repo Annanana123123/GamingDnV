@@ -39,6 +39,8 @@ namespace GamingDnV.ViewModels
             Cen = PathInterface + "CenterPanel.png";
             VisibilityR = Visibility.Hidden;
             VisibilityL = Visibility.Hidden;
+            ViB = Visibility.Visible;
+            ViT = Visibility.Visible;
             OpacityR = 1;
             OpacityL = 1;
             StartTimer();
@@ -51,6 +53,27 @@ namespace GamingDnV.ViewModels
         public DispatcherTimer Timer = new DispatcherTimer();
 
         public PreView pv { get; set; }
+
+        private Visibility _viB;
+        public Visibility ViB
+        {
+            get { return _viB; }
+            set
+            {
+                _viB = value;
+                RaisePropertyChanged(nameof(ViB));
+            }
+        }
+        private Visibility _viT;
+        public Visibility ViT
+        {
+            get { return _viT; }
+            set
+            {
+                _viT = value;
+                RaisePropertyChanged(nameof(ViT));
+            }
+        }
 
         private Visibility _visibilityR;
         public Visibility VisibilityR
@@ -358,6 +381,12 @@ namespace GamingDnV.ViewModels
         {
             Timer.Tick += new EventHandler(TimerTick);
             Timer.Interval = new TimeSpan( 0, 0, 0, 0, 500);
+        }
+
+        public void VisibilityLogo()
+        {
+            ViB = Visibility.Hidden;
+            ViT = Visibility.Hidden;
         }
 
         private void TimerTick(object sender, EventArgs e)

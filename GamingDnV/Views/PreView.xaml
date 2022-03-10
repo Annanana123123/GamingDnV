@@ -21,6 +21,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
+        
         <Image Source="{Binding ImageView}"
                Grid.Column="0"
                Grid.Row="0"
@@ -251,5 +252,16 @@
                     Foreground="White"
                     Command="{Binding CloseWindow}"/>
         </Grid>
+        <Image Grid.Column="0"
+               Grid.Row="0"
+               Grid.RowSpan="4"
+               Visibility="{Binding ViB}"
+               Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Background.png"/>
+        <Image Grid.Column="0"
+               Grid.Row="0"
+               Grid.RowSpan="4"
+               Width="854"
+               Visibility="{Binding ViT}"
+               Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\text.png"/>
     </Grid>
 </Window>
