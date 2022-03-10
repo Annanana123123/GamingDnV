@@ -39,8 +39,8 @@ namespace GamingDnV.ViewModels
             Cen = PathInterface + "CenterPanel.png";
             VisibilityR = Visibility.Hidden;
             VisibilityL = Visibility.Hidden;
-            ViB = Visibility.Visible;
-            ViT = Visibility.Visible;
+            ViB = Visibility.Hidden;
+            ViT = Visibility.Hidden;
             OpacityR = 1;
             OpacityL = 1;
             StartTimer();
@@ -385,6 +385,11 @@ namespace GamingDnV.ViewModels
 
         public void VisibilityLogo()
         {
+            ViB = Visibility.Visible;
+            ViT = Visibility.Visible;
+        }
+        public void NoVisibilityLogo()
+        {
             ViB = Visibility.Hidden;
             ViT = Visibility.Hidden;
         }
@@ -543,6 +548,7 @@ namespace GamingDnV.ViewModels
         public void ShowWindowVS(int n)
         {
             pv = new PreView(this);
+            
             pv.Show();
             PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + n + "\\Images\\";
             PathHero = AppDomain.CurrentDomain.BaseDirectory + "Media\\Heros/";

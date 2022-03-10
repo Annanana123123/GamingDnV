@@ -91,6 +91,7 @@ namespace GamingDnV
             BtnL = new RelayCommand(() => CurrentV(1));
             BtnR = new RelayCommand(() => CurrentV(2));
             IntoBattlePrint = new RelayCommand(() => Print());
+            Logo = new RelayCommand(() => VisibilitzLogo());
             VisibilityInfo = Visibility.Hidden;
             VisibilityLoad = Visibility.Visible;
             VisibilityVersus = Visibility.Hidden;
@@ -109,6 +110,7 @@ namespace GamingDnV
 
         #region Свойства
 
+        public bool logo = false;
         public bool versus = true;
 
         public PreViewModel PreVeiwWindow { get; set; }
@@ -952,7 +954,19 @@ namespace GamingDnV
             HiPrint = "История: Я "+ CurrentUser.Species + " " + CurrentUser.Class + " по имени " + CurrentUser.HeroName + ". " + CurrentUser.History + "\n\rОписание способностей:\n" + CurrentUser.Description;
             VisibilityPrint = Visibility.Visible;
         }
-
+        public void VisibilitzLogo()
+        {
+            if (logo)
+            {
+                PreVeiwWindow.NoVisibilityLogo();
+                logo = false;
+            }
+            else
+            {
+                PreVeiwWindow.VisibilityLogo();
+                logo = true;
+            }
+        }
         public void CloseVersusWin()
         {
             VisibilityVersus = Visibility.Hidden;
@@ -1590,7 +1604,6 @@ namespace GamingDnV
                     PreVeiwWindow.EndBattle();
                     ViewBattle = "Показать";
                     VisibilityWin = false;
-                    PreVeiwWindow.VisibilityLogo();
                 }
                 else
                 {
@@ -1824,6 +1837,7 @@ namespace GamingDnV
         public ICommand BtnL { get; set; }
         public ICommand BtnR { get; set; }
         public ICommand IntoBattlePrint { get; set; }
+        public ICommand Logo { get; set; }
 
         #endregion
     }

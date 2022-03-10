@@ -363,6 +363,16 @@
                                         Foreground="#2A72E9"
                                         Margin="0 0 3 3"
                                         Command="{Binding ClianTextBox}"/>
+                    <Button Content="Логотип" 
+                                        Width="187"
+                                        Height="35"
+                                        FontSize="15"
+                                        BorderBrush="#2A72E9"
+                                        BorderThickness="3"
+                                        Background="#12131A"
+                                        Foreground="#2A72E9"
+                                        Margin="0 0 3 3"
+                                        Command="{Binding Logo}"/>
                     <Button Content="{Binding ViewBattle}" 
                                         Width="187"
                                         Height="35"
