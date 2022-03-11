@@ -83,9 +83,9 @@ namespace GamingDnV
             ImagBtn4 = new RelayCommand(() => ShowImag(3));
             ImagBtn5 = new RelayCommand(() => ShowImag(4));
             ImagBtn6 = new RelayCommand(() => ShowImag(5));
-            BackSound = new RelayCommand(() => PlayAndStop(TypeSound.Back, CurrEvent));
-            AtacSound = new RelayCommand(() => PlayAndStop(TypeSound.Atac, CurrEvent));
-            TrackSound = new RelayCommand(() => PlayAndStop(TypeSound.Track, CurrEvent));
+            BackSound = new RelayCommand(() => PlayAndStop(CurrEvent));
+            AtacSound = new RelayCommand(() => PlayAndStop(CurrEvent));
+            TrackSound = new RelayCommand(() => PlayAndStop(CurrEvent));
             ComboOk = new RelayCommand(() => LoadHystory());
             CloseVersus = new RelayCommand(() => CloseVersusWin());
             BtnL = new RelayCommand(() => CurrentV(1));
@@ -96,6 +96,10 @@ namespace GamingDnV
             VisibilityLoad = Visibility.Visible;
             VisibilityVersus = Visibility.Hidden;
             VisibilityPrint = Visibility.Hidden;
+            DColorL = "#1C1C25";
+            DColorR = "#1C1C25";
+            HColorL = "#1C1C25";
+            HColorR = "#1C1C25";
             VR = Visibility.Hidden;
             VL = Visibility.Visible;
             TextButton = "Ход Героя";
@@ -116,6 +120,51 @@ namespace GamingDnV
 
         ObservableCollection<UsersModel> Users = new ObservableCollection<UsersModel>();
         ObservableCollection<NPCModel> NPC = new ObservableCollection<NPCModel>();
+
+        private string _dColorL;
+        public string DColorL
+        {
+            get { return _dColorL; }
+            set
+            {
+                _dColorL = value;
+
+                RaisePropertyChanged(nameof(DColorL));
+            }
+        }
+        private string _dColorR;
+        public string DColorR
+        {
+            get { return _dColorR; }
+            set
+            {
+                _dColorR = value;
+
+                RaisePropertyChanged(nameof(DColorR));
+            }
+        }
+        private string _hColorL;
+        public string HColorL
+        {
+            get { return _hColorL; }
+            set
+            {
+                _hColorL = value;
+
+                RaisePropertyChanged(nameof(HColorL));
+            }
+        }
+        private string _hColorR;
+        public string HColorR
+        {
+            get { return _hColorR; }
+            set
+            {
+                _hColorR = value;
+
+                RaisePropertyChanged(nameof(HColorR));
+            }
+        }
 
         private string _imagPrint;
         public string ImagPrint
@@ -976,7 +1025,7 @@ namespace GamingDnV
                 PathMedia = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + SelectItem.Id + "\\Sounds\\";
                 Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE HistoryId = " + SelectItem.Id + " ORDER BY tRooms.Order;");
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
-                ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Item, Abilities, Ulta, History, Imag, AtacSound, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
+                ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Item, Abilities, Ulta, History, Imag, Sounds, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
                 HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tHeros WHERE HistoryId =" + SelectItem.Id);
             }
         }
@@ -991,7 +1040,7 @@ namespace GamingDnV
             return str;
         }
 
-        public void PlayAndStop(TypeSound type, TypeEven eventT)
+        public void PlayAndStop(TypeEven eventT)
         {
             Media media = new Media();
             if (SoundPlay)
@@ -1011,12 +1060,7 @@ namespace GamingDnV
                         Sound += CurrentEvent.Sounds;
                         break;
                     case TypeEven.NPC:
-                        switch (type)
-                        {
-                            case TypeSound.Atac:
-                                Sound += CurrentNPC.AtacSound;
-                                break;
-                        }
+                        Sound += CurrentNPC.Sounds;
                         break;
                 }
                 media.Open(Sound);
@@ -1263,6 +1307,31 @@ namespace GamingDnV
             if (versus)
             {
                 VersusTable = new ObservableCollection<ActionModel>(Versus.OrderByDescending(x => x.Action).ToList());
+                if (Versus[0].Person == "Hero")
+                {
+
+                    TextButton = "Ход Героя";
+                    PreVeiwWindow.EditShit(0);
+                    NpcStep = false;
+                    ClianTextBoxVeiw();
+                    VR = Visibility.Hidden;
+                    VL = Visibility.Visible;
+                    ClianColor();
+                    DColorL = "#2b4c00";
+                    HColorL = "#2b4c00";
+                }
+                else
+                {
+                    TextButton = "Ход NPC";
+                    PreVeiwWindow.EditShit(0);
+                    NpcStep = true;
+                    ClianTextBoxVeiw();
+                    VR = Visibility.Visible;
+                    VL = Visibility.Hidden;
+                    ClianColor();
+                    DColorR = "#2b4c00";
+                    HColorR = "#2b4c00";
+                }
                 VisibilityVersus = Visibility.Visible;
             }
             else
@@ -1275,10 +1344,6 @@ namespace GamingDnV
         {
             var rr = e.Row.Item;
             var r = e.GetType();
-            //string sql = "UPDATE tUsers SET Atac = '"+CurrUser.Atac+"' WHERE Id = "+CurrUser.Id;
-            //UpdataBD.UpdataInDb(sql);
-            //UPDATE tUsers SET tUsers.Imag = 'Heros\ava3.png' WHERE tUsers.Id = 3
-            //string sql1 = "INSERT INTO `Orders` (`Customer`, `Count`, `DateOrder`, `DeidLine`) VALUES ('" + _customerText + "', '" + _count + "', '" + _dateOrder + "', '" + _daidLine + "')";
         }
         public int Who(int n)
         {
@@ -1547,7 +1612,13 @@ namespace GamingDnV
                 MessageBox.Show("Выбери соперника в таблице");
             }
         }
-
+        public void ClianColor()
+        {
+            DColorL = "#1C1C25";
+            DColorR = "#1C1C25";
+            HColorL = "#1C1C25";
+            HColorR = "#1C1C25";
+        }
         public void EditStep()
         {
             if (NpcStep)
@@ -1558,6 +1629,9 @@ namespace GamingDnV
                 ClianTextBoxVeiw();
                 VR = Visibility.Hidden;
                 VL = Visibility.Visible;
+                ClianColor();
+                DColorL = "#2b4c00";
+                HColorL = "#2b4c00";
             }
             else
             {
@@ -1567,6 +1641,9 @@ namespace GamingDnV
                 ClianTextBoxVeiw();
                 VR = Visibility.Visible;
                 VL = Visibility.Hidden;
+                ClianColor();
+                DColorR = "#2b4c00";
+                HColorR = "#2b4c00";
             }
         }
 
@@ -1703,12 +1780,13 @@ namespace GamingDnV
                 AtacSEn = false;
                 TrackSEn = false;
                 HP = CurrentNPC.Health.ToString();
-                TextNPC = CurrentNPC.History;
-                ItemText = CurrentNPC.Item;
+                TextNPC = CurrentNPC.History + "\r\n\rСпособности:\r\n" + CurrentNPC.Abilities + "\r\n\rЗаклинание:\r\n" + CurrentNPC.Ulta;
+                ItemText = "Инвентарь:\r\n" + CurrentNPC.Item;
                 TollTipNPS = CurrentNPC.Notee;
                 ImageInfo = PathNPC + CurrentNPC.Imag;
-                if (CurrentNPC.AtacSound != "")
-                    AtacSEn = true;
+                CurrEvent = TypeEven.NPC;
+                if (CurrentNPC.Sounds != "")
+                    BackSEn = true;
             };
         }
         public void ViewUser()
@@ -1979,7 +2057,7 @@ namespace GamingDnV
                 return _push8Btn
                     ?? (_push8Btn = new ActionCommand(() =>
                     {
-                        PlayAndStop(TypeSound.Back, CurrEvent);
+                        PlayAndStop(CurrEvent);
                     }));
             }
         }

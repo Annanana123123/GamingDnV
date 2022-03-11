@@ -1346,7 +1346,7 @@
                                     HorizontalAlignment="Center">
                             <Image Source="{Binding IL}" Height="130" Width="130"/>
                             <StackPanel Margin="0 0 20 0">
-                                <TextBox Background="#1C1C25"
+                                <TextBox Background="{Binding DColorL}"
                                          BorderBrush="#2A72E9"
                                          IsReadOnly="True"
                                          VerticalContentAlignment="Center"
@@ -1356,7 +1356,7 @@
                                          Height="65"
                                          FontSize="40"
                                          Text="{Binding DL}"/>
-                                <TextBox Background="#1C1C25"
+                                <TextBox Background="{Binding HColorL}"
                                          BorderBrush="#2A72E9"
                                          IsReadOnly="True"
                                          VerticalContentAlignment="Center"
@@ -1368,7 +1368,7 @@
                                          Text="{Binding HL}"/>
                             </StackPanel>
                             <StackPanel Margin="20 0 0 0">
-                                <TextBox Background="#1C1C25"
+                                <TextBox Background="{Binding DColorR}"
                                          BorderBrush="#2A72E9"
                                          IsReadOnly="True"
                                          VerticalContentAlignment="Center"
@@ -1378,7 +1378,7 @@
                                          Height="65"
                                          FontSize="40"
                                          Text="{Binding DR}"/>
-                                <TextBox Background="#1C1C25"
+                                <TextBox Background="{Binding HColorR}"
                                          BorderBrush="#2A72E9"
                                          IsReadOnly="True"
                                          VerticalContentAlignment="Center"
@@ -1632,16 +1632,16 @@
                 </Grid>
             </Grid>
         </Grid>
+        <!--<Grid Grid.Row="0"
+              Grid.RowSpan="4"
+              Grid.Column="0"
+              Grid.ColumnSpan="7"
+              Visibility="{Binding VisibilityPrint}">-->
         <Grid Grid.Row="0"
               Grid.RowSpan="4"
               Grid.Column="0"
               Grid.ColumnSpan="7"
-              Visibility="{Binding VisibilityPrint}">
-            <!--<Grid Grid.Row="0"
-              Grid.RowSpan="4"
-              Grid.Column="0"
-              Grid.ColumnSpan="7"
-              Visibility="Hidden">-->
+              Visibility="Hidden">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>

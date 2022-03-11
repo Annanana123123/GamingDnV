@@ -70,6 +70,6 @@ namespace GamingDnV.Models
             }
         }
         //Музыка
-        public string AtacSound { get; set; }
+        public string Sounds { get; set; }
     }
 }
