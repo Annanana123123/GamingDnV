@@ -345,18 +345,6 @@ namespace GamingDnV
             }
         }
 
-        private string _health;
-        public string Health
-        {
-            get { return _health; }
-            set
-            {
-                _health = value;
-
-                RaisePropertyChanged(nameof(Health));
-            }
-        }
-
         private string _hP;
         public string HP
         {
@@ -986,7 +974,6 @@ namespace GamingDnV
                 PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + SelectItem.Id + "\\Images\\";
                 PathInterface = AppDomain.CurrentDomain.BaseDirectory + "Media\\Interface\\";
                 PathMedia = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + SelectItem.Id + "\\Sounds\\";
-                Health = PathInterface + "Hard.png";
                 Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE HistoryId = " + SelectItem.Id + " ORDER BY tRooms.Order;");
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
                 ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Item, Abilities, Ulta, History, Imag, AtacSound, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
@@ -1980,6 +1967,18 @@ namespace GamingDnV
                 return _push7Btn
                     ?? (_push7Btn = new ActionCommand(() =>
                     {
+                        ClianTextBoxVeiw();
+                    }));
+            }
+        }
+        private ICommand _push8Btn;
+        public ICommand Push8Btn
+        {
+            get
+            {
+                return _push8Btn
+                    ?? (_push8Btn = new ActionCommand(() =>
+                    {
                         PlayAndStop(TypeSound.Back, CurrEvent);
                     }));
             }
@@ -1996,7 +1995,66 @@ namespace GamingDnV
                     }));
             }
         }
-
+        private ICommand _pushDivideBtn;
+        public ICommand PushDivideBtn
+        {
+            get
+            {
+                return _pushDivideBtn
+                    ?? (_pushDivideBtn = new ActionCommand(() =>
+                    {
+                        SummaCh(0, 3, 1);
+                    }));
+            }
+        }
+        private ICommand _pushMultiplyBtn;
+        public ICommand PushMultiplyBtn
+        {
+            get
+            {
+                return _pushMultiplyBtn
+                    ?? (_pushMultiplyBtn = new ActionCommand(() =>
+                    {
+                        SummaCh(0, 3, 2);
+                    }));
+            }
+        }
+        private ICommand _pushSubtractBtn;
+        public ICommand PushSubtractBtn
+        {
+            get
+            {
+                return _pushSubtractBtn
+                    ?? (_pushSubtractBtn = new ActionCommand(() =>
+                    {
+                        SummaCh(0, 3, 3);
+                    }));
+            }
+        }
+        private ICommand _pushAddBtn;
+        public ICommand PushAddBtn
+        {
+            get
+            {
+                return _pushAddBtn
+                    ?? (_pushAddBtn = new ActionCommand(() =>
+                    {
+                        SummaCh(0, 2);
+                    }));
+            }
+        }
+        private ICommand _pushDeleteBtn;
+        public ICommand PushDeleteBtn
+        {
+            get
+            {
+                return _pushDeleteBtn
+                    ?? (_pushDeleteBtn = new ActionCommand(() =>
+                    {
+                        ShowWindowVS();
+                    }));
+            }
+        }
         #endregion
     }
 }

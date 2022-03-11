@@ -21,6 +21,11 @@
         <KeyBinding Command="{Binding Push8Btn}" Key="NumPad8"/>
         <KeyBinding Command="{Binding Push9Btn}" Key="NumPad9"/>
         <KeyBinding Command="{Binding Push0Btn}" Key="NumPad0"/>
+        <KeyBinding Command="{Binding PushDivideBtn}" Key="Divide"/>
+        <KeyBinding Command="{Binding PushMultiplyBtn}" Key="Multiply"/>
+        <KeyBinding Command="{Binding PushSubtractBtn}" Key="Subtract"/>
+        <KeyBinding Command="{Binding PushAddBtn}" Key="Add"/>
+        <KeyBinding Command="{Binding PushDeleteBtn}" Key="Delete"/>
     </Window.InputBindings>
     <Window.Resources>
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
@@ -428,42 +433,40 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Border Background="#1C1C25"
-                        Grid.ColumnSpan="2"
-                        Grid.RowSpan="2">
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="2">
             </Border>
             <Grid Grid.Column="0"
-                      Grid.Row="0">
+                      Grid.Row="0" ShowGridLines="True">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Image Margin="10" 
                            Grid.Column="0"
                            Grid.ColumnSpan="2"
                            Grid.Row="0"
                            Grid.RowSpan="2"
-                           HorizontalAlignment="Left" 
+                           HorizontalAlignment="Right" 
                            VerticalAlignment="Top" 
                            Width="200"
                            ToolTip="{Binding TollTipNPS}"
                            Source="{Binding ImageInfo}"/>
-                <Image Grid.Column="1"
-                           Grid.Row="0"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Source="{Binding Health}"
-                           Width="50"/>
-                <TextBlock Grid.Column="1"
-                               Grid.Row="0"
-                               Text="{Binding HP}"
-                               Foreground="#ffffff"
-                               FontSize="20"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
+                <TextBox Margin="10"
+                         Grid.Row="0"
+                         IsReadOnly="True"
+                         Width="50"
+                         Height="50"
+                         Background="#1C1C25"
+                         Text="{Binding HP}"
+                         Foreground="#ffffff"
+                         FontSize="20"
+                         VerticalContentAlignment="Center"
+                         HorizontalContentAlignment="Center"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Top"/>
             </Grid>
             <ScrollViewer Grid.Column="0" 
                               Grid.Row="1"
@@ -502,7 +505,7 @@
                             BorderThickness="2"
                             HorizontalContentAlignment="Center"
                             Foreground="#2A72E9"
-                            Margin="0 20 10 5"
+                            Margin="0 10 10 5"
                             Command="{Binding ViewImag}"/>
                     <Button Content="Информация"
                             FontSize="20"
@@ -515,7 +518,7 @@
                             Command="{Binding ViewInfo}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0"
-                                Grid.Column="0">
+                            Grid.Column="0">
                     <Button Content="Бой"
                             FontSize="20"
                             Grid.Row="0"
@@ -525,7 +528,7 @@
                             BorderThickness="2"
                             HorizontalContentAlignment="Center"
                             Foreground="#2A72E9"
-                            Margin="0 20 5 5"
+                            Margin="0 10 5 5"
                             Command="{Binding IntoBattleR}"/>
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Фон"
