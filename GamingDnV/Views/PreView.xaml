@@ -21,11 +21,10 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
-        
         <Image Grid.RowSpan="4"
-               Source="{Binding ImageView}"
                Grid.Column="0"
                Grid.Row="0"
+               Source="{Binding ImageView}"
                Margin="50"
                Visibility="{Binding VisibilityImageView}"/>
         <!--<TextBox Text="{Binding Text}"
@@ -258,11 +257,30 @@
                Grid.RowSpan="4"
                Visibility="{Binding ViB}"
                Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Background.png"/>
-        <Image Grid.Column="0"
-               Grid.Row="0"
-               Grid.RowSpan="4"
+        <StackPanel Grid.Column="0"
+                    Grid.Row="0"
+                    Grid.RowSpan="4"
+                    VerticalAlignment="Center"
+                    Visibility="{Binding ViT}">
+            <Image 
                Width="854"
-               Visibility="{Binding ViT}"
                Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\text.png"/>
+            <TextBox Text="{Binding HistoryName}"
+                     Background="#00000000"
+                     BorderThickness="0"
+                     HorizontalContentAlignment="Center"
+                     FontSize="100" FontFamily="Century Gothic" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBox.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFFFBF37" Offset="0"/>
+                        <GradientStop Color="#FFA16E00" Offset="1"/>
+                    </LinearGradientBrush>
+                </TextBox.Foreground>
+                <TextBox.Effect>
+                    <DropShadowEffect Direction="220" BlurRadius="15" ShadowDepth="8"/>
+                </TextBox.Effect>
+            </TextBox>
+        </StackPanel>
+
     </Grid>
 </Window>

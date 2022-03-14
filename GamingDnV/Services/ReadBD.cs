@@ -118,7 +118,22 @@ namespace GamingDnV.Services
             return Users;
         }
 
-        
+        public static string ReadHistoryInDb(string sql)
+        {
+            string History = "";
+            OleDbConnection myConnect = new OleDbConnection(constr);
+            myConnect.Open();
+            OleDbCommand myCommand = new OleDbCommand(sql, myConnect);
+            OleDbDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                History = Convert.ToString(reader[0].ToString());
+            }
+            myConnect.Close();
+            return History;
+        }
+
+
         public static ObservableCollection<NPCModel> ReadNPCInDb(string sql)
         {
             ObservableCollection<NPCModel> NPC = new ObservableCollection<NPCModel>();
@@ -143,13 +158,15 @@ namespace GamingDnV.Services
                     Charisma = Convert.ToInt32(reader[10].ToString()),
                     Species = Convert.ToString(reader[11].ToString()),
                     Class = Convert.ToString(reader[12].ToString()),
-                    Item = Convert.ToString(reader[13].ToString()),
-                    Abilities = Convert.ToString(reader[14].ToString()),
-                    Ulta = Convert.ToString(reader[15].ToString()),
-                    History = Convert.ToString(reader[16].ToString()),
-                    Imag = Convert.ToString(reader[17].ToString()),
-                    Sounds = Convert.ToString(reader[18].ToString()),
-                    RoomId = Convert.ToInt32(reader[19].ToString())
+                    Arms = Convert.ToString(reader[13].ToString()),
+                    Item = Convert.ToString(reader[14].ToString()),
+                    Abilities = Convert.ToString(reader[15].ToString()),
+                    Ulta = Convert.ToString(reader[16].ToString()),
+                    History = Convert.ToString(reader[17].ToString()),
+                    Imag = Convert.ToString(reader[18].ToString()),
+                    Equip = Convert.ToString(reader[19].ToString()),
+                    Sounds = Convert.ToString(reader[20].ToString()),
+                    RoomId = Convert.ToInt32(reader[21].ToString())
                 });
             }
             myConnect.Close();

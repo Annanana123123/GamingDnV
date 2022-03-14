@@ -57,6 +57,10 @@ namespace GamingDnV.Models
         public string History { get; set; }
         //Ава
         public string Imag { get; set; }
+        //Оружие
+        public string Arms { get; set; }
+        //Экипировка
+        public string Equip { get; set; }
         //Инициатива
         private string _atac;
         public string Atac

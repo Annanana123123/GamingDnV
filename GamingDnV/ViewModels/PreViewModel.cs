@@ -139,7 +139,19 @@ namespace GamingDnV.ViewModels
                 RaisePropertyChanged(nameof(VersusVisibility));
             }
         }
-        
+
+        private string _historyName;
+        public string HistoryName
+        {
+            get { return _historyName; }
+            set
+            {
+                _historyName = value;
+
+                RaisePropertyChanged(nameof(HistoryName));
+            }
+        }
+
         private string _avaLeft;
         public string AvaLeft
         {
@@ -384,8 +396,9 @@ namespace GamingDnV.ViewModels
             Timer.Interval = new TimeSpan( 0, 0, 0, 0, 500);
         }
 
-        public void VisibilityLogo()
+        public void VisibilityLogo(string his)
         {
+            HistoryName = his;
             ViB = Visibility.Visible;
             ViT = Visibility.Visible;
         }

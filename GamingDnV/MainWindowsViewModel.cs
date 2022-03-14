@@ -115,7 +115,7 @@ namespace GamingDnV
         #region Свойства
         public bool logo = false;
         public bool versus = true;
-
+        public string History = "";
         public PreViewModel PreVeiwWindow { get; set; }
 
         ObservableCollection<UsersModel> Users = new ObservableCollection<UsersModel>();
@@ -999,7 +999,7 @@ namespace GamingDnV
             }
             else
             {
-                PreVeiwWindow.VisibilityLogo();
+                PreVeiwWindow.VisibilityLogo(History);
                 logo = true;
             }
         }
@@ -1023,9 +1023,10 @@ namespace GamingDnV
                 PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + SelectItem.Id + "\\Images\\";
                 PathInterface = AppDomain.CurrentDomain.BaseDirectory + "Media\\Interface\\";
                 PathMedia = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + SelectItem.Id + "\\Sounds\\";
+                History = ReadBD.ReadHistoryInDb("SELECT Name FROM tHistorys WHERE Id = " + SelectItem.Id + ";");
                 Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE HistoryId = " + SelectItem.Id + " ORDER BY tRooms.Order;");
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
-                ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Item, Abilities, Ulta, History, Imag, Sounds, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
+                ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Arms, Item, Abilities, Ulta, History, Imag, Equip, Sounds, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
                 HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tHeros WHERE HistoryId =" + SelectItem.Id);
             }
         }
@@ -1163,6 +1164,7 @@ namespace GamingDnV
         {
             VersusTable = new ObservableCollection<ActionModel>();
             Versus = new ObservableCollection<ActionModel>();
+            
             foreach (var w in HerosTable)
             {
                 w.Atac = null;
@@ -1181,12 +1183,13 @@ namespace GamingDnV
         
         public void CalcAction()
         {
+            ObservableCollection<ActionModel> VSs = new ObservableCollection<ActionModel>();
             if (versus)
             {
                 foreach (var e in HerosTable)
                 {
-                    if (e.Atac != null)
-                    {
+                    //if (e.Atac != null)
+                    //{
                         Versus.Add(new ActionModel()
                         {
                             Id = e.Id,
@@ -1209,14 +1212,16 @@ namespace GamingDnV
                             Arms = e.Arms,
                             Equip = e.Equip,
                             Passiv = e.Passiv,
-                            Description = e.Description
+                            Description = e.Description,
                         });
-                    }
+                    //}
                 }
-                foreach (var e in NPCTable)
+                if (NPCTable != null)
                 {
-                    if (e.Atac != null)
+                    foreach (var e in NPCTable)
                     {
+                        //if (e.Atac != null)
+                        //{
                         Versus.Add(new ActionModel()
                         {
                             Id = e.Id,
@@ -1229,6 +1234,7 @@ namespace GamingDnV
                             Power = e.Power,
                             Dexterity = e.Dexterity,
                             Endurance = e.Endurance,
+                            Arms = e.Arms,
                             Wisdom = e.Wisdom,
                             Intelligence = e.Intelligence,
                             Charisma = e.Charisma,
@@ -1236,10 +1242,40 @@ namespace GamingDnV
                             Abilities = e.Abilities,
                             Ulta = e.Ulta,
                             Imag = e.Imag,
+                            Equip = e.Equip
+                        });
+                        //}
+                    }
+                }
+                foreach (var e in Versus)
+                {
+                    if (e.Action != 0)
+                    {
+                        VSs.Add(new ActionModel()
+                        {
+                            Id = e.Id,
+                            Action = e.Action,
+                            Person = e.Person,
+                            Name = e.Name,
+                            Notee = e.Notee,
+                            Defence = e.Defence,
+                            Health = e.Health,
+                            Power = e.Power,
+                            Dexterity = e.Dexterity,
+                            Endurance = e.Endurance,
+                            Wisdom = e.Wisdom,
+                            Arms = e.Arms,
+                            Intelligence = e.Intelligence,
+                            Charisma = e.Charisma,
+                            Item = e.Item,
+                            Abilities = e.Abilities,
+                            Ulta = e.Ulta,
+                            Imag = e.Imag,
+                            Equip = e.Equip
                         });
                     }
                 }
-                Versus = new ObservableCollection<ActionModel>(Versus.OrderByDescending(x => x.Action).ToList());
+                Versus = new ObservableCollection<ActionModel>(VSs.OrderByDescending(x => x.Action).ToList());
                 int i = 0;
                 int a = -1;
                 int ie = 1;
@@ -1649,13 +1685,19 @@ namespace GamingDnV
 
         public void HeroInBattle()
         {
-            PreVeiwWindow.LeftInBattleVeiw(CurrentUser.Imag, CurrentUser.HeroName, CurrentUser.Defence.ToString(), CurrentUser.Health.ToString(), "Hero");
-            PreVeiwWindow.EditShit(0);
+            if (CurrentUser != null)
+            {
+                PreVeiwWindow.LeftInBattleVeiw(CurrentUser.Imag, CurrentUser.HeroName, CurrentUser.Defence.ToString(), CurrentUser.Health.ToString(), "Hero");
+                PreVeiwWindow.EditShit(0);
+            }
         }
         public void NPCInBattle()
         {
-            PreVeiwWindow.RightInBattleVeiw(CurrentNPC.Imag, CurrentNPC.Name, CurrentNPC.Defence.ToString(), CurrentNPC.Health.ToString(), "NPC");
-            PreVeiwWindow.EditShit(0);
+            if (CurrentNPC != null)
+            {
+                PreVeiwWindow.RightInBattleVeiw(CurrentNPC.Imag, CurrentNPC.Name, CurrentNPC.Defence.ToString(), CurrentNPC.Health.ToString(), "NPC");
+                PreVeiwWindow.EditShit(0);
+            }
         }
         public void ShowWindowVS()
         {
@@ -1704,38 +1746,41 @@ namespace GamingDnV
 
         public void CurrentV(int n)
         {
-            switch (n)
+            if (CurrentVersus != null)
             {
-                case 1:
-                    if (CurrentVersus.Person == "Hero")
-                    {
-                        IL = PathHero + CurrentVersus.Imag;
-                    }
-                    else
-                    {
-                        IL = PathNPC + CurrentVersus.Imag;
-                    }
-                    LCurr = CurrentVersus;
-                    DL = CurrentVersus.Defence.ToString();
-                    HL = CurrentVersus.Health.ToString();
-                    PreVeiwWindow.LeftInBattleVeiw(CurrentVersus.Imag, CurrentVersus.Name, CurrentVersus.Defence.ToString(), CurrentVersus.Health.ToString(), CurrentVersus.Person);
-                    PreVeiwWindow.EditShit(0);
-                    break;
-                case 2:
-                    if (CurrentVersus.Person == "Hero")
-                    {
-                        IR = PathHero + CurrentVersus.Imag;
-                    }
-                    else
-                    {
-                        IR = PathNPC + CurrentVersus.Imag;
-                    }
-                    RCurr = CurrentVersus;
-                    DR = CurrentVersus.Defence.ToString();
-                    HR = CurrentVersus.Health.ToString();
-                    PreVeiwWindow.RightInBattleVeiw(CurrentVersus.Imag, CurrentVersus.Name, CurrentVersus.Defence.ToString(), CurrentVersus.Health.ToString(), CurrentVersus.Person);
-                    PreVeiwWindow.EditShit(0);
-                    break;
+                switch (n)
+                {
+                    case 1:
+                        if (CurrentVersus.Person == "Hero")
+                        {
+                            IL = PathHero + CurrentVersus.Imag;
+                        }
+                        else
+                        {
+                            IL = PathNPC + CurrentVersus.Imag;
+                        }
+                        LCurr = CurrentVersus;
+                        DL = CurrentVersus.Defence.ToString();
+                        HL = CurrentVersus.Health.ToString();
+                        PreVeiwWindow.LeftInBattleVeiw(CurrentVersus.Imag, CurrentVersus.Name, CurrentVersus.Defence.ToString(), CurrentVersus.Health.ToString(), CurrentVersus.Person);
+                        PreVeiwWindow.EditShit(0);
+                        break;
+                    case 2:
+                        if (CurrentVersus.Person == "Hero")
+                        {
+                            IR = PathHero + CurrentVersus.Imag;
+                        }
+                        else
+                        {
+                            IR = PathNPC + CurrentVersus.Imag;
+                        }
+                        RCurr = CurrentVersus;
+                        DR = CurrentVersus.Defence.ToString();
+                        HR = CurrentVersus.Health.ToString();
+                        PreVeiwWindow.RightInBattleVeiw(CurrentVersus.Imag, CurrentVersus.Name, CurrentVersus.Defence.ToString(), CurrentVersus.Health.ToString(), CurrentVersus.Person);
+                        PreVeiwWindow.EditShit(0);
+                        break;
+                }
             }
         }
 
@@ -1815,19 +1860,21 @@ namespace GamingDnV
         }
         public void ViewImagIn()
         {
-            if (VisibilityImag)
+            if (CurrentNPC != null)
             {
-                ViewImagText = "Показать";
-                PreVeiwWindow.NoShowImag();
-                VisibilityImag = false;
+                if (VisibilityImag)
+                {
+                    ViewImagText = "Показать";
+                    PreVeiwWindow.NoShowImag();
+                    VisibilityImag = false;
+                }
+                else
+                {
+                    ViewImagText = "Скрыть";
+                    PreVeiwWindow.ShowImag(CurrentNPC.Imag, TypeEven.NPC);
+                    VisibilityImag = true;
+                }
             }
-            else
-            {
-                ViewImagText = "Скрыть";
-                PreVeiwWindow.ShowImag(CurrentNPC.Imag, TypeEven.NPC);
-                VisibilityImag = true;
-            }
-            
         }
 
         public bool CheckPushBtn(string x)
@@ -2058,6 +2105,18 @@ namespace GamingDnV
                     ?? (_push8Btn = new ActionCommand(() =>
                     {
                         PlayAndStop(CurrEvent);
+                    }));
+            }
+        }
+        private ICommand _push9Btn;
+        public ICommand Push9Btn
+        {
+            get
+            {
+                return _push9Btn
+                    ?? (_push9Btn = new ActionCommand(() =>
+                    {
+                        EditStep();
                     }));
             }
         }
