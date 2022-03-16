@@ -27,18 +27,7 @@
                Source="{Binding ImageView}"
                Margin="50"
                Visibility="{Binding VisibilityImageView}"/>
-        <!--<TextBox Text="{Binding Text}"
-                 Grid.Row="1"
-                 Width="100"
-                 Height="50"
-                 FontSize="20"
-                 VerticalContentAlignment="Center"
-                 HorizontalContentAlignment="Center"
-                 BorderBrush="#2A72E9"
-                 BorderThickness="3"
-                 Foreground="#2A72E9"
-                 Background="#12131A"
-                 Opacity="1"/>-->
+
         <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" Opacity="0.1"  Width="10" HorizontalAlignment="Stretch" Height="3"/>
         <Grid Grid.Row="1" ShowGridLines="false">
             <Grid.ColumnDefinitions>
@@ -58,8 +47,8 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Image Grid.RowSpan="2" Margin="20 5 20 0" VerticalAlignment="Top" Source="{Binding AvaLeft}"/>
-                    <Image Grid.RowSpan="2" Margin="20 5 20 0" VerticalAlignment="Top" Visibility="{Binding VisibilityL}" Opacity="{Binding OpacityL}" Source="{Binding ScratchesL}"/>
+                    <Image Grid.RowSpan="2" Margin="0 10 10 0" VerticalAlignment="Top" HorizontalAlignment="Center" Source="{Binding AvaLeft}"/>
+                    <Image Grid.RowSpan="2" Margin="0 10 10 0" VerticalAlignment="Top" Visibility="{Binding VisibilityL}" Opacity="{Binding OpacityL}" Source="{Binding ScratchesL}"/>
                     <Grid Grid.Row="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="23*"/>
@@ -109,29 +98,38 @@
                            Source="{Binding LShitImg}"
                            Margin="5 0 5 0"/>
                         <TextBox Grid.Row="0" 
-                             IsReadOnly="True" 
-                             Text="{Binding ShitL}"
-                             Visibility="{Binding ShitLVisibility}"
-                             Background="#00000000"
-                             FontSize="27"
-                             FontWeight="Bold"
-                             BorderThickness="0"
-                             HorizontalContentAlignment="Center"
-                             VerticalContentAlignment="Center"/>
+                                 IsReadOnly="True" 
+                                 Text="{Binding ShitL}"
+                                 Visibility="{Binding ShitLVisibility}"
+                                 Background="#00000000"
+                                 FontSize="27"
+                                 FontWeight="Bold"
+                                 Foreground="White"
+                                 BorderThickness="0"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="1"/>
+                            </TextBox.Effect>
+                        </TextBox>
                         <Image Grid.Row="1" 
                                Margin="25 5 25 0" 
                                Source="{Binding H}"/>
                         <TextBox Grid.Row="1" 
-                             IsReadOnly="True"
-                             Text="{Binding HealthL}"
-                             Visibility="{Binding HealthLVisibility}"
-                             Background="#00000000"
-                             FontSize="27"
-                             Foreground="White"
-                             FontWeight="Bold"
-                             BorderThickness="0"
-                             HorizontalContentAlignment="Center"
-                             VerticalContentAlignment="Center"/>
+                                 IsReadOnly="True"
+                                 Text="{Binding HealthL}"
+                                 Visibility="{Binding HealthLVisibility}"
+                                 Background="#00000000"
+                                 FontSize="27"
+                                 Foreground="White"
+                                 FontWeight="Bold"
+                                 BorderThickness="0"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="1"/>
+                            </TextBox.Effect>
+                        </TextBox>
                     </Grid>
                 </Grid>
             </Grid>
@@ -143,8 +141,8 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Image Grid.RowSpan="2" Margin="20 5 20 0" VerticalAlignment="Top" Source="{Binding AvaRight}"/>
-                    <Image Grid.RowSpan="2" Margin="20 5 20 0" VerticalAlignment="Top" Visibility="{Binding VisibilityR}" Opacity="{Binding OpacityR}" Source="{Binding ScratchesR}"/>
+                    <Image Grid.RowSpan="2" Margin="0 10 10 0" VerticalAlignment="Top" HorizontalAlignment="Center" Source="{Binding AvaRight}"/>
+                    <Image Grid.RowSpan="2" Margin="0 10 10 0" VerticalAlignment="Top" Visibility="{Binding VisibilityR}" Opacity="{Binding OpacityR}" Source="{Binding ScratchesR}"/>
                     <Grid Grid.Row="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="23*"/>
@@ -192,15 +190,20 @@
                         <Image Grid.Row="0" Source="{Binding RShitImg}"
                            Margin="5 0 5 0"/>
                         <TextBox Grid.Row="0" 
-                             IsReadOnly="True" 
-                             Text="{Binding ShitR}"
-                             Visibility="{Binding ShitRVisibility}"
-                             Background="#00000000"
-                             FontSize="27"
-                             FontWeight="Bold"
-                             BorderThickness="0"
-                             HorizontalContentAlignment="Center"
-                             VerticalContentAlignment="Center"/>
+                                 IsReadOnly="True" 
+                                 Text="{Binding ShitR}"
+                                 Visibility="{Binding ShitRVisibility}"
+                                 Background="#00000000"
+                                 FontSize="27"
+                                 FontWeight="Bold"
+                                 BorderThickness="0"
+                                 Foreground="White"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="1"/>
+                            </TextBox.Effect>
+                        </TextBox>
                         <!--<Image Grid.Row="1" 
                                Margin="25 5 25 0" 
                                Source="{Binding H}"/>
@@ -214,7 +217,11 @@
                              FontWeight="Bold"
                              BorderThickness="0"
                              HorizontalContentAlignment="Center"
-                             VerticalContentAlignment="Center"/>-->
+                             VerticalContentAlignment="Center">
+                            <TextBox.Effect>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="2"/>
+                            </TextBox.Effect>
+                        </TextBox>-->
                     </Grid>
                 </Grid>
             </Grid>
@@ -255,7 +262,7 @@
         <Image Grid.Column="0"
                Grid.Row="0"
                Grid.RowSpan="4"
-               Visibility="{Binding ViB}"
+               Visibility="Hidden"
                Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Background.png"/>
         <StackPanel Grid.Column="0"
                     Grid.Row="0"

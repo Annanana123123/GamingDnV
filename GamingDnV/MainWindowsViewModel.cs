@@ -1790,6 +1790,7 @@ namespace GamingDnV
             AtacSEn = false;
             TrackSEn = false;
             arr = null;
+            ItemText = "";
             arr = CurrentRoom.Images.Split(';');
             TextNPC = CurrentRoom.TextRoom;
             ImageInfo = PathImag + arr[0];
@@ -1807,6 +1808,7 @@ namespace GamingDnV
                 BackSEn = false;
                 AtacSEn = false;
                 TrackSEn = false;
+                ItemText = "";
                 arr = null;
                 arr = CurrentEvent.Images.Split(';');
                 TextNPC = CurrentEvent.TextEvent;
