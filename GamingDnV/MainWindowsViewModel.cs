@@ -1735,7 +1735,7 @@ namespace GamingDnV
 
         public void OnLoad()
         {
-            List<ComboBoxModel> Combo = ReadBD.ReadHistory("SELECT Id, Name FROM tHistorys;");
+            List<ComboBoxModel> Combo = ReadBD.ReadHistory("SELECT Id, Name FROM tHistorys WHERE Visibility = 1;");
             ComboBoxItem = Combo;
             //LoadHystory(1);
         }
