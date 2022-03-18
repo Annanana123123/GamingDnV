@@ -13,6 +13,28 @@ namespace GamingDnV.Services
     {
         public static string constr = "provider=Microsoft.Jet.OLEDB.4.0;data source=database.mdb";
 
+        public static ObservableCollection<ItemsModel> ReadItemsInDb(string sql)
+        {
+            ObservableCollection<ItemsModel> Items = new ObservableCollection<ItemsModel>();
+            OleDbConnection myConnect = new OleDbConnection(constr);
+            myConnect.Open();
+            OleDbCommand myCommand = new OleDbCommand(sql, myConnect);
+            OleDbDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                Items.Add(new ItemsModel()
+                {
+                    Id = Convert.ToInt32(reader[0].ToString()),
+                    Name = Convert.ToString(reader[1].ToString()),
+                    Notee = Convert.ToString(reader[2].ToString()),
+                    IdPerson = Convert.ToInt32(reader[3].ToString()),
+                    Person = Convert.ToInt32(reader[4].ToString()),
+                });
+            }
+            myConnect.Close();
+            return Items;
+        }
+
         public static ObservableCollection<EventsModel> ReadEventInDb(string sql)
         {
             //Id, Name, TextEvent, Images, Sounds, Order

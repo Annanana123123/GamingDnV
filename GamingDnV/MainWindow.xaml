@@ -263,7 +263,7 @@
                 <RowDefinition Height="150"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Image Margin="10" Source="{Binding UserIcon}"/>
+            <Image Margin="10" Source="{Binding UserIcon}" ToolTip="{Binding ToolTipU}"/>
             <ScrollViewer Grid.Column="1"
                                   Grid.RowSpan="2">
                 <ScrollViewer.Resources>
@@ -311,54 +311,22 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
             <StackPanel Grid.Column="0">
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="1" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B1}"/>
-                    <Button Content="2" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B2}"/>
-                    <Button Content="3" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B3}"/>
-                    <Button Content="4" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B4}"/>
-                    <Button Content="5" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B5}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="6" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B6}"/>
-                    <Button Content="7" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B7}"/>
-                    <Button Content="8" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B8}"/>
-                    <Button Content="9" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B9}"/>
-                    <Button Content="10" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B10}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="11" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B11}"/>
-                    <Button Content="12" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B12}"/>
-                    <Button Content="13" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B13}"/>
-                    <Button Content="14" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B14}"/>
-                    <Button Content="15" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B15}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="16" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B16}"/>
-                    <Button Content="17" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B17}"/>
-                    <Button Content="18" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B18}"/>
-                    <Button Content="19" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B19}"/>
-                    <Button Content="20" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B20}"/>
+                <StackPanel>
+                    <TextBox Text="{Binding Damag}"
+                             Margin="0 0 3 3"
+                             Width="187"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             BorderBrush="#2A72E9" 
+                             BorderThickness="3" 
+                             Background="#12131A" 
+                             Foreground="#2A72E9"
+                             FontSize="50"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Защита" FontSize="15" Margin="0 0 3 3" Width="88" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
@@ -371,55 +339,88 @@
                                 Command="{Binding ResultHealth3}"/>
                 </StackPanel>
                 <StackPanel>
+
                     <Button Content="Очистить" 
-                                        Width="187"
-                                        Height="35"
-                                        FontSize="15"
-                                        BorderBrush="#2A72E9"
-                                        BorderThickness="3"
-                                        Background="#12131A"
-                                        Foreground="#2A72E9"
-                                        Margin="0 0 3 3"
-                                        Command="{Binding ClianTextBox}"/>
-                    <Button Content="Логотип" 
-                                        Width="187"
-                                        Height="35"
-                                        FontSize="15"
-                                        BorderBrush="#2A72E9"
-                                        BorderThickness="3"
-                                        Background="#12131A"
-                                        Foreground="#2A72E9"
-                                        Margin="0 0 3 3"
-                                        Command="{Binding Logo}"/>
-                    <Button Content="{Binding ViewBattle}" 
-                                        Width="187"
-                                        Height="35"
-                                        FontSize="15"
-                                        BorderBrush="#2A72E9"
-                                        BorderThickness="3"
-                                        Background="#12131A"
-                                        Foreground="#2A72E9"
-                                        Margin="0 0 3 3"
-                                        Command="{Binding ShowWindow}"/>
+                            Width="187"
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 3 3"
+                            Command="{Binding ClianTextBox}"/>
+                    <Button Content="{Binding TextButton}" Margin="0 0 3 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding NPCStep}"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Column="1">
-                <Button Content="СИЛА" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Power}"/>
-                <Button Content="ЛОВКИСТЬ" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Dexterity}"/>
-                <Button Content="ВЫНОСЛИВОСТЬ" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Endurance}"/>
-                <Button Content="МУДРОСТЬ" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Wisdom}"/>
-                <Button Content="ИНТЕЛЕКТ" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Intelligence}"/>
-                <Button Content="ХАРИЗМА" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Charisma}"/>
-                <Button Content="{Binding TextButton}" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding NPCStep}"/>
+                <Button Content="Логотип" 
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 0 3"
+                            Command="{Binding Logo}"/>
+                <Button Content="{Binding ViewBattle}" 
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 0 3"
+                            Command="{Binding ShowWindow}"/>
             </StackPanel>
-
+            <DataGrid Grid.Row="1"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      Background="#12131A"
+                      x:Name="GridItem"
+                      ItemsSource="{Binding Items, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      ScrollViewer.CanContentScroll="True"
+                      SelectionMode="Single"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      GridLinesVisibility="all"
+                      VerticalGridLinesBrush="#32323d"
+                      RowEditEnding="GridNPC_RowEditEnding"
+                      SelectedItem="{Binding CurrentItems, Mode=TwoWay}"
+                      FontSize="20">
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type DataGrid}">
+                        <Setter Property="HeadersVisibility" Value="Column" />
+                    </Style>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="#1C1C25" />
+                        <Setter Property="Foreground" Value="#888888"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="BorderBrush" Value="#32323d"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                    </Style>
+                    <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background" Value="#12131A"/>
+                        <Setter Property="Foreground" Value="#999999"/>
+                        <Setter Property="BorderBrush" Value="#32323d"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                    </Style>
+                    <Style x:Key="NameCellStyle" TargetType="{x:Type DataGridCell}">
+                        <Style.Setters>
+                            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                        </Style.Setters>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Предмет" Width="*" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Id" Width="auto" Binding="{Binding IdPerson}"/>
+                    <DataGridTextColumn Header="IdP" Width="auto" Binding="{Binding Person}"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
 
         <Grid Grid.Row="3"
@@ -459,6 +460,7 @@
                          IsReadOnly="True"
                          Width="50"
                          Height="50"
+                         ToolTip="{Binding ToolTipN}"
                          Background="#1C1C25"
                          Text="{Binding HP}"
                          Foreground="#ffffff"
@@ -896,7 +898,7 @@
               Grid.RowSpan="5"
               Grid.Column="0"
               Grid.ColumnSpan="7"
-              Visibility="{Binding VisibilityLoad}">
+              Visibility="{Binding VisibilityLoad, FallbackValue=Hidden}">
         <!--<Grid Grid.Row="0"
               Grid.RowSpan="3"
               Visibility="Hidden">-->
@@ -965,7 +967,7 @@
               Grid.RowSpan="3"
               Grid.Column="1"
               Grid.ColumnSpan="5"
-              Visibility="{Binding VisibilityInfo}">
+              Visibility="{Binding VisibilityInfo, FallbackValue=Hidden}">
 
         <!--<Grid Grid.Row="1"
               Grid.RowSpan="3"
@@ -1176,7 +1178,7 @@
               Grid.RowSpan="4"
               Grid.Column="0"
               Grid.ColumnSpan="7"
-              Visibility="{Binding VisibilityVersus}">
+              Visibility="{Binding VisibilityVersus, FallbackValue=Hidden}">
             <!--<Grid Grid.Row="0"
               Grid.RowSpan="4"
               Grid.Column="0"
@@ -1636,7 +1638,7 @@
               Grid.RowSpan="4"
               Grid.Column="0"
               Grid.ColumnSpan="7"
-              Visibility="{Binding VisibilityPrint}">
+              Visibility="{Binding VisibilityPrint, FallbackValue=Hidden}">
         <!--<Grid Grid.Row="0"
               Grid.RowSpan="4"
               Grid.Column="0"

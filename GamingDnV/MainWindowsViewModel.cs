@@ -35,26 +35,6 @@ namespace GamingDnV
             IntoBattleR = new RelayCommand(() => NPCInBattle());
             IntoBattleL = new RelayCommand(() => HeroInBattle());
             ClianTextBox = new RelayCommand(() => ClianTextBoxVeiw());
-            B1 = new RelayCommand(() => SummaCh(1,0));
-            B2 = new RelayCommand(() => SummaCh(2,0));
-            B3 = new RelayCommand(() => SummaCh(3,0));
-            B4 = new RelayCommand(() => SummaCh(4,0));
-            B5 = new RelayCommand(() => SummaCh(5,0));
-            B6 = new RelayCommand(() => SummaCh(6,0));
-            B7 = new RelayCommand(() => SummaCh(7,0));
-            B8 = new RelayCommand(() => SummaCh(8,0));
-            B9 = new RelayCommand(() => SummaCh(9,0));
-            B10 = new RelayCommand(() => SummaCh(10,0));
-            B11 = new RelayCommand(() => SummaCh(11,0));
-            B12 = new RelayCommand(() => SummaCh(12,0));
-            B13 = new RelayCommand(() => SummaCh(13,0));
-            B14 = new RelayCommand(() => SummaCh(14,0));
-            B15 = new RelayCommand(() => SummaCh(15,0));
-            B16 = new RelayCommand(() => SummaCh(16,0));
-            B17 = new RelayCommand(() => SummaCh(17,0));
-            B18 = new RelayCommand(() => SummaCh(18,0));
-            B19 = new RelayCommand(() => SummaCh(19,0));
-            B20 = new RelayCommand(() => SummaCh(20,0));
             D4 = new RelayCommand(() => RandomIze(4));
             D6 = new RelayCommand(() => RandomIze(6));
             D8 = new RelayCommand(() => RandomIze(8));
@@ -62,16 +42,10 @@ namespace GamingDnV
             D12 = new RelayCommand(() => RandomIze(12));
             D20 = new RelayCommand(() => RandomIze(20));
             D100 = new RelayCommand(() => RandomIze(100));
-            Power = new RelayCommand(() => SummaCh(1, 1));
-            Dexterity = new RelayCommand(() => SummaCh(2, 1));
-            Endurance = new RelayCommand(() => SummaCh(3, 1));
-            Wisdom = new RelayCommand(() => SummaCh(4, 1));
-            Intelligence = new RelayCommand(() => SummaCh(5, 1));
-            Charisma = new RelayCommand(() => SummaCh(6, 1));
-            ResultDefence = new RelayCommand(() => SummaCh(0, 2));
-            ResultHealth1 = new RelayCommand(() => SummaCh(0, 3, 1));
-            ResultHealth2 = new RelayCommand(() => SummaCh(0, 3, 2));
-            ResultHealth3 = new RelayCommand(() => SummaCh(0, 3, 3));
+            ResultDefence = new RelayCommand(() => PreVeiwWindow.EditShit(NpcStep));
+            ResultHealth1 = new RelayCommand(() => SummaCh(1));
+            ResultHealth2 = new RelayCommand(() => SummaCh(2));
+            ResultHealth3 = new RelayCommand(() => SummaCh(3));
             NPCStep = new RelayCommand(() => EditStep());
             ActionBtn = new RelayCommand(() => CalcAction());
             CleanActionBtn = new RelayCommand(() => CleanAct());
@@ -120,6 +94,41 @@ namespace GamingDnV
 
         ObservableCollection<UsersModel> Users = new ObservableCollection<UsersModel>();
         ObservableCollection<NPCModel> NPC = new ObservableCollection<NPCModel>();
+
+        private string _damag;
+        public string Damag
+        {
+            get { return _damag; }
+            set
+            {
+                _damag = value;
+
+                RaisePropertyChanged(nameof(Damag));
+            }
+        }
+
+        private string _toolTipU;
+        public string ToolTipU
+        {
+            get { return _toolTipU; }
+            set
+            {
+                _toolTipU = value;
+
+                RaisePropertyChanged(nameof(ToolTipU));
+            }
+        }
+        private string _toolTipN;
+        public string ToolTipN
+        {
+            get { return _toolTipN; }
+            set
+            {
+                _toolTipN = value;
+
+                RaisePropertyChanged(nameof(ToolTipN));
+            }
+        }
 
         private string _dColorL;
         public string DColorL
@@ -546,6 +555,17 @@ namespace GamingDnV
                 _itemText = value;
 
                 RaisePropertyChanged(nameof(ItemText));
+            }
+        }
+        private ObservableCollection<ItemsModel> _items;
+        public ObservableCollection<ItemsModel> Items
+        {
+            get { return _items; }
+            set
+            {
+                _items = value;
+
+                RaisePropertyChanged(nameof(Items));
             }
         }
 
@@ -1028,7 +1048,41 @@ namespace GamingDnV
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
                 ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Arms, Item, Abilities, Ulta, History, Imag, Equip, Sounds, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
                 HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tHeros WHERE HistoryId =" + SelectItem.Id);
+                Items = WhereItems();
             }
+        }
+
+        public ObservableCollection<ItemsModel> WhereItems()
+        {
+            ObservableCollection<ItemsModel> item = new ObservableCollection<ItemsModel>();
+            ObservableCollection<ItemsModel> item1 = new ObservableCollection<ItemsModel>();
+            ObservableCollection<ItemsModel> item2 = new ObservableCollection<ItemsModel>();
+            ObservableCollection<ItemsModel> item3 = new ObservableCollection<ItemsModel>();
+            string id = "";
+            foreach (var n in HerosTable)
+            {
+                id += n.Id + ", "; 
+            }
+            if (id != "")
+                item1 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person FROM tItems WHERE IdPerson in (" + id + ") and Person = 1;");
+
+            id = "";
+            foreach (var n in ListNpc)
+            {
+                id += n.Id + ", ";
+            }
+            if (id != "")
+                item2 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person FROM tItems WHERE IdPerson in (" + id + ") and Person = 2;");
+
+            id = "";
+            foreach (var n in Rooms)
+            {
+                id += n.Id + ", ";
+            }
+            if (id != "")
+                item3 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person FROM tItems WHERE IdPerson in (" + id + ") and Person = 3;");
+            item = new ObservableCollection<ItemsModel>(item1.Concat(item2.Concat(item3)));
+            return item;
         }
 
         public string WhereIn()
@@ -1489,61 +1543,19 @@ namespace GamingDnV
             return res;
         }
 
-        public void SummaCh(int n, int type, int s = 0)
+        public void SummaCh(int s = 0)
         {
-            string text = "";
-            switch (type)
+            int dam = Convert.ToInt32(Damag);
+            if (NpcStep)
             {
-                case 0:
-                    if (summa == 0)
-                    {
-                        text = n.ToString() + " ";
-                    }
-                    else
-                    {
-                        if (n<0)
-                        {
-                            text = n + " ";
-                        }
-                        else
-                        {
-                            text = "+ " + n + " ";
-                        }
-                    }
-                    summa += n;
-                    break;
-                case 1:
-                    int t = 0;
-                    if (VisibilityVersus == Visibility.Visible)
-                    {
-                        t = WhoVS(n);
-                    }
-                    else
-                    {
-                        t = Who(n);
-                    }
-                    if (t < 0)
-                    {
-                        text = t + " ";
-                    }
-                    else
-                    {
-                        text = "+ " + t + " ";
-                    }
-                    
-                    summa += t;
-                    break;
-                case 2:
-                    text = "= " + summa;
-                    ResultCheckDefence();
-                    break;
-                case 3:
-                    text = "= " + summa;
-                    ResultCheckHealth(s);
-                    break;
+                CurrentNPC.Health -= dam;
+                ResultCheckHealth(s);
             }
-            PreVeiwWindow.ViewVersus(text);
-            TextView += text;
+            else
+            {
+                CurrentUser.Health -= dam;
+                ResultCheckHealth(s);
+            }
         }
 
         public void ResultCheckHealth(int s)
@@ -1614,40 +1626,6 @@ namespace GamingDnV
             }
         }
 
-        public void ResultCheckDefence()
-        {
-            if (CurrentNPC != null && CurrentUser != null)
-            {
-                if (NpcStep)
-                {
-                    //Ход NPC
-                    if (CurrentUser.Defence - summa <= 0)
-                    {
-                        PreVeiwWindow.EditShit(NpcStep, 2);
-                    }
-                    else
-                    {
-                        PreVeiwWindow.EditShit(NpcStep, 1);
-                    }
-                }
-                else
-                {
-                    //Ход Героя
-                    if (CurrentNPC.Defence - summa <= 0)
-                    {
-                        PreVeiwWindow.EditShit(NpcStep, 2);
-                    }
-                    else
-                    {
-                        PreVeiwWindow.EditShit(NpcStep, 1);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Выбери соперника в таблице");
-            }
-        }
         public void ClianColor()
         {
             DColorL = "#1C1C25";
@@ -1791,6 +1769,7 @@ namespace GamingDnV
             TrackSEn = false;
             arr = null;
             ItemText = "";
+            ToolTipN = "id = " + CurrentRoom.Id.ToString();
             arr = CurrentRoom.Images.Split(';');
             TextNPC = CurrentRoom.TextRoom;
             ImageInfo = PathImag + arr[0];
@@ -1826,6 +1805,7 @@ namespace GamingDnV
                 BackSEn = false;
                 AtacSEn = false;
                 TrackSEn = false;
+                ToolTipN = "id = " + CurrentNPC.Id.ToString();
                 HP = CurrentNPC.Health.ToString();
                 TextNPC = CurrentNPC.History + "\r\n\rСпособности:\r\n" + CurrentNPC.Abilities + "\r\n\rЗаклинание:\r\n" + CurrentNPC.Ulta;
                 ItemText = "Инвентарь:\r\n" + CurrentNPC.Item;
@@ -1840,6 +1820,7 @@ namespace GamingDnV
         {
             if (CurrentUser != null)
             {
+                ToolTipU = "id = " + CurrentUser.Id.ToString();
                 UserInfo = "Оружие:\r\n" + CurrentUser.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentUser.Equip + "\r\n\r\nИнвинтарь:\r\n" + CurrentUser.Item + "\r\n\r\nСпособности:\r\n" + CurrentUser.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentUser.Ulta + "\r\n\r\nОписание:\r\n" + CurrentUser.Description;
                 UserIcon = PathHero + CurrentUser.Imag;
             }
@@ -1958,32 +1939,6 @@ namespace GamingDnV
         public ICommand Battle4 { get; set; }
         public ICommand Battle5 { get; set; }
         public ICommand ClianTextBox { get; set; }
-        public ICommand B1 { get; set; }
-        public ICommand B2 { get; set; }
-        public ICommand B3 { get; set; }
-        public ICommand B4 { get; set; }
-        public ICommand B5 { get; set; }
-        public ICommand B6 { get; set; }
-        public ICommand B7 { get; set; }
-        public ICommand B8 { get; set; }
-        public ICommand B9 { get; set; }
-        public ICommand B10 { get; set; }
-        public ICommand B11 { get; set; }
-        public ICommand B12 { get; set; }
-        public ICommand B13 { get; set; }
-        public ICommand B14 { get; set; }
-        public ICommand B15 { get; set; }
-        public ICommand B16 { get; set; }
-        public ICommand B17 { get; set; }
-        public ICommand B18 { get; set; }
-        public ICommand B19 { get; set; }
-        public ICommand B20 { get; set; }
-        public ICommand Power { get; set; }
-        public ICommand Dexterity { get; set; }
-        public ICommand Endurance { get; set; }
-        public ICommand Wisdom { get; set; }
-        public ICommand Intelligence { get; set; }
-        public ICommand Charisma { get; set; }
         public ICommand NPCStep { get; set; }
         public ICommand ResultDefence { get; set; }
         public ICommand ResultHealth1 { get; set; }
@@ -2142,7 +2097,7 @@ namespace GamingDnV
                 return _pushDivideBtn
                     ?? (_pushDivideBtn = new ActionCommand(() =>
                     {
-                        SummaCh(0, 3, 1);
+                        SummaCh(1);
                     }));
             }
         }
@@ -2154,7 +2109,7 @@ namespace GamingDnV
                 return _pushMultiplyBtn
                     ?? (_pushMultiplyBtn = new ActionCommand(() =>
                     {
-                        SummaCh(0, 3, 2);
+                        SummaCh(2);
                     }));
             }
         }
@@ -2166,7 +2121,7 @@ namespace GamingDnV
                 return _pushSubtractBtn
                     ?? (_pushSubtractBtn = new ActionCommand(() =>
                     {
-                        SummaCh(0, 3, 3);
+                        SummaCh(3);
                     }));
             }
         }
@@ -2178,7 +2133,7 @@ namespace GamingDnV
                 return _pushAddBtn
                     ?? (_pushAddBtn = new ActionCommand(() =>
                     {
-                        SummaCh(0, 2);
+                        PreVeiwWindow.EditShit(NpcStep);
                     }));
             }
         }

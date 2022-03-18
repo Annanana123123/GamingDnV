@@ -225,7 +225,7 @@
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid ShowGridLines="false" Grid.Column="2" Visibility="{Binding VersusVisibility}">
+            <Grid ShowGridLines="false" Grid.Column="2" Visibility="{Binding VersusVisibility, FallbackValue=Hidden}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -268,7 +268,7 @@
                     Grid.Row="0"
                     Grid.RowSpan="4"
                     VerticalAlignment="Center"
-                    Visibility="{Binding ViT}">
+                    Visibility="{Binding ViT, FallbackValue=Hidden}">
             <Image 
                Width="854"
                Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\text.png"/>

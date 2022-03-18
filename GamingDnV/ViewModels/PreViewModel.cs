@@ -467,22 +467,22 @@ namespace GamingDnV.ViewModels
             Timer.Start();
         }
 
-        public void EditShit(bool npsStep, int dem)
+        public void EditShit(bool npsStep)
         {
             if (npsStep)
             {
-                LShitImg = PathInterface + "Shit" + dem + ".png";
+                LShitImg = PathInterface + "Shit2.png";
             }
             else
             {
-                RShitImg = PathInterface + "Shit" + dem + ".png";
+                RShitImg = PathInterface + "Shit2.png";
             }
         }
 
         public void EditShit(int dem)
         {
-                LShitImg = PathInterface + "Shit" + dem + ".png";
-                RShitImg = PathInterface + "Shit" + dem + ".png";
+                LShitImg = PathInterface + "Shit0.png";
+                RShitImg = PathInterface + "Shit0.png";
         }
 
         public void EditHP(bool npsStep, int hp)
@@ -545,7 +545,7 @@ namespace GamingDnV.ViewModels
         public void StartBattle()
         {
             RightVisibility = Visibility.Visible;
-            VersusVisibility = Visibility.Visible;
+            //VersusVisibility = Visibility.Visible;
             LeftVisibility = Visibility.Visible;
         }
         public void ShowImag(string name, TypeEven type)

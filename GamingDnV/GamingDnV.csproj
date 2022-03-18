@@ -72,6 +72,7 @@
     <Compile Include="Models\ActionModel.cs" />
     <Compile Include="Models\ComboBoxModel.cs" />
     <Compile Include="Models\EventsModel.cs" />
+    <Compile Include="Models\ItemsModel.cs" />
     <Compile Include="Models\NPCModel.cs" />
     <Compile Include="Models\RoomsModel.cs" />
     <Compile Include="Models\UsersModel.cs" />
