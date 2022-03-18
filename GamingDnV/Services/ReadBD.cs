@@ -13,9 +13,9 @@ namespace GamingDnV.Services
     {
         public static string constr = "provider=Microsoft.Jet.OLEDB.4.0;data source=database.mdb";
 
-        public static ObservableCollection<ItemsModel> ReadItemsInDb(string sql)
+        public static List<ItemsModel> ReadItemsInDb(string sql)
         {
-            ObservableCollection<ItemsModel> Items = new ObservableCollection<ItemsModel>();
+            List<ItemsModel> Items = new List<ItemsModel>();
             OleDbConnection myConnect = new OleDbConnection(constr);
             myConnect.Open();
             OleDbCommand myCommand = new OleDbCommand(sql, myConnect);

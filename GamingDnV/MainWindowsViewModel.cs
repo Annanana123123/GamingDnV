@@ -557,8 +557,21 @@ namespace GamingDnV
                 RaisePropertyChanged(nameof(ItemText));
             }
         }
-        private ObservableCollection<ItemsModel> _items;
-        public ObservableCollection<ItemsModel> Items
+
+        private List<ItemsModel> _listitems;
+        public List<ItemsModel> ListItems
+        {
+            get { return _listitems; }
+            set
+            {
+                _listitems = value;
+
+                RaisePropertyChanged(nameof(ListItems));
+            }
+        }
+
+        private List<ItemsModel> _items;
+        public List<ItemsModel> Items
         {
             get { return _items; }
             set
@@ -1048,16 +1061,16 @@ namespace GamingDnV
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
                 ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Arms, Item, Abilities, Ulta, History, Imag, Equip, Sounds, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
                 HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tHeros WHERE HistoryId =" + SelectItem.Id);
-                Items = WhereItems();
+                ListItems = WhereItems();
             }
         }
 
-        public ObservableCollection<ItemsModel> WhereItems()
+        public List<ItemsModel> WhereItems()
         {
-            ObservableCollection<ItemsModel> item = new ObservableCollection<ItemsModel>();
-            ObservableCollection<ItemsModel> item1 = new ObservableCollection<ItemsModel>();
-            ObservableCollection<ItemsModel> item2 = new ObservableCollection<ItemsModel>();
-            ObservableCollection<ItemsModel> item3 = new ObservableCollection<ItemsModel>();
+            List<ItemsModel> item = new List<ItemsModel>();
+            List<ItemsModel> item1 = new List<ItemsModel>();
+            List<ItemsModel> item2 = new List<ItemsModel>();
+            List<ItemsModel> item3 = new List<ItemsModel>();
             string id = "";
             foreach (var n in HerosTable)
             {
@@ -1081,7 +1094,7 @@ namespace GamingDnV
             }
             if (id != "")
                 item3 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person FROM tItems WHERE IdPerson in (" + id + ") and Person = 3;");
-            item = new ObservableCollection<ItemsModel>(item1.Concat(item2.Concat(item3)));
+            item = new List<ItemsModel>(item1.Concat(item2.Concat(item3)));
             return item;
         }
 
@@ -1778,6 +1791,7 @@ namespace GamingDnV
                 BackSEn = true;
             Events = new ObservableCollection<EventsModel>(ListEvent.Where(x => x.RoomId == CurrentRoom.Id).OrderBy(x => x.Order).ToList());
             NPCTable = new ObservableCollection<NPCModel>(ListNpc.Where(x => x.RoomId == CurrentRoom.Id).ToList());
+            Items = ListItems.Where(x => x.IdPerson == CurrentRoom.Id && x.Person == 3).ToList();
         }
 
         public void CurrentE()
@@ -1814,6 +1828,7 @@ namespace GamingDnV
                 CurrEvent = TypeEven.NPC;
                 if (CurrentNPC.Sounds != "")
                     BackSEn = true;
+                Items = ListItems.Where(x => x.IdPerson == CurrentNPC.Id && x.Person == 2).ToList();
             };
         }
         public void ViewUser()
@@ -1823,6 +1838,7 @@ namespace GamingDnV
                 ToolTipU = "id = " + CurrentUser.Id.ToString();
                 UserInfo = "Оружие:\r\n" + CurrentUser.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentUser.Equip + "\r\n\r\nИнвинтарь:\r\n" + CurrentUser.Item + "\r\n\r\nСпособности:\r\n" + CurrentUser.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentUser.Ulta + "\r\n\r\nОписание:\r\n" + CurrentUser.Description;
                 UserIcon = PathHero + CurrentUser.Imag;
+                Items = ListItems.Where(x => x.IdPerson == CurrentUser.Id && x.Person == 1).ToList();
             }
         }
         public void ViewVersus()
