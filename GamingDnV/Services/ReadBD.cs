@@ -29,6 +29,7 @@ namespace GamingDnV.Services
                     Notee = Convert.ToString(reader[2].ToString()),
                     IdPerson = Convert.ToInt32(reader[3].ToString()),
                     Person = Convert.ToInt32(reader[4].ToString()),
+                    Count = Convert.ToInt32(reader[5].ToString())
                 });
             }
             myConnect.Close();
@@ -194,6 +195,28 @@ namespace GamingDnV.Services
             myConnect.Close();
             return NPC;
         }
+
+        public static List<NoteModel> ReadNoteInDb(string sql)
+        {
+            List<NoteModel> Note = new List<NoteModel>();
+            OleDbConnection myConnect = new OleDbConnection(constr);
+            myConnect.Open();
+            OleDbCommand myCommand = new OleDbCommand(sql, myConnect);
+            OleDbDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                Note.Add(new NoteModel()
+                {
+                    Id = Convert.ToInt32(reader[0].ToString()),
+                    Name = Convert.ToString(reader[1].ToString()),
+                    Notee = Convert.ToString(reader[2].ToString()),
+                    HistoryId = Convert.ToInt32(reader[3].ToString())
+                });
+            }
+            myConnect.Close();
+            return Note;
+        }
+
         public static void WriteBD(string _sql)
         {
                 //string sql = "INSERT INTO `Orders` (`Customer`, `Count`, `DateOrder`, `DeidLine`) VALUES ('" + _customerText + "', '" + _count + "', '" + _dateOrder + "', '" + _daidLine + "')";

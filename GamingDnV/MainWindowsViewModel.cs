@@ -66,6 +66,10 @@ namespace GamingDnV
             BtnR = new RelayCommand(() => CurrentV(2));
             IntoBattlePrint = new RelayCommand(() => Print());
             Logo = new RelayCommand(() => VisibilitzLogo());
+            Transfer = new RelayCommand(() => TransferItem());
+            Delete = new RelayCommand(() => DeleteItem());
+            Garbage = new RelayCommand(() => GarbageItem());
+            ShowNote = new RelayCommand(() => ViewNote());
             VisibilityInfo = Visibility.Hidden;
             VisibilityLoad = Visibility.Visible;
             VisibilityVersus = Visibility.Hidden;
@@ -76,6 +80,7 @@ namespace GamingDnV
             HColorR = "#1C1C25";
             VR = Visibility.Hidden;
             VL = Visibility.Visible;
+            VisibilityNote = Visibility.Hidden;
             TextButton = "Ход Героя";
             ViewImagText = "Показать";
             ViewBattle = "Показать";
@@ -92,6 +97,7 @@ namespace GamingDnV
         public string History = "";
         public PreViewModel PreVeiwWindow { get; set; }
 
+        List<NoteModel> ListNote = new List<NoteModel>();
         ObservableCollection<UsersModel> Users = new ObservableCollection<UsersModel>();
         ObservableCollection<NPCModel> NPC = new ObservableCollection<NPCModel>();
 
@@ -513,6 +519,17 @@ namespace GamingDnV
             }
         }
 
+        private Visibility _visibilityNote;
+        public Visibility VisibilityNote
+        {
+            get { return _visibilityNote; }
+            set
+            {
+                _visibilityNote = value;
+                RaisePropertyChanged(nameof(VisibilityNote));
+            }
+        }
+
         private string _sqlText;
         public string SqlText
         {
@@ -524,6 +541,19 @@ namespace GamingDnV
                 RaisePropertyChanged(nameof(SqlText));
             }
         }
+
+        private string _textNote;
+        public string TextNote
+        {
+            get { return _textNote; }
+            set
+            {
+                _textNote = value;
+
+                RaisePropertyChanged(nameof(TextNote));
+            }
+        }
+
         private string _textNPC;
         public string TextNPC
         {
@@ -876,6 +906,17 @@ namespace GamingDnV
             }
         }
 
+        private ItemsModel _currentItems;
+        public ItemsModel CurrentItems
+        {
+            get { return _currentItems; }
+            set
+            {
+                _currentItems = value;
+                //CurrentI();
+            }
+        }
+
         private NPCModel _currentNPC;
         public NPCModel CurrentNPC
         {
@@ -1023,6 +1064,19 @@ namespace GamingDnV
             HiPrint = "История: Я "+ CurrentUser.Species + " " + CurrentUser.Class + " по имени " + CurrentUser.HeroName + ". " + CurrentUser.History + "\n\rОписание способностей:\n" + CurrentUser.Description;
             VisibilityPrint = Visibility.Visible;
         }
+
+        public void ViewNote()
+        {
+            if (VisibilityNote == Visibility.Hidden)
+            {
+                VisibilityNote = Visibility.Visible;
+            }
+            else
+            {
+                VisibilityNote = Visibility.Hidden;
+            }
+        }
+
         public void VisibilitzLogo()
         {
             if (logo)
@@ -1062,7 +1116,52 @@ namespace GamingDnV
                 ListNpc = ReadBD.ReadNPCInDb("SELECT Id, Name, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Species, Class, Arms, Item, Abilities, Ulta, History, Imag, Equip, Sounds, RoomId FROM tNpc WHERE tNpc.RoomId in (" + WhereIn() + ");");
                 HerosTable = ReadBD.ReadUsersInDb("SELECT Id, HeroName, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence ,Charisma , Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Passiv FROM tHeros WHERE HistoryId =" + SelectItem.Id);
                 ListItems = WhereItems();
+                ListNote = ReadBD.ReadNoteInDb("SELECT Id, Name, Notee, HistoryId FROM tNote WHERE HistoryId in (0, " + SelectItem.Id + ");");
+                TextNote = Note(ListNote);
             }
+        }
+
+        public string Note (List<NoteModel> s)
+        {
+            string text = "";
+            foreach (var n in s)
+            {
+                text += n.Name + " - " + n.Notee + "\r\n\r\n";
+            }
+            return text;
+        }
+
+        public void GarbageItem()
+        {
+            Items = ListItems.Where(x => x.IdPerson == 0 && x.Person == 0).ToList();
+        }
+
+        public void TransferItem()
+        {
+            if (CurrentUser != null)
+            {
+                int currPer = CurrentItems.Person;
+                int currId = CurrentItems.IdPerson;
+                ReadBD.WriteBD("UPDATE tItems SET IdPerson = " + CurrentUser.Id + ", Person = " + 1 + " WHERE Id = " + CurrentItems.Id);
+                CurrentItems.IdPerson = CurrentUser.Id;
+                CurrentItems.Person = 1;
+                Items = ListItems.Where(x => x.IdPerson == currId && x.Person == currPer).ToList();
+            }
+            else
+            {
+                MessageBox.Show("Выбери героя!");
+            }
+        }
+
+        public void DeleteItem()
+        {
+            int currPer = CurrentItems.Person;
+            int currId = CurrentItems.IdPerson;
+            ReadBD.WriteBD("UPDATE tItems SET IdPerson = 0, Person = 0 WHERE Id = " + CurrentItems.Id);
+            CurrentItems.IdPerson = 0;
+            CurrentItems.Person = 0;
+            //Items = ListItems;
+            Items = ListItems.Where(x => x.IdPerson == currId && x.Person == currPer).ToList();
         }
 
         public List<ItemsModel> WhereItems()
@@ -1077,7 +1176,7 @@ namespace GamingDnV
                 id += n.Id + ", "; 
             }
             if (id != "")
-                item1 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person FROM tItems WHERE IdPerson in (" + id + ") and Person = 1;");
+                item1 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count FROM tItems WHERE IdPerson in (" + id + ") and Person = 1;");
 
             id = "";
             foreach (var n in ListNpc)
@@ -1085,7 +1184,7 @@ namespace GamingDnV
                 id += n.Id + ", ";
             }
             if (id != "")
-                item2 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person FROM tItems WHERE IdPerson in (" + id + ") and Person = 2;");
+                item2 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count FROM tItems WHERE IdPerson in (" + id + ") and Person = 2;");
 
             id = "";
             foreach (var n in Rooms)
@@ -1093,7 +1192,7 @@ namespace GamingDnV
                 id += n.Id + ", ";
             }
             if (id != "")
-                item3 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person FROM tItems WHERE IdPerson in (" + id + ") and Person = 3;");
+                item3 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count FROM tItems WHERE IdPerson in (" + id + ") and Person = 3;");
             item = new List<ItemsModel>(item1.Concat(item2.Concat(item3)));
             return item;
         }
@@ -1775,6 +1874,12 @@ namespace GamingDnV
             }
         }
 
+        public void CurrentI()
+        {
+            //if (CurrentItems != null)
+                //MessageBox.Show(CurrentItems.Name);
+        }
+
         public void CurrentR()
         {
             BackSEn = false;
@@ -1985,6 +2090,10 @@ namespace GamingDnV
         public ICommand BtnR { get; set; }
         public ICommand IntoBattlePrint { get; set; }
         public ICommand Logo { get; set; }
+        public ICommand Transfer { get; set; }
+        public ICommand Garbage { get; set; }
+        public ICommand Delete { get; set; }
+        public ICommand ShowNote { get; set; }
         private ICommand _push1Btn;
         public ICommand Push1Btn
         {

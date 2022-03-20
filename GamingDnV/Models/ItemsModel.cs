@@ -18,5 +18,7 @@ namespace GamingDnV.Models
         public int IdPerson { get; set; }
         //Вид владельца
         public int Person { get; set; }
+        //Количество
+        public int Count { get; set; }
     }
 }
