@@ -36,6 +36,21 @@ namespace GamingDnV.Services
             return Items;
         }
 
+        public static string ReadWriteNoteInDb(string sql)
+        {
+            string TextNote = "";
+            OleDbConnection myConnect = new OleDbConnection(constr);
+            myConnect.Open();
+            OleDbCommand myCommand = new OleDbCommand(sql, myConnect);
+            OleDbDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                TextNote = Convert.ToString(reader[0].ToString());
+            }
+            myConnect.Close();
+            return TextNote;
+        }
+
         public static ObservableCollection<EventsModel> ReadEventInDb(string sql)
         {
             //Id, Name, TextEvent, Images, Sounds, Order

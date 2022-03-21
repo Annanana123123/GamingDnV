@@ -70,10 +70,14 @@ namespace GamingDnV
             Delete = new RelayCommand(() => DeleteItem());
             Garbage = new RelayCommand(() => GarbageItem());
             ShowNote = new RelayCommand(() => ViewNote());
+            EditNoteBtn = new RelayCommand(() => EditNote());
+            WriteNodeText = new RelayCommand(() => WriteEditNote());
+            CanсelNode = new RelayCommand(() => EditNote());
             VisibilityInfo = Visibility.Hidden;
             VisibilityLoad = Visibility.Visible;
             VisibilityVersus = Visibility.Hidden;
             VisibilityPrint = Visibility.Hidden;
+            VisibilityWriteNote = Visibility.Hidden;
             DColorL = "#1C1C25";
             DColorR = "#1C1C25";
             HColorL = "#1C1C25";
@@ -100,6 +104,19 @@ namespace GamingDnV
         List<NoteModel> ListNote = new List<NoteModel>();
         ObservableCollection<UsersModel> Users = new ObservableCollection<UsersModel>();
         ObservableCollection<NPCModel> NPC = new ObservableCollection<NPCModel>();
+
+
+        private string _textWriteNode;
+        public string TextWriteNode
+        {
+            get { return _textWriteNode; }
+            set
+            {
+                _textWriteNode = value;
+
+                RaisePropertyChanged(nameof(TextWriteNode));
+            }
+        }
 
         private string _damag;
         public string Damag
@@ -516,6 +533,17 @@ namespace GamingDnV
             {
                 _visibilityInfo = value;
                 RaisePropertyChanged(nameof(VisibilityInfo));
+            }
+        }
+
+        private Visibility _visibilityWriteNote;
+        public Visibility VisibilityWriteNote
+        {
+            get { return _visibilityWriteNote; }
+            set
+            {
+                _visibilityWriteNote = value;
+                RaisePropertyChanged(nameof(VisibilityWriteNote));
             }
         }
 
@@ -1065,6 +1093,13 @@ namespace GamingDnV
             VisibilityPrint = Visibility.Visible;
         }
 
+        public void WriteEditNote()
+        {
+            string sql = "UPDATE `tWriteNode` SET `Text` = '" + TextWriteNode + "' WHERE `Id` = 1";
+            ReadBD.WriteBD(sql);
+            EditNote();
+        }
+
         public void ViewNote()
         {
             if (VisibilityNote == Visibility.Hidden)
@@ -1074,6 +1109,17 @@ namespace GamingDnV
             else
             {
                 VisibilityNote = Visibility.Hidden;
+            }
+        }
+        public void EditNote()
+        {
+            if (VisibilityWriteNote == Visibility.Hidden)
+            {
+                VisibilityWriteNote = Visibility.Visible;
+            }
+            else
+            {
+                VisibilityWriteNote = Visibility.Hidden;
             }
         }
 
@@ -1118,6 +1164,7 @@ namespace GamingDnV
                 ListItems = WhereItems();
                 ListNote = ReadBD.ReadNoteInDb("SELECT Id, Name, Notee, HistoryId FROM tNote WHERE HistoryId in (0, " + SelectItem.Id + ");");
                 TextNote = Note(ListNote);
+                TextWriteNode = ReadBD.ReadWriteNoteInDb("SELECT Text FROM tWriteNode WHERE id = 1");
             }
         }
 
@@ -1660,17 +1707,25 @@ namespace GamingDnV
             int dam = Convert.ToInt32(Damag);
             if (NpcStep)
             {
-                CurrentNPC.Health -= dam;
-                ResultCheckHealth(s);
+                //CurrentUser.Health -= dam;
+                if (VisibilityVersus == Visibility.Hidden)
+                {
+                    CurrentUser.Health -= dam;
+                }
+                ResultCheckHealth(s, dam);
             }
             else
             {
-                CurrentUser.Health -= dam;
-                ResultCheckHealth(s);
+                
+                if (VisibilityVersus == Visibility.Hidden)
+                {
+                    CurrentNPC.Health -= dam;
+                }
+                ResultCheckHealth(s, dam);
             }
         }
 
-        public void ResultCheckHealth(int s)
+        public void ResultCheckHealth(int s, int dam = 0)
         {
             if (CurrentNPC != null && CurrentUser != null)
             {
@@ -1683,20 +1738,22 @@ namespace GamingDnV
                     //Ход Героя
                     if (VisibilityVersus == Visibility.Visible)
                     {
-                        result = RCurr.Health - summa;
+                        result = RCurr.Health - dam;
                         if (RCurr.Person == "Hero")
                         {
                             HerosTable.First(x => x.Id == RCurr.Id).Health = result;
+                            HR = result.ToString();
                         }
                         else
                         {
                             NPCTable.First(x => x.Id == RCurr.Id).Health = result;
+                            HR = result.ToString();
                         }
                         VersusTable.First(x => x.Id == RCurr.Id).Health = result;
                     }
                     else
                     {
-                        result = CurrentNPC.Health - summa;
+                        result = CurrentNPC.Health;
                         NPCTable.First(x => x.Id == CurrentNPC.Id).Health = result;
                     }
                     HP = result.ToString();
@@ -1708,29 +1765,31 @@ namespace GamingDnV
                     //Ход NPC
                     if (VisibilityVersus == Visibility.Visible)
                     {
-                        result = LCurr.Health - summa;
+                        result = LCurr.Health - dam;
                         if (LCurr.Person == "Hero")
                         {
                             HerosTable.First(x => x.Id == LCurr.Id).Health = result;
+                            HL = result.ToString();
                         }
                         else
                         {
                             NPCTable.First(x => x.Id == LCurr.Id).Health = result;
+                            HL = result.ToString();
                         }
                         VersusTable.First(x => x.Id == LCurr.Id).Health = result;
                     }
                     else
                     {
-                        result = CurrentUser.Health - summa;
-                        NPCTable.First(x => x.Id == CurrentUser.Id).Health = result;
+                        result = CurrentUser.Health;
+                        HerosTable.First(x => x.Id == CurrentUser.Id).Health = result;
                     }
                     table = "tHeros";
                     PreVeiwWindow.CrashL(s);
 
                 }
                 PreVeiwWindow.EditHP(NpcStep, result);
-                sql = "UPDATE " + table + " SET Health = '" + result + "' WHERE Id = " + id;
-                UpdataBD.UpdataInDb(sql);
+                //sql = "UPDATE " + table + " SET Health = '" + result + "' WHERE Id = " + id;
+                //UpdataBD.UpdataInDb(sql);
             }
             else
             {
@@ -2094,6 +2153,9 @@ namespace GamingDnV
         public ICommand Garbage { get; set; }
         public ICommand Delete { get; set; }
         public ICommand ShowNote { get; set; }
+        public ICommand EditNoteBtn { get; set; }
+        public ICommand WriteNodeText { get; set; }
+        public ICommand CanсelNode { get; set; }
         private ICommand _push1Btn;
         public ICommand Push1Btn
         {

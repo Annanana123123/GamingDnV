@@ -320,6 +320,7 @@
                     <TextBox Text="{Binding Damag}"
                              Margin="0 0 3 3"
                              Width="187"
+                             Height="73"
                              HorizontalContentAlignment="Center"
                              VerticalContentAlignment="Center"
                              BorderBrush="#2A72E9" 
@@ -335,7 +336,7 @@
                                 Command="{Binding ResultHealth1}"/>
                     <Button Content="|||" FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
                                 Command="{Binding ResultHealth2}"/>
-                    <Button Content="." FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                    <Button Content="( )" FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
                                 Command="{Binding ResultHealth3}"/>
                 </StackPanel>
                 <StackPanel>
@@ -355,7 +356,7 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Column="1">
-                <Button Content="Заметки" 
+                <Button Content="Подскаски" 
                         Height="35"
                         FontSize="15"
                         BorderBrush="#2A72E9"
@@ -364,6 +365,15 @@
                         Foreground="#2A72E9"
                         Margin="0 0 0 3"
                         Command="{Binding ShowNote}"/>
+                <Button Content="Заметки" 
+                        Height="35"
+                        FontSize="15"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="3"
+                        Background="#12131A"
+                        Foreground="#2A72E9"
+                        Margin="0 0 0 3"
+                        Command="{Binding EditNoteBtn}"/>
                 <Button Content="Логотип" 
                             Height="35"
                             FontSize="15"
@@ -1512,53 +1522,17 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="1" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B1}"/>
-                            <Button Content="2" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B2}"/>
-                            <Button Content="3" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B3}"/>
-                            <Button Content="4" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B4}"/>
-                            <Button Content="5" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B5}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="6" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B6}"/>
-                            <Button Content="7" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B7}"/>
-                            <Button Content="8" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B8}"/>
-                            <Button Content="9" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B9}"/>
-                            <Button Content="10" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B10}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="11" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B11}"/>
-                            <Button Content="12" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B12}"/>
-                            <Button Content="13" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B13}"/>
-                            <Button Content="14" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B14}"/>
-                            <Button Content="15" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B15}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="16" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B16}"/>
-                            <Button Content="17" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B17}"/>
-                            <Button Content="18" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B18}"/>
-                            <Button Content="19" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B19}"/>
-                            <Button Content="20" FontSize="18" Margin="0 0 3 3" Width="35" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding B20}"/>
+                        <StackPanel>
+                            <TextBox Text="{Binding Damag}"
+                             Margin="0 0 3 3"
+                             Width="187"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             BorderBrush="#2A72E9" 
+                             BorderThickness="3" 
+                             Background="#12131A" 
+                             Foreground="#2A72E9"
+                             FontSize="50"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Button Content="Защита" FontSize="15" Margin="0 0 3 3" Width="88" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
@@ -1567,47 +1541,53 @@
                                 Command="{Binding ResultHealth1}"/>
                             <Button Content="|||" FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
                                 Command="{Binding ResultHealth2}"/>
-                            <Button Content="." FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                            <Button Content="( )" FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
                                 Command="{Binding ResultHealth3}"/>
                         </StackPanel>
                         <StackPanel>
+
                             <Button Content="Очистить" 
-                                        Width="187"
-                                        Height="35"
-                                        FontSize="15"
-                                        BorderBrush="#2A72E9"
-                                        BorderThickness="3"
-                                        Background="#12131A"
-                                        Foreground="#2A72E9"
-                                        Margin="0 0 3 3"
-                                        Command="{Binding ClianTextBox}"/>
-                            <Button Content="{Binding ViewBattle}" 
-                                        Width="187"
-                                        Height="35"
-                                        FontSize="15"
-                                        BorderBrush="#2A72E9"
-                                        BorderThickness="3"
-                                        Background="#12131A"
-                                        Foreground="#2A72E9"
-                                        Margin="0 0 3 3"
-                                        Command="{Binding ShowWindow}"/>
+                            Width="187"
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 3 3"
+                            Command="{Binding ClianTextBox}"/>
+                            <Button Content="{Binding TextButton}" Margin="0 0 3 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding NPCStep}"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
-                        <Button Content="СИЛА" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Power}"/>
-                        <Button Content="ЛОВКИСТЬ" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Dexterity}"/>
-                        <Button Content="ВЫНОСЛИВОСТЬ" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Endurance}"/>
-                        <Button Content="МУДРОСТЬ" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Wisdom}"/>
-                        <Button Content="ИНТЕЛЕКТ" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Intelligence}"/>
-                        <Button Content="ХАРИЗМА" Margin="0 0 0 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding Charisma}"/>
-                        <Button Content="{Binding TextButton}" Margin="0 0 0 0" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding NPCStep}"/>
+                        <Button Content="Заметки" 
+                        Height="35"
+                        FontSize="15"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="3"
+                        Background="#12131A"
+                        Foreground="#2A72E9"
+                        Margin="0 0 0 3"
+                        Command="{Binding ShowNote}"/>
+                        <Button Content="Логотип" 
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 0 3"
+                            Command="{Binding Logo}"/>
+                        <Button Content="{Binding ViewBattle}" 
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 0 3"
+                            Command="{Binding ShowWindow}"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Width="auto" Margin="5 0 0 0">
                         <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
@@ -1900,6 +1880,59 @@
                        TextWrapping="Wrap"
                        Margin="20 20 5 20"/>
             </ScrollViewer>
+        </Grid>
+        <Grid Grid.Column="3"
+              Grid.Row="1"
+              Visibility="{Binding VisibilityWriteNote, FallbackValue=Visible}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Border Background="#1C1C25"
+                    CornerRadius="10"
+                    BorderBrush="#2A72E9"
+                    BorderThickness="2"
+                    Grid.Row="0"
+                    Grid.RowSpan="2"/>
+            <ScrollViewer Grid.Row="0">
+                <ScrollViewer.Resources>
+                    <Style BasedOn="{StaticResource {x:Type ScrollBar}}" TargetType="{x:Type ScrollBar}">
+                        <Setter Property="Opacity" Value="0"/>
+                    </Style>
+                </ScrollViewer.Resources>
+                <TextBox Text="{Binding TextWriteNode}"
+                         Background="#00000000"
+                         Foreground="White"
+                         FontSize="20"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Margin="20 20 5 20"/>
+            </ScrollViewer>
+                <StackPanel Grid.Row="1"
+                            Orientation="Horizontal"
+                        Margin="0 10 0 10"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center">
+                    <Button Content="Записать" 
+                        Height="50" 
+                        Width="100" 
+                        FontSize="20"
+                        BorderBrush="#2A72E9" 
+                        BorderThickness="3" 
+                        Background="#12131A" 
+                        Foreground="#2A72E9"
+                        Command="{Binding WriteNodeText}"
+                        Margin=" 0 0 10 0"/>
+                    <Button Content="Отмена" 
+                        Height="50" 
+                        Width="100"
+                        FontSize="20"
+                        BorderBrush="#2A72E9" 
+                        BorderThickness="3" 
+                        Background="#12131A" 
+                        Foreground="#2A72E9"
+                        Command="{Binding CanсelNode}"/>
+                </StackPanel>
         </Grid>
     </Grid>
 </Window>

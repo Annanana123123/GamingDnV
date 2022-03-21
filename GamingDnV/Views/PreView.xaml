@@ -288,6 +288,5 @@
                 </TextBox.Effect>
             </TextBox>
         </StackPanel>
-
     </Grid>
 </Window>
