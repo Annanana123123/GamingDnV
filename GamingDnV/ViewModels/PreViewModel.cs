@@ -502,11 +502,18 @@ namespace GamingDnV.ViewModels
             VersusCH += text;
         }
 
-        public void LeftInBattleVeiw(string imag, string name, string _shit, string _health, string person)
+        public void LeftInBattleVeiw(string imag, string name, string _shit, string _health, int person, int room)
         {
-            if (person == "Hero")
+            if (person == 1)
             {
-                AvaLeft = PathHero + imag;
+                if (room == 0)
+                {
+                    AvaLeft = PathHero + imag;
+                }
+                else
+                {
+                    AvaLeft = PathNPC + imag;
+                }
             }
             else
             {
@@ -516,11 +523,18 @@ namespace GamingDnV.ViewModels
             ShitL = _shit;
             HealthL = _health;
         }
-        public void RightInBattleVeiw(string imag, string name, string _shit, string _health, string person)
+        public void RightInBattleVeiw(string imag, string name, string _shit, string _health, int person, int room)
         {
-            if (person == "Hero")
+            if (person == 1)
             {
-                AvaRight = PathHero + imag;
+                if (room == 0)
+                {
+                    AvaRight = PathHero + imag;
+                }
+                else
+                {
+                    AvaRight = PathNPC + imag;
+                }
             }
             else
             {
@@ -539,8 +553,8 @@ namespace GamingDnV.ViewModels
         }
         public void Clien()
         {
-            LeftInBattleVeiw("", "", "", "", "");
-            RightInBattleVeiw("", "", "", "", "");
+            LeftInBattleVeiw("", "", "", "", 0, 0);
+            RightInBattleVeiw("", "", "", "", 0, 0);
         }
         public void StartBattle()
         {

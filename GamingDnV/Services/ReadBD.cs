@@ -116,6 +116,48 @@ namespace GamingDnV.Services
             myConnect.Close();
             return Users;
         }
+        
+        public static ObservableCollection<PersonModel> ReadPersonInDb(string sql)
+        {
+            ObservableCollection<PersonModel> Person = new ObservableCollection<PersonModel>();
+            OleDbConnection myConnect = new OleDbConnection(constr);
+            myConnect.Open();
+            OleDbCommand myCommand = new OleDbCommand(sql, myConnect);
+            OleDbDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                Person.Add(new PersonModel()
+                {
+                    Id = Convert.ToInt32(reader[0].ToString()),
+                    Name = Convert.ToString(reader[1].ToString()),
+                    RoomId = Convert.ToInt32(reader[2].ToString()),
+                    Notee = Convert.ToString(reader[3].ToString()),
+                    Defence = Convert.ToInt32(reader[4].ToString()),
+                    Health = Convert.ToInt32(reader[5].ToString()),
+                    Power = Convert.ToInt32(reader[6].ToString()),
+                    Dexterity = Convert.ToInt32(reader[7].ToString()),
+                    Endurance = Convert.ToInt32(reader[8].ToString()),
+                    Wisdom = Convert.ToInt32(reader[9].ToString()),
+                    Intelligence = Convert.ToInt32(reader[10].ToString()),
+                    Charisma = Convert.ToInt32(reader[11].ToString()),
+                    Passiv = Convert.ToInt32(reader[12].ToString()),
+                    Species = Convert.ToString(reader[13].ToString()),
+                    Class = Convert.ToString(reader[14].ToString()),
+                    Item = Convert.ToString(reader[15].ToString()),
+                    Abilities = Convert.ToString(reader[16].ToString()),
+                    Ulta = Convert.ToString(reader[17].ToString()),
+                    History = Convert.ToString(reader[18].ToString()),
+                    Imag = Convert.ToString(reader[19].ToString()),
+                    Arms = Convert.ToString(reader[20].ToString()),
+                    Equip = Convert.ToString(reader[21].ToString()),
+                    Description = Convert.ToString(reader[22].ToString()),
+                    Sound = Convert.ToString(reader[23].ToString()),
+                    Person = Convert.ToInt32(reader[24].ToString())
+                });
+            }
+            myConnect.Close();
+            return Person;
+        }
 
         public static ObservableCollection<UsersModel> ReadUsersInDb(string sql)
         {

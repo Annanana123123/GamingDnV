@@ -239,13 +239,13 @@
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Имя" Width="auto" Binding="{Binding HeroName}"/>
+                <DataGridTextColumn Header="Имя" Width="auto" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Игрок" Width="*" Binding="{Binding UserName}"/>
                 <DataGridTextColumn Header="DF" Width="35" Binding="{Binding Defence}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Power}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding Dexterity}" CellStyle="{StaticResource NameCellStyle}"/>
-                <DataGridTextColumn Header="ВЫ" Width="35" Binding="{Binding Endurance}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding Endurance}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wisdom}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding Intelligence}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Charisma}" CellStyle="{StaticResource NameCellStyle}"/>
@@ -606,28 +606,16 @@
                                     Margin="0 0 5 0"
                                     IsEnabled="{Binding BackSEn}"
                                     Command="{Binding BackSound}"/>
-                        <Button Content="Бой"
+                        <Button Content="Рекрут"
                                     FontSize="20"
-                                    Width="50"
+                                    Width="70"
                                     Background="#1C1C25"
                                     BorderBrush="#2A72E9"
                                     BorderThickness="2"
                                     HorizontalContentAlignment="Center"
                                     Foreground="#2A72E9"
                                     Margin="0 0 5 0"
-                                    IsEnabled="{Binding AtacSEn}"
-                                    Command="{Binding AtacSound}"/>
-                        <Button Content="Трек1"
-                                    FontSize="20"
-                                    Width="72"
-                                    Background="#1C1C25"
-                                    BorderBrush="#2A72E9"
-                                    BorderThickness="2"
-                                    HorizontalContentAlignment="Center"
-                                    Foreground="#2A72E9"
-                                    Margin="0 0 5 0"
-                                    IsEnabled="{Binding TrackSEn}"
-                                    Command="{Binding TrackSound}"/>
+                                    Command="{Binding RecrutBtn}"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -956,7 +944,7 @@
                     <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
                     <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Power}" CellStyle="{StaticResource NameCellStyle}"/>
                     <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding Dexterity}" CellStyle="{StaticResource NameCellStyle}"/>
-                    <DataGridTextColumn Header="ВЫ" Width="35" Binding="{Binding Endurance}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding Endurance}" CellStyle="{StaticResource NameCellStyle}"/>
                     <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wisdom}" CellStyle="{StaticResource NameCellStyle}"/>
                     <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding Intelligence}" CellStyle="{StaticResource NameCellStyle}"/>
                     <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Charisma}" CellStyle="{StaticResource NameCellStyle}"/>
@@ -1345,7 +1333,7 @@
                         <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
                         <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Power}" CellStyle="{StaticResource NameCellStyle}"/>
                         <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding Dexterity}" CellStyle="{StaticResource NameCellStyle}"/>
-                        <DataGridTextColumn Header="ВЫ" Width="35" Binding="{Binding Endurance}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding Endurance}" CellStyle="{StaticResource NameCellStyle}"/>
                         <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wisdom}" CellStyle="{StaticResource NameCellStyle}"/>
                         <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding Intelligence}" CellStyle="{StaticResource NameCellStyle}"/>
                         <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Charisma}" CellStyle="{StaticResource NameCellStyle}"/>
@@ -1492,15 +1480,6 @@
                                  Text="^"
                                  Visibility="{Binding VR}"/>
                     </StackPanel>
-                    <TextBox Background="#1C1C25"
-                             BorderBrush="#2A72E9"
-                             IsReadOnly="True"
-                             VerticalContentAlignment="Center"
-                             HorizontalContentAlignment="Center"
-                             Foreground="#2A72E9"
-                             Width="205"
-                             FontSize="20"
-                             Text="{Binding TextView}"/>
                 </StackPanel>
                 <Button Content="Х" 
                         Grid.Column="4"
@@ -1683,11 +1662,6 @@
               Grid.Column="0"
               Grid.ColumnSpan="7"
               Visibility="{Binding VisibilityPrint, FallbackValue=Hidden}">
-        <!--<Grid Grid.Row="0"
-              Grid.RowSpan="4"
-              Grid.Column="0"
-              Grid.ColumnSpan="7"
-              Visibility="Hidden">-->
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>
@@ -1777,12 +1751,12 @@
                     </Grid.RowDefinitions>
                     <Image Grid.Column="2"
                            Grid.Row="0" 
-                           
                            Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Shit0.png"/>
                     <TextBox Grid.Column="2"
                              Grid.Row="0"
                              Text="{Binding DFPrint}"
                              FontSize="40"
+                             Foreground="White"
                              Background="#00000000"
                              BorderThickness="0"
                              VerticalContentAlignment="Center"
@@ -1793,7 +1767,10 @@
                            Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Hard.png"/>
                     <TextBox Grid.Column="2"
                              Grid.Row="1"
-                             Text="{Binding HPPrint}"
+                             VerticalAlignment="Top"
+                             Margin="0 5 0 0"
+                             Height="50"
+                             Text="32"
                              BorderThickness="0"
                              FontSize="40"
                              Foreground="#FFFFFF"
@@ -1847,11 +1824,11 @@
                     <TextBox Grid.Column="2"
                              Text="{Binding EqPrint}"
                              TextWrapping="Wrap"
-                             FontSize="20"/>
+                             FontSize="16"/>
                     <TextBox Grid.Column="4"
                              Text="{Binding AbPrint}"
                              TextWrapping="Wrap"
-                             FontSize="20"/>
+                             FontSize="16"/>
                     <TextBox Grid.Column="0"
                              Grid.Row="3"
                              Grid.ColumnSpan="5"
@@ -1883,7 +1860,7 @@
         </Grid>
         <Grid Grid.Column="3"
               Grid.Row="1"
-              Visibility="{Binding VisibilityWriteNote, FallbackValue=Visible}">
+              Visibility="{Binding VisibilityWriteNote, FallbackValue=Hidden}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>

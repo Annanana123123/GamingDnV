@@ -75,6 +75,7 @@
     <Compile Include="Models\ItemsModel.cs" />
     <Compile Include="Models\NoteModel.cs" />
     <Compile Include="Models\NPCModel.cs" />
+    <Compile Include="Models\PersonModel.cs" />
     <Compile Include="Models\RoomsModel.cs" />
     <Compile Include="Models\UsersModel.cs" />
     <Compile Include="Services\ActionCommand.cs" />

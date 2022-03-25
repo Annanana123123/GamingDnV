@@ -262,7 +262,7 @@
         <Image Grid.Column="0"
                Grid.Row="0"
                Grid.RowSpan="4"
-               Visibility="Hidden"
+               Visibility="{Binding ViT, FallbackValue=Hidden}"
                Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Background.png"/>
         <StackPanel Grid.Column="0"
                     Grid.Row="0"
