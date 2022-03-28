@@ -143,16 +143,15 @@ namespace GamingDnV.Services
                     Passiv = Convert.ToInt32(reader[12].ToString()),
                     Species = Convert.ToString(reader[13].ToString()),
                     Class = Convert.ToString(reader[14].ToString()),
-                    Item = Convert.ToString(reader[15].ToString()),
-                    Abilities = Convert.ToString(reader[16].ToString()),
-                    Ulta = Convert.ToString(reader[17].ToString()),
-                    History = Convert.ToString(reader[18].ToString()),
-                    Imag = Convert.ToString(reader[19].ToString()),
-                    Arms = Convert.ToString(reader[20].ToString()),
-                    Equip = Convert.ToString(reader[21].ToString()),
-                    Description = Convert.ToString(reader[22].ToString()),
-                    Sound = Convert.ToString(reader[23].ToString()),
-                    Person = Convert.ToInt32(reader[24].ToString())
+                    Abilities = Convert.ToString(reader[15].ToString()),
+                    Ulta = Convert.ToString(reader[16].ToString()),
+                    History = Convert.ToString(reader[17].ToString()),
+                    Imag = Convert.ToString(reader[18].ToString()),
+                    Arms = Convert.ToString(reader[19].ToString()),
+                    Equip = Convert.ToString(reader[20].ToString()),
+                    Description = Convert.ToString(reader[21].ToString()),
+                    Sound = Convert.ToString(reader[22].ToString()),
+                    Person = Convert.ToInt32(reader[23].ToString())
                 });
             }
             myConnect.Close();

@@ -51,8 +51,6 @@ namespace GamingDnV.Models
         public string Species { get; set; }
         //Класс
         public string Class { get; set; }
-        //Инвинтарь
-        public string Item { get; set; }
         //Способности
         public string Abilities { get; set; }
         //Заклинания

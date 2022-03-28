@@ -65,6 +65,7 @@ namespace GamingDnV
             BtnL = new RelayCommand(() => CurrentV(1));
             BtnR = new RelayCommand(() => CurrentV(2));
             IntoBattlePrint = new RelayCommand(() => Print());
+            ItemBattlePrint = new RelayCommand(() => PrintItem());
             Logo = new RelayCommand(() => VisibilitzLogo());
             Transfer = new RelayCommand(() => TransferItem());
             Delete = new RelayCommand(() => DeleteItem());
@@ -77,6 +78,7 @@ namespace GamingDnV
             VisibilityLoad = Visibility.Visible;
             VisibilityVersus = Visibility.Hidden;
             VisibilityPrint = Visibility.Hidden;
+            VisibilityPrintI = Visibility.Hidden;
             VisibilityWriteNote = Visibility.Hidden;
             DColorL = "#1C1C25";
             DColorR = "#1C1C25";
@@ -468,6 +470,16 @@ namespace GamingDnV
                 RaisePropertyChanged(nameof(VisibilityPrint));
             }
         }
+        private Visibility _visibilityPrintI;
+        public Visibility VisibilityPrintI
+        {
+            get { return _visibilityPrintI; }
+            set
+            {
+                _visibilityPrintI = value;
+                RaisePropertyChanged(nameof(VisibilityPrintI));
+            }
+        }
 
         private Visibility _vR;
         public Visibility VR
@@ -700,6 +712,30 @@ namespace GamingDnV
             }
         }
 
+        private string _itemTextPrint;
+        public string ItemTextPrint
+        {
+            get { return _itemTextPrint; }
+            set
+            {
+                _itemTextPrint = value;
+
+                RaisePropertyChanged(nameof(ItemTextPrint));
+            }
+        }
+
+        private string _abTextPrint;
+        public string AbTextPrint
+        {
+            get { return _abTextPrint; }
+            set
+            {
+                _abTextPrint = value;
+
+                RaisePropertyChanged(nameof(AbTextPrint));
+            }
+        }
+
         private string _userIcon;
         public string UserIcon
         {
@@ -929,7 +965,7 @@ namespace GamingDnV
             set
             {
                 _currentItems = value;
-                //CurrentI();
+                CurrentI();
             }
         }
 
@@ -1079,10 +1115,19 @@ namespace GamingDnV
                 WPrint = CurrentUser.Wisdom.ToString();
                 IPrint = CurrentUser.Intelligence.ToString();
                 CPrint = CurrentUser.Charisma.ToString();
-                EqPrint = "Оружие:\n" + CurrentUser.Arms + "\n\rСнаряжение:\n" + CurrentUser.Equip + "\n\rИнвентарь:\n" + CurrentUser.Item;
+                EqPrint = "Оружие:\n" + CurrentUser.Arms + "\n\rСнаряжение:\n" + CurrentUser.Equip;
                 AbPrint = "Способности:\n" + CurrentUser.Abilities + "\n\rЗаклинания:\n" + CurrentUser.Ulta;
-                HiPrint = "История: Я " + CurrentUser.Species + " " + CurrentUser.Class + " по имени " + CurrentUser.Name + ". " + CurrentUser.History + "\n\rОписание способностей:\n" + CurrentUser.Description;
+                HiPrint = "История: Я " + CurrentUser.Species + " " + CurrentUser.Class + " по имени " + CurrentUser.Name + ". " + CurrentUser.History;
                 VisibilityPrint = Visibility.Visible;
+            }
+        }
+        public void PrintItem()
+        {
+            if (CurrentUser != null)
+            {
+                ItemTextPrint = ListViewItem(CurrentUser);
+                AbTextPrint = CurrentUser.Description;
+                VisibilityPrintI = Visibility.Visible;
             }
         }
 
@@ -1143,6 +1188,7 @@ namespace GamingDnV
         {
             VisibilityVersus = Visibility.Hidden;
             VisibilityPrint = Visibility.Hidden;
+            VisibilityPrintI = Visibility.Hidden;
         }
 
         public void LoadHystory()
@@ -1163,9 +1209,9 @@ namespace GamingDnV
                 Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE HistoryId = " + SelectItem.Id + " ORDER BY tRooms.Order;");
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
 
-                ListPerson = ReadBD.ReadPersonInDb(" SELECT Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Sound, Person FROM tHeros WHERE HistoryId =" + SelectItem.Id +
+                ListPerson = ReadBD.ReadPersonInDb(" SELECT Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, Abilities, Ulta, History, Imag, Arms, Equip, Description, Sound, Person FROM tHeros WHERE HistoryId =" + SelectItem.Id +
                                                    " union all" +
-                                                   " SELECT Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, Item, Abilities, Ulta, History, Imag, Arms, Equip, Description, Sound, Person FROM tNPC WHERE HistoryId =" + SelectItem.Id);
+                                                   " SELECT Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, Abilities, Ulta, History, Imag, Arms, Equip, Description, Sound, Person FROM tNPC WHERE HistoryId =" + SelectItem.Id);
                 ListNpc = new ObservableCollection<PersonModel>(ListPerson.Where(x => x.Person == 2).ToList());
                 ListHero = new ObservableCollection<PersonModel>(ListPerson.Where(x => x.Person == 1).ToList());
                 HerosTable = ListHero;
@@ -1225,6 +1271,7 @@ namespace GamingDnV
             List<ItemsModel> item1 = new List<ItemsModel>();
             List<ItemsModel> item2 = new List<ItemsModel>();
             List<ItemsModel> item3 = new List<ItemsModel>();
+            List<ItemsModel> item4 = new List<ItemsModel>();
             string id = "";
             foreach (var n in HerosTable)
             {
@@ -1248,7 +1295,9 @@ namespace GamingDnV
             }
             if (id != "")
                 item3 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count FROM tItems WHERE IdPerson in (" + id + ") and Person = 3;");
-            item = new List<ItemsModel>(item1.Concat(item2.Concat(item3)));
+
+            item4 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count FROM tItems WHERE IdPerson = 0 and Person = 0;");
+            item = new List<ItemsModel>(item1.Concat(item2.Concat(item3.Concat(item4))));
             return item;
         }
 
@@ -1427,7 +1476,6 @@ namespace GamingDnV
                             Wisdom = e.Wisdom,
                             Intelligence = e.Intelligence,
                             Charisma = e.Charisma,
-                            Item = e.Item,
                             Abilities = e.Abilities,
                             Ulta = e.Ulta,
                             Imag = e.Imag,
@@ -1461,7 +1509,6 @@ namespace GamingDnV
                                 Wisdom = e.Wisdom,
                                 Intelligence = e.Intelligence,
                                 Charisma = e.Charisma,
-                                Item = e.Item,
                                 Abilities = e.Abilities,
                                 Ulta = e.Ulta,
                                 Imag = e.Imag,
@@ -1491,7 +1538,6 @@ namespace GamingDnV
                             Arms = e.Arms,
                             Intelligence = e.Intelligence,
                             Charisma = e.Charisma,
-                            Item = e.Item,
                             Abilities = e.Abilities,
                             Ulta = e.Ulta,
                             Imag = e.Imag,
@@ -1945,8 +1991,8 @@ namespace GamingDnV
 
         public void CurrentI()
         {
-            //if (CurrentItems != null)
-                //MessageBox.Show(CurrentItems.Name);
+            if (CurrentItems != null)
+                UserInfo = CurrentItems.Notee;
         }
 
         public void CurrentR()
@@ -1996,7 +2042,7 @@ namespace GamingDnV
                 ToolTipN = "id = " + CurrentNPC.Id.ToString();
                 HP = CurrentNPC.Health.ToString();
                 TextNPC = CurrentNPC.History + "\r\n\rСпособности:\r\n" + CurrentNPC.Abilities + "\r\n\rЗаклинание:\r\n" + CurrentNPC.Ulta;
-                ItemText = "Инвентарь:\r\n" + CurrentNPC.Item;
+                ItemText = "Инвентарь:\r\n" + ListViewItem(CurrentNPC);
                 TollTipNPS = CurrentNPC.Notee;
                 ImageInfo = PathNPC + CurrentNPC.Imag;
                 CurrEvent = TypeEven.NPC;
@@ -2005,12 +2051,21 @@ namespace GamingDnV
                 Items = ListItems.Where(x => x.IdPerson == CurrentNPC.Id && x.Person == 2).ToList();
             };
         }
+        public string ListViewItem(PersonModel use)
+        {
+            string str = "";
+            foreach (var d in ListItems.Where(x => x.IdPerson == use.Id && x.Person == 1))
+            {
+                str += d.Name + " (x" + d.Count + ") " + " - " + d.Notee + "\r\n\r";
+            }
+            return str;
+        }
         public void ViewUser()
         {
             if (CurrentUser != null)
             {
                 ToolTipU = "id = " + CurrentUser.Id.ToString();
-                UserInfo = "Оружие:\r\n" + CurrentUser.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentUser.Equip + "\r\n\r\nИнвинтарь:\r\n" + CurrentUser.Item + "\r\n\r\nСпособности:\r\n" + CurrentUser.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentUser.Ulta + "\r\n\r\nОписание:\r\n" + CurrentUser.Description;
+                UserInfo = "Оружие:\r\n" + CurrentUser.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentUser.Equip + "\r\n\r\nИнвинтарь:\r\n" + ListViewItem(CurrentUser) + "\r\n\r\nСпособности:\r\n" + CurrentUser.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentUser.Ulta + "\r\n\r\nОписание:\r\n" + CurrentUser.Description;
                 if (CurrentUser.RoomId == 0)
                 {
                     UserIcon = PathHero + CurrentUser.Imag;
@@ -2026,7 +2081,7 @@ namespace GamingDnV
         {
             if (CurrentVersus != null)
             {
-                UserInfo = "Оружие:\r\n" + CurrentVersus.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentVersus.Equip + "\r\n\r\nИнвинтарь:\r\n" + CurrentVersus.Item + "\r\n\r\nСпособности:\r\n" + CurrentVersus.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentVersus.Ulta + "\r\n\r\nОписание:\r\n" + CurrentVersus.Description;
+                UserInfo = "Оружие:\r\n" + CurrentVersus.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentVersus.Equip + "\r\n\r\nИнвинтарь:\r\n" + ListViewItem(CurrentVersus) + "\r\n\r\nСпособности:\r\n" + CurrentVersus.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentVersus.Ulta + "\r\n\r\nОписание:\r\n" + CurrentVersus.Description;
                 if (CurrentVersus.RoomId == 0)
                 {
                     UserIcon = PathHero + CurrentVersus.Imag;
@@ -2165,6 +2220,7 @@ namespace GamingDnV
         public ICommand BtnL { get; set; }
         public ICommand BtnR { get; set; }
         public ICommand IntoBattlePrint { get; set; }
+        public ICommand ItemBattlePrint { get; set; }
         public ICommand Logo { get; set; }
         public ICommand Transfer { get; set; }
         public ICommand Garbage { get; set; }
