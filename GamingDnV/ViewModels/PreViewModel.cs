@@ -387,8 +387,21 @@ namespace GamingDnV.ViewModels
                 RaisePropertyChanged(nameof(NameRight));
             }
         }
+
+        private string _logoImag;
+        public string LogoImag
+        {
+            get { return _logoImag; }
+            set
+            {
+                _logoImag = value;
+
+                RaisePropertyChanged(nameof(LogoImag));
+            }
+        }
+        
         #endregion
-       
+
         #region Методы
         public void StartTimer()
         {
@@ -396,9 +409,10 @@ namespace GamingDnV.ViewModels
             Timer.Interval = new TimeSpan( 0, 0, 0, 0, 500);
         }
 
-        public void VisibilityLogo(string his)
+        public void VisibilityLogo(string his, string imag)
         {
             HistoryName = his;
+            LogoImag = PathImag + imag;
             ViB = Visibility.Visible;
             ViT = Visibility.Visible;
         }

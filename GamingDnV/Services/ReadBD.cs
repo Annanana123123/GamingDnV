@@ -5,13 +5,17 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using GamingDnV.Enums;
 using GamingDnV.Models;
+using MySql.Data.MySqlClient;
 
 namespace GamingDnV.Services
 {
     public class ReadBD
     {
         public static string constr = "provider=Microsoft.Jet.OLEDB.4.0;data source=database.mdb";
+        
 
         public static List<ItemsModel> ReadItemsInDb(string sql)
         {
@@ -197,19 +201,25 @@ namespace GamingDnV.Services
             return Users;
         }
 
-        public static string ReadHistoryInDb(string sql)
+        public static List<HistoryModel> ReadHistoryInDb(string sql)
         {
             string History = "";
             OleDbConnection myConnect = new OleDbConnection(constr);
             myConnect.Open();
             OleDbCommand myCommand = new OleDbCommand(sql, myConnect);
             OleDbDataReader reader = myCommand.ExecuteReader();
+            List<HistoryModel> ListH = new List<HistoryModel>();
             while (reader.Read())
             {
-                History = Convert.ToString(reader[0].ToString());
+                ListH.Add(new HistoryModel()
+                {
+                    Name = Convert.ToString(reader[0].ToString()),
+                    Imag = Convert.ToString(reader[1].ToString())
+            });
+                //History = Convert.ToString(reader[0].ToString());
             }
             myConnect.Close();
-            return History;
+            return ListH;
         }
 
 

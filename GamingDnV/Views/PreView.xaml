@@ -259,11 +259,18 @@
                     Foreground="White"
                     Command="{Binding CloseWindow}"/>
         </Grid>
+        
         <Image Grid.Column="0"
                Grid.Row="0"
                Grid.RowSpan="4"
                Visibility="{Binding ViT, FallbackValue=Hidden}"
-               Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Background.png"/>
+               Source="{Binding LogoImag}"/>
+        <Rectangle Grid.Column="0"
+                   Grid.Row="0"
+                   Grid.RowSpan="4" 
+                   Fill="#4C000000"
+                   Visibility="{Binding ViT, FallbackValue=Hidden}"
+                   />
         <StackPanel Grid.Column="0"
                     Grid.Row="0"
                     Grid.RowSpan="4"

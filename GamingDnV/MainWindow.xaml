@@ -291,6 +291,16 @@
                         Foreground="#2A72E9"
                         Margin="5 0 5 0"
                         Command="{Binding IntoBattleL}"/>
+                <Button Content="Сохранить"
+                        FontSize="20"
+                        VerticalAlignment="Top"
+                        Background="#1C1C25"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="2"
+                        HorizontalContentAlignment="Center"
+                        Foreground="#2A72E9"
+                        Margin="5 5 5 0"
+                        Command="{Binding SaveBtn}"/>
                 <Label Content="На печать"
                        Margin="0 20 0 0"
                        HorizontalAlignment="Center"
@@ -308,7 +318,7 @@
                         Foreground="#2A72E9"
                         Margin="5 5 5 0"
                         Command="{Binding IntoBattlePrint}"/>
-                <Button Content="Инфентарь"
+                <Button Content="Инвентарь"
                         FontSize="20"
                         Grid.Row="1"
                         Height="40"
@@ -369,8 +379,14 @@
                             Foreground="#2A72E9"
                             Margin="0 0 3 3"
                             Command="{Binding ClianTextBox}"/>
-                    <Button Content="{Binding TextButton}" Margin="0 0 3 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
-                                Command="{Binding NPCStep}"/>
+                    <Button Content="{Binding TextButton, FallbackValue=Ход героя}" 
+                            Margin="0 0 3 3" 
+                            Height="35" 
+                            BorderBrush="#2A72E9" 
+                            BorderThickness="3" 
+                            Background="#12131A" 
+                            Foreground="#2A72E9"
+                            Command="{Binding NPCStep}"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Column="1">
@@ -401,15 +417,24 @@
                             Foreground="#2A72E9"
                             Margin="0 0 0 3"
                             Command="{Binding Logo}"/>
-                <Button Content="{Binding ViewBattle}" 
-                            Height="35"
-                            FontSize="15"
-                            BorderBrush="#2A72E9"
-                            BorderThickness="3"
-                            Background="#12131A"
-                            Foreground="#2A72E9"
-                            Margin="0 0 0 3"
-                            Command="{Binding ShowWindow}"/>
+                <Button Content="{Binding ViewBattle, FallbackValue=Показать}" 
+                        Height="35"
+                        FontSize="15"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="3"
+                        Background="#12131A"
+                        Foreground="#2A72E9"
+                        Margin="0 0 0 3"
+                        Command="{Binding ShowWindow}"/>
+                <Button Content="{Binding DbConnect, FallbackValue=Подключиться}" 
+                        Height="35"
+                        FontSize="15"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="3"
+                        Background="#12131A"
+                        Foreground="#2A72E9"
+                        Margin="0 0 0 3"
+                        Command="{Binding DbConnectBtn}"/>
             </StackPanel>
             <StackPanel Grid.Row="1"
                         Grid.Column="0"
@@ -1860,7 +1885,7 @@
               Grid.RowSpan="4"
               Grid.Column="0"
               Grid.ColumnSpan="7"
-              Visibility="{Binding VisibilityPrintI, FallbackValue=v}">
+              Visibility="{Binding VisibilityPrintI, FallbackValue=hidden}">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>

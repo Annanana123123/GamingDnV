@@ -44,6 +44,7 @@
     <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=8.0.28.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -68,10 +69,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Enums\TypeEven.cs" />
+    <Compile Include="Enums\TypeResult.cs" />
     <Compile Include="MainWindowsViewModel.cs" />
     <Compile Include="Models\ActionModel.cs" />
     <Compile Include="Models\ComboBoxModel.cs" />
     <Compile Include="Models\EventsModel.cs" />
+    <Compile Include="Models\HistoryModel.cs" />
     <Compile Include="Models\ItemsModel.cs" />
     <Compile Include="Models\NoteModel.cs" />
     <Compile Include="Models\NPCModel.cs" />

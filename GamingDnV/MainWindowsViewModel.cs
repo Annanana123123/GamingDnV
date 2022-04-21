@@ -74,6 +74,8 @@ namespace GamingDnV
             EditNoteBtn = new RelayCommand(() => EditNote());
             WriteNodeText = new RelayCommand(() => WriteEditNote());
             CanсelNode = new RelayCommand(() => EditNote());
+            DbConnectBtn = new RelayCommand(() => ConnectDB());
+            SaveBtn = new RelayCommand(() => SaveDb());
             VisibilityInfo = Visibility.Hidden;
             VisibilityLoad = Visibility.Visible;
             VisibilityVersus = Visibility.Hidden;
@@ -90,6 +92,7 @@ namespace GamingDnV
             TextButton = "Ход Героя";
             ViewImagText = "Показать";
             ViewBattle = "Показать";
+            DbConnect = "Подключение";
             BackSEn = false;
             AtacSEn = false;
             TrackSEn = false;
@@ -104,6 +107,7 @@ namespace GamingDnV
         public PreViewModel PreVeiwWindow { get; set; }
 
         List<NoteModel> ListNote = new List<NoteModel>();
+        List<HistoryModel> ListHistory = new List<HistoryModel>();
         //ObservableCollection<UsersModel> Users = new ObservableCollection<UsersModel>();
         //ObservableCollection<NPCModel> NPC = new ObservableCollection<NPCModel>();
 
@@ -117,6 +121,18 @@ namespace GamingDnV
                 _textWriteNode = value;
 
                 RaisePropertyChanged(nameof(TextWriteNode));
+            }
+        }
+
+        private string _dbConnect;
+        public string DbConnect
+        {
+            get { return _dbConnect; }
+            set
+            {
+                _dbConnect = value;
+
+                RaisePropertyChanged(nameof(DbConnect));
             }
         }
 
@@ -1100,6 +1116,18 @@ namespace GamingDnV
 
         #region Методы
 
+        public void ConnectDB()
+        {
+            if (UpdataBD.TestConnect() == TypeResult.Ok)
+            {
+                DbConnect = "Готово";
+            }
+            else
+            {
+                DbConnect = "Повтор";
+            }
+        }
+
         public void Print()
         {
             if (CurrentUser != null)
@@ -1180,7 +1208,7 @@ namespace GamingDnV
             }
             else
             {
-                PreVeiwWindow.VisibilityLogo(History);
+                PreVeiwWindow.VisibilityLogo(History, ListHistory[0].Imag);
                 logo = true;
             }
         }
@@ -1205,7 +1233,9 @@ namespace GamingDnV
                 PathImag = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + SelectItem.Id + "\\Images\\";
                 PathInterface = AppDomain.CurrentDomain.BaseDirectory + "Media\\Interface\\";
                 PathMedia = AppDomain.CurrentDomain.BaseDirectory + "Media\\History_" + SelectItem.Id + "\\Sounds\\";
-                History = ReadBD.ReadHistoryInDb("SELECT Name FROM tHistorys WHERE Id = " + SelectItem.Id + ";");
+                
+                ListHistory = ReadBD.ReadHistoryInDb("SELECT Name, Imag FROM tHistorys WHERE Id = " + SelectItem.Id + ";");
+                History = ListHistory[0].Name;
                 Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE HistoryId = " + SelectItem.Id + " ORDER BY tRooms.Order;");
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
 
@@ -1244,6 +1274,8 @@ namespace GamingDnV
                 int currPer = CurrentItems.Person;
                 int currId = CurrentItems.IdPerson;
                 ReadBD.WriteBD("UPDATE tItems SET IdPerson = " + CurrentUser.Id + ", Person = " + 1 + " WHERE Id = " + CurrentItems.Id);
+                UpdataBD.Update("UPDATE wp_items SET IdPerson = " + CurrentUser.Id + " WHERE Id = " + CurrentItems.Id);
+                UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1 WHERE `IpPerson`= " + CurrentUser.Id);
                 CurrentItems.IdPerson = CurrentUser.Id;
                 CurrentItems.Person = 1;
                 Items = ListItems.Where(x => x.IdPerson == currId && x.Person == currPer).ToList();
@@ -1253,12 +1285,21 @@ namespace GamingDnV
                 MessageBox.Show("Выбери героя!");
             }
         }
-
+        public void SaveDb()
+        {
+            foreach (var d in ListHero)
+            {
+                UpdataBD.Update("UPDATE `wp_heros` SET `Defence`="+d.Defence+",`Health`="+d.Health+",`Power`="+d.Power+ ",`Dexterity`=" + d.Dexterity + ",`Endurance`=" + d.Endurance + ",`Wisdom`=" + d.Wisdom + ",`Intelligence`=" + d.Intelligence + ",`Charisma`=" + d.Charisma + " WHERE `Id`="+d.Id);
+                UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1");
+            }
+        }
         public void DeleteItem()
         {
             int currPer = CurrentItems.Person;
             int currId = CurrentItems.IdPerson;
             ReadBD.WriteBD("UPDATE tItems SET IdPerson = 0, Person = 0 WHERE Id = " + CurrentItems.Id);
+            UpdataBD.Update("UPDATE wp_items SET IdPerson = 0 WHERE Id = " + CurrentItems.Id);
+            UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1");
             CurrentItems.IdPerson = 0;
             CurrentItems.Person = 0;
             //Items = ListItems;
@@ -1786,10 +1827,10 @@ namespace GamingDnV
         {
             if (CurrentNPC != null && CurrentUser != null)
             {
-                string sql = "";
+                //string sql = "";
                 string table = "";
                 int result = 0;
-                int id = 0;
+                //int id = 0;
                 if (NpcStep == false)
                 {
                     //Ход Героя
@@ -2180,6 +2221,7 @@ namespace GamingDnV
         #region Команды
 
         public ICommand ComboOk { get; set; }
+        public ICommand DbConnectBtn { get; set; }
         public ICommand ShowWindow { get; set; }
         public ICommand StartSql { get; set; }
         public ICommand ViewImag { get; set; }
@@ -2229,6 +2271,7 @@ namespace GamingDnV
         public ICommand EditNoteBtn { get; set; }
         public ICommand WriteNodeText { get; set; }
         public ICommand CanсelNode { get; set; }
+        public ICommand SaveBtn { get; set; }
         private ICommand _push1Btn;
         public ICommand Push1Btn
         {
