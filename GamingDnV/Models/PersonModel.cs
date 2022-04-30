@@ -83,5 +83,31 @@ namespace GamingDnV.Models
         public int Person { get; set; }
         //Очередь
         public int Order { get; set; }
+        //Золото
+        private int _gold;
+        public int Gold
+        {
+            get { return _gold; }
+            set
+            {
+                _gold = value;
+
+                RaisePropertyChanged(nameof(Gold));
+            }
+        }
+        //Уровень
+        public int LevelUp { get; set; }
+        //Опыт
+        private int _ervaring;
+        public int Ervaring
+        {
+            get { return _ervaring; }
+            set
+            {
+                _ervaring = value;
+
+                RaisePropertyChanged(nameof(Ervaring));
+            }
+        }
     }
 }

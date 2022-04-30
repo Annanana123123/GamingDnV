@@ -240,7 +240,8 @@
             </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Имя" Width="auto" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Игрок" Width="*" Binding="{Binding UserName}"/>
+                <DataGridTextColumn Header="УР" Width="35" Binding="{Binding LevelUp}"/>
+                <DataGridTextColumn Header="Опыт" Width="*" Binding="{Binding Ervaring}"/>
                 <DataGridTextColumn Header="DF" Width="35" Binding="{Binding Defence}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Power}" CellStyle="{StaticResource NameCellStyle}"/>
@@ -250,6 +251,7 @@
                 <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding Intelligence}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Charisma}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="ПА" Width="35" Binding="{Binding Passiv}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ЗМ" Width="40" Binding="{Binding Gold}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="AT" Width="35" Binding="{Binding Atac, Mode=TwoWay}" CellStyle="{StaticResource NameCellStyle}"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -496,8 +498,8 @@
                             HorizontalAlignment="Center">
                     <Button Content="Корзина" 
                             Height="35"
-                            Width="90"
-                            FontSize="15"
+                            Width="60"
+                            FontSize="13"
                             BorderBrush="#2A72E9"
                             BorderThickness="3"
                             Background="#12131A"
@@ -506,24 +508,34 @@
                             Command="{Binding Garbage}"/>
                     <Button Content="Передать" 
                             Height="35"
-                            Width="90"
-                            FontSize="15"
+                            Width="65"
+                            FontSize="13"
                             BorderBrush="#2A72E9"
                             BorderThickness="3"
                             Background="#12131A"
                             Foreground="#2A72E9"
-                            Margin="10 10 0 10"
+                            Margin="5 10 0 10"
                             Command="{Binding Transfer}"/>
                     <Button Content="Удалить" 
                             Height="35"
-                            Width="90"
-                            FontSize="15"
+                            Width="60"
+                            FontSize="13"
                             BorderBrush="#2A72E9"
                             BorderThickness="3"
                             Background="#12131A"
                             Foreground="#2A72E9"
-                            Margin="10 10 0 10"
+                            Margin="5 10 0 10"
                             Command="{Binding Delete}"/>
+                    <Button Content="Магазин" 
+                            Height="35"
+                            Width="60"
+                            FontSize="13"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="5 10 0 10"
+                            Command="{Binding Shop}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

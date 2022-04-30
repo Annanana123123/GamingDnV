@@ -69,6 +69,7 @@ namespace GamingDnV
             Logo = new RelayCommand(() => VisibilitzLogo());
             Transfer = new RelayCommand(() => TransferItem());
             Delete = new RelayCommand(() => DeleteItem());
+            Shop = new RelayCommand(() => ShopItem());
             Garbage = new RelayCommand(() => GarbageItem());
             ShowNote = new RelayCommand(() => ViewNote());
             EditNoteBtn = new RelayCommand(() => EditNote());
@@ -103,6 +104,7 @@ namespace GamingDnV
         #region Свойства
         public bool logo = false;
         public bool versus = true;
+        public bool shop = false;
         public string History = "";
         public PreViewModel PreVeiwWindow { get; set; }
 
@@ -1239,9 +1241,9 @@ namespace GamingDnV
                 Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE HistoryId = " + SelectItem.Id + " ORDER BY tRooms.Order;");
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
 
-                ListPerson = ReadBD.ReadPersonInDb(" SELECT Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, Abilities, Ulta, History, Imag, Arms, Equip, Description, Sound, Person FROM tHeros WHERE HistoryId =" + SelectItem.Id +
+                ListPerson = ReadBD.ReadPersonInDb(" SELECT a.Id, a.Name, a.RoomId, a.Notee, a.Defence, a.Health, a.Power, a.Dexterity, a.Endurance, a.Wisdom, a.Intelligence, a.Charisma, a.Passiv, a.Species, a.Class, a.Abilities, a.Ulta, a.History, a.Imag, a.Arms, a.Equip, a.Description, a.Sound, a.Person, a.Gold, b.Id, a.Ervaring FROM tHeros as a inner join tErvaring as b on a.Ervaring >= b.Ervaring and a.Ervaring < b.ErvaringUp WHERE HistoryId =" + SelectItem.Id +
                                                    " union all" +
-                                                   " SELECT Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, Abilities, Ulta, History, Imag, Arms, Equip, Description, Sound, Person FROM tNPC WHERE HistoryId =" + SelectItem.Id);
+                                                   " SELECT Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, Abilities, Ulta, History, Imag, Arms, Equip, Description, Sound, Person, Gold, LevelUp, Ervaring FROM tNPC WHERE HistoryId =" + SelectItem.Id);
                 ListNpc = new ObservableCollection<PersonModel>(ListPerson.Where(x => x.Person == 2).ToList());
                 ListHero = new ObservableCollection<PersonModel>(ListPerson.Where(x => x.Person == 1).ToList());
                 HerosTable = ListHero;
@@ -1267,18 +1269,58 @@ namespace GamingDnV
             Items = ListItems.Where(x => x.IdPerson == 0 && x.Person == 0).ToList();
         }
 
+        public void ShopItem()
+        {
+            shop = true;
+            List<ItemsModel> ListShop = new List<ItemsModel>();
+            ListShop = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Price FROM tShop;");
+            Items = ListShop;
+        }
+
         public void TransferItem()
         {
             if (CurrentUser != null)
             {
-                int currPer = CurrentItems.Person;
-                int currId = CurrentItems.IdPerson;
-                ReadBD.WriteBD("UPDATE tItems SET IdPerson = " + CurrentUser.Id + ", Person = " + 1 + " WHERE Id = " + CurrentItems.Id);
-                UpdataBD.Update("UPDATE wp_items SET IdPerson = " + CurrentUser.Id + " WHERE Id = " + CurrentItems.Id);
-                UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1 WHERE `IpPerson`= " + CurrentUser.Id);
-                CurrentItems.IdPerson = CurrentUser.Id;
-                CurrentItems.Person = 1;
-                Items = ListItems.Where(x => x.IdPerson == currId && x.Person == currPer).ToList();
+                if (shop)
+                {
+                    int currPer = CurrentItems.Person;
+                    int currId = CurrentItems.IdPerson;
+                    if (ReadBD.GetId("SELECT `id` FROM `tItems` WHERE Name = '" + CurrentItems.Name + "';") > 0)
+                    {
+                        int IdEdit = ReadBD.GetId("SELECT `id` FROM `tItems` WHERE Name = '" + CurrentItems.Name + "';");
+                        int CountEdit = ReadBD.GetId("SELECT `Count` FROM `tItems` WHERE Name = '" + CurrentItems.Name + "';");
+                        CountEdit++;
+                        ReadBD.WriteBD("UPDATE tItems SET `Count` = " + CountEdit + " WHERE Id = " + IdEdit);
+                        var Edit = ListItems.Where(x => x.Id == IdEdit).ToList();
+                        Edit[0].Count = CountEdit;
+                    }
+                    else
+                    {
+                        ReadBD.WriteBD("INSERT INTO `tItems` (`Name`, `Notee`, `IdPerson`, `Person`, `Count`) VALUES ('" + CurrentItems.Name + "', '" + CurrentItems.Notee + "', '" + CurrentUser.Id + "', '1', '1')");
+                        int MaxId = ReadBD.GetMaxId("SELECT max(id) FROM `tItems`");
+                        ListItems.Add(new ItemsModel()
+                        {
+                            Id = MaxId,
+                            Name = CurrentItems.Name,
+                            Notee = CurrentItems.Notee,
+                            IdPerson = CurrentUser.Id,
+                            Person = 1,
+                            Count = 1,
+                        });
+                    }
+                    //ReadBD.WriteBD("UPDATE tItems SET IdPerson = " + CurrentUser.Id + ", Person = " + 1 + " WHERE Id = " + CurrentItems.Id);
+                }
+                else
+                {
+                    int currPer = CurrentItems.Person;
+                    int currId = CurrentItems.IdPerson;
+                    ReadBD.WriteBD("UPDATE tItems SET IdPerson = " + CurrentUser.Id + ", Person = " + 1 + " WHERE Id = " + CurrentItems.Id);
+                    UpdataBD.Update("UPDATE wp_items SET IdPerson = " + CurrentUser.Id + " WHERE Id = " + CurrentItems.Id);
+                    UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1 WHERE `IpPerson`= " + CurrentUser.Id);
+                    CurrentItems.IdPerson = CurrentUser.Id;
+                    CurrentItems.Person = 1;
+                    Items = ListItems.Where(x => x.IdPerson == currId && x.Person == currPer).ToList();
+                }
             }
             else
             {
@@ -1289,7 +1331,8 @@ namespace GamingDnV
         {
             foreach (var d in ListHero)
             {
-                UpdataBD.Update("UPDATE `wp_heros` SET `Defence`="+d.Defence+",`Health`="+d.Health+",`Power`="+d.Power+ ",`Dexterity`=" + d.Dexterity + ",`Endurance`=" + d.Endurance + ",`Wisdom`=" + d.Wisdom + ",`Intelligence`=" + d.Intelligence + ",`Charisma`=" + d.Charisma + " WHERE `Id`="+d.Id);
+                UpdataBD.Update("UPDATE `wp_heros` SET `Defence`="+d.Defence+",`Health`="+d.Health+",`Power`="+d.Power+ ",`Dexterity`=" + d.Dexterity + ",`Endurance`=" + d.Endurance + ",`Wisdom`=" + d.Wisdom + ",`Intelligence`=" + d.Intelligence + ",`Charisma`=" + d.Charisma + ", `Gold`=" + d.Gold + ", `Ervaring`=" + d.Ervaring + " WHERE `Id`=" + d.Id);
+                UpdataBD.UpdataInDb("UPDATE `theros` SET `Gold`=" + d.Gold + ", `Ervaring`=" + d.Ervaring + " WHERE `Id`=" + d.Id);
                 UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1");
             }
         }
@@ -2077,6 +2120,7 @@ namespace GamingDnV
         {
             if (CurrentNPC != null)
             {
+                shop = false;
                 BackSEn = false;
                 AtacSEn = false;
                 TrackSEn = false;
@@ -2105,6 +2149,7 @@ namespace GamingDnV
         {
             if (CurrentUser != null)
             {
+                shop = false;
                 ToolTipU = "id = " + CurrentUser.Id.ToString();
                 UserInfo = "Оружие:\r\n" + CurrentUser.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentUser.Equip + "\r\n\r\nИнвинтарь:\r\n" + ListViewItem(CurrentUser) + "\r\n\r\nСпособности:\r\n" + CurrentUser.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentUser.Ulta + "\r\n\r\nОписание:\r\n" + CurrentUser.Description;
                 if (CurrentUser.RoomId == 0)
@@ -2267,6 +2312,7 @@ namespace GamingDnV
         public ICommand Transfer { get; set; }
         public ICommand Garbage { get; set; }
         public ICommand Delete { get; set; }
+        public ICommand Shop { get; set; }
         public ICommand ShowNote { get; set; }
         public ICommand EditNoteBtn { get; set; }
         public ICommand WriteNodeText { get; set; }

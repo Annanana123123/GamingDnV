@@ -155,7 +155,10 @@ namespace GamingDnV.Services
                     Equip = Convert.ToString(reader[20].ToString()),
                     Description = Convert.ToString(reader[21].ToString()),
                     Sound = Convert.ToString(reader[22].ToString()),
-                    Person = Convert.ToInt32(reader[23].ToString())
+                    Person = Convert.ToInt32(reader[23].ToString()),
+                    Gold = Convert.ToInt32(reader[24].ToString()),
+                    LevelUp = Convert.ToInt32(reader[25].ToString()),
+                    Ervaring = Convert.ToInt32(reader[26].ToString())
                 });
             }
             myConnect.Close();
@@ -291,6 +294,36 @@ namespace GamingDnV.Services
                 OleDbCommand myCommand = new OleDbCommand(_sql, myConnect);
                 myCommand.ExecuteReader();
                 myConnect.Close();
+        }
+
+        public static int GetMaxId(string sql)
+        {
+            int Id = 0;
+            OleDbConnection myConnect = new OleDbConnection(constr);
+            myConnect.Open();
+            OleDbCommand myCommand = new OleDbCommand(sql, myConnect);
+            OleDbDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                Id = Convert.ToInt32(reader[0].ToString());
+            }
+            myConnect.Close();
+            return Id;
+        }
+
+        public static int GetId(string sql)
+        {
+            int Id = 0;
+            OleDbConnection myConnect = new OleDbConnection(constr);
+            myConnect.Open();
+            OleDbCommand myCommand = new OleDbCommand(sql, myConnect);
+            OleDbDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                Id = Convert.ToInt32(reader[0].ToString());
+            }
+            myConnect.Close();
+            return Id;
         }
     }
 }
