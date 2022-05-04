@@ -244,12 +244,12 @@
                 <DataGridTextColumn Header="Опыт" Width="*" Binding="{Binding Ervaring}"/>
                 <DataGridTextColumn Header="DF" Width="35" Binding="{Binding Defence}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
-                <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Power}" CellStyle="{StaticResource NameCellStyle}"/>
-                <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding Dexterity}" CellStyle="{StaticResource NameCellStyle}"/>
-                <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding Endurance}" CellStyle="{StaticResource NameCellStyle}"/>
-                <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wisdom}" CellStyle="{StaticResource NameCellStyle}"/>
-                <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding Intelligence}" CellStyle="{StaticResource NameCellStyle}"/>
-                <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Charisma}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Po}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding De}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding En}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wi}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding In}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Ch}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="ПА" Width="35" Binding="{Binding Passiv}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="ЗМ" Width="40" Binding="{Binding Gold}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="AT" Width="35" Binding="{Binding Atac, Mode=TwoWay}" CellStyle="{StaticResource NameCellStyle}"/>
@@ -307,7 +307,7 @@
                        Margin="0 20 0 0"
                        HorizontalAlignment="Center"
                        Foreground="#999999"/>
-                <Button Content="Профиль"
+                <Button Content="Экспорт"
                         FontSize="20"
                         Grid.Row="1"
                         Height="40"
@@ -319,7 +319,7 @@
                         HorizontalContentAlignment="Center"
                         Foreground="#2A72E9"
                         Margin="5 5 5 0"
-                        Command="{Binding IntoBattlePrint}"/>
+                        Command="{Binding ExportBtn}"/>
                 <Button Content="Инвентарь"
                         FontSize="20"
                         Grid.Row="1"
@@ -1728,170 +1728,15 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <Border Background="#12131A"
-                    Grid.Row="0"
-                    Grid.RowSpan="3"
-                    Grid.ColumnSpan="3"
-                    Grid.Column="0"/>
-            <Border Background="#ffffff"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    BorderBrush="#2A72E9"
-                    BorderThickness="2"/>
-            <Button Content="Х" 
-                    Grid.Column="2"
-                    Grid.Row="0"
-                    FontSize="20"
-                    BorderBrush="#2A72E9" 
-                    Background="#12131A" 
-                    Foreground="#2A72E9"
-                    BorderThickness="2 2 2 2"
-                    VerticalContentAlignment="Center"
-                    Command="{Binding CloseVersus}"/>
-            <Grid Grid.Column="1"
-                  Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="483"/>
-                    <ColumnDefinition Width="10"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="10"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="600"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="10"/>
-                </Grid.RowDefinitions>
-                <Image Grid.Row="1" Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Layer_0.png"/>
-                <Image Height="400"
-                       VerticalAlignment="Top"
-                       Margin="0 27 0 0"
-                       Grid.Row="1" 
-                       Source="{Binding ImagPrint}"/>
-                <Image Grid.Row="1" 
-                       Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Layer_1.png"/>
-                <TextBox Text="{Binding NamePrint}"
-                         FontSize="40"
-                         Background="#00000000"
-                         Foreground="#ffebbb"
-                         Height="50"
-                         Width="270"
-                         Grid.Row="1" 
-                         BorderThickness="0"
-                         VerticalAlignment="Bottom"
-                         VerticalContentAlignment="Center"
-                         HorizontalContentAlignment="Center"
-                         Margin="0 0 15 105" FontFamily="Arial"/>
-                <TextBox Grid.Column="0"
-                         Grid.Row="2"
-                         Text="{Binding ClassPrint}"
-                         FontSize="30"
-                         Background="#00000000"
-                         BorderThickness="0"
-                         VerticalAlignment="Center"
-                         VerticalContentAlignment="Center"
-                         HorizontalContentAlignment="Center"
-                         FontFamily="Arial"/>
-                <Grid Grid.Column="0"
-                      Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="90"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="108"/>
-                        <RowDefinition Height="80"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Image Grid.Column="2"
-                           Grid.Row="0" 
-                           Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Shit0.png"/>
-                    <TextBox Grid.Column="2"
-                             Grid.Row="0"
-                             Text="{Binding DFPrint}"
-                             FontSize="40"
-                             Foreground="White"
-                             Background="#00000000"
-                             BorderThickness="0"
-                             VerticalContentAlignment="Center"
-                             HorizontalContentAlignment="Center"
-                             Margin="20" FontWeight="Bold"/>
-                    <Image Grid.Column="2"
-                           Grid.Row="1" 
-                           Source="C:\Users\genii\source\repos\GamingDnVGit\GamingDnV\bin\Debug\Media\Interface\Hard.png"/>
-                    <TextBox Grid.Column="2"
-                             Grid.Row="1"
-                             VerticalAlignment="Top"
-                             Margin="0 5 0 0"
-                             Height="50"
-                             Text="32"
-                             BorderThickness="0"
-                             FontSize="40"
-                             Foreground="#FFFFFF"
-                             Background="#00000000"
-                             VerticalContentAlignment="Center"
-                             HorizontalContentAlignment="Center"
-                             FontWeight="Bold"/>
-                </Grid>
-                <Grid Grid.Column="2"
-                      Grid.Row="1"
-                      Grid.RowSpan="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="310"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Column="0"
-                                Grid.Row="0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Width="270" BorderThickness="1" BorderBrush="#000000" FontSize="30" Text="СИЛА" FontWeight="Bold"/>
-                            <TextBox Width="40" HorizontalContentAlignment="Center" BorderThickness="0 1 1 1" BorderBrush="#000000" FontSize="30" Text="{Binding PPrint}" FontWeight="Bold"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Width="270" BorderThickness="1" BorderBrush="#000000" FontSize="30" Text="ЛОВКОСТЬ" FontWeight="Bold"/>
-                            <TextBox Width="40" HorizontalContentAlignment="Center" BorderThickness="0 1 1 1" BorderBrush="#000000" FontSize="30" Text="{Binding DPrint}" FontWeight="Bold"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Width="270" BorderThickness="1" BorderBrush="#000000" FontSize="30" Text="ТЕЛОСЛОЖЕНИЕ" FontWeight="Bold"/>
-                            <TextBox Width="40" HorizontalContentAlignment="Center" BorderThickness="0 1 1 1" BorderBrush="#000000" FontSize="30" Text="{Binding EPrint}" FontWeight="Bold"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Width="270" BorderThickness="1" BorderBrush="#000000" FontSize="30" Text="МУДРОСТЬ" FontWeight="Bold"/>
-                            <TextBox Width="40" HorizontalContentAlignment="Center" BorderThickness="0 1 1 1" BorderBrush="#000000" FontSize="30" Text="{Binding WPrint}" FontWeight="Bold"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Width="270" BorderThickness="1" BorderBrush="#000000" FontSize="30" Text="ИНТЕЛЕКТ" FontWeight="Bold"/>
-                            <TextBox Width="40" HorizontalContentAlignment="Center" BorderThickness="0 1 1 1" BorderBrush="#000000" FontSize="30" Text="{Binding IPrint}" FontWeight="Bold"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Width="270" BorderThickness="1" BorderBrush="#000000" FontSize="30" Text="ХАРИЗМА" FontWeight="Bold"/>
-                            <TextBox Width="40" HorizontalContentAlignment="Center" BorderThickness="0 1 1 1" BorderBrush="#000000" FontSize="30" Text="{Binding CPrint}" FontWeight="Bold"/>
-                        </StackPanel>
-                    </StackPanel>
-                    <TextBox Grid.Column="2"
-                             Text="{Binding EqPrint}"
-                             TextWrapping="Wrap"
-                             FontSize="16"/>
-                    <TextBox Grid.Column="4"
-                             Text="{Binding AbPrint}"
-                             TextWrapping="Wrap"
-                             FontSize="16"/>
-                    <TextBox Grid.Column="0"
-                             Grid.Row="3"
-                             Grid.ColumnSpan="5"
-                             Text="{Binding HiPrint}"
-                             TextWrapping="Wrap"
-                             FontSize="20"/>
-                </Grid>
-            </Grid>
+
+            <TextBox Text="{Binding Print}"
+                     FontSize="10"
+                     Background="#000000"
+                     Foreground="#ffebbb"
+                     Grid.Row="1" 
+                     Grid.Column="1"
+                     BorderThickness="0"
+                     FontFamily="Arial"/>
         </Grid>
         <Grid Grid.Row="0"
               Grid.RowSpan="4"

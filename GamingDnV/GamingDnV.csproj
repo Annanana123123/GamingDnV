@@ -71,6 +71,7 @@
     <Compile Include="Enums\TypeEven.cs" />
     <Compile Include="Enums\TypeResult.cs" />
     <Compile Include="MainWindowsViewModel.cs" />
+    <Compile Include="Models\AbilitiesModel.cs" />
     <Compile Include="Models\ActionModel.cs" />
     <Compile Include="Models\ComboBoxModel.cs" />
     <Compile Include="Models\EventsModel.cs" />

@@ -64,7 +64,7 @@ namespace GamingDnV
             CloseVersus = new RelayCommand(() => CloseVersusWin());
             BtnL = new RelayCommand(() => CurrentV(1));
             BtnR = new RelayCommand(() => CurrentV(2));
-            IntoBattlePrint = new RelayCommand(() => Print());
+            ExportBtn = new RelayCommand(() => Export());
             ItemBattlePrint = new RelayCommand(() => PrintItem());
             Logo = new RelayCommand(() => VisibilitzLogo());
             Transfer = new RelayCommand(() => TransferItem());
@@ -218,171 +218,15 @@ namespace GamingDnV
             }
         }
 
-        private string _imagPrint;
-        public string ImagPrint
+        private string _print;
+        public string Print
         {
-            get { return _imagPrint; }
+            get { return _print; }
             set
             {
-                _imagPrint = value;
+                _print = value;
 
-                RaisePropertyChanged(nameof(ImagPrint));
-            }
-        }
-
-        private string _namePrint;
-        public string NamePrint
-        {
-            get { return _namePrint; }
-            set
-            {
-                _namePrint = value;
-
-                RaisePropertyChanged(nameof(NamePrint));
-            }
-        }
-
-        private string _classPrint;
-        public string ClassPrint
-        {
-            get { return _classPrint; }
-            set
-            {
-                _classPrint = value;
-
-                RaisePropertyChanged(nameof(ClassPrint));
-            }
-        }
-
-        private string _dFPrint;
-        public string DFPrint
-        {
-            get { return _dFPrint; }
-            set
-            {
-                _dFPrint = value;
-
-                RaisePropertyChanged(nameof(DFPrint));
-            }
-        }
-
-        private string _hPPrint;
-        public string HPPrint
-        {
-            get { return _hPPrint; }
-            set
-            {
-                _hPPrint = value;
-
-                RaisePropertyChanged(nameof(HPPrint));
-            }
-        }
-
-        private string _pPrint;
-        public string PPrint
-        {
-            get { return _pPrint; }
-            set
-            {
-                _pPrint = value;
-
-                RaisePropertyChanged(nameof(PPrint));
-            }
-        }
-
-        private string _dPrint;
-        public string DPrint
-        {
-            get { return _dPrint; }
-            set
-            {
-                _dPrint = value;
-
-                RaisePropertyChanged(nameof(DPrint));
-            }
-        }
-
-        private string _ePrint;
-        public string EPrint
-        {
-            get { return _ePrint; }
-            set
-            {
-                _ePrint = value;
-
-                RaisePropertyChanged(nameof(EPrint));
-            }
-        }
-
-        private string _wPrint;
-        public string WPrint
-        {
-            get { return _wPrint; }
-            set
-            {
-                _wPrint = value;
-
-                RaisePropertyChanged(nameof(WPrint));
-            }
-        }
-
-        private string _iPrint;
-        public string IPrint
-        {
-            get { return _iPrint; }
-            set
-            {
-                _iPrint = value;
-
-                RaisePropertyChanged(nameof(IPrint));
-            }
-        }
-
-        private string _cPrint;
-        public string CPrint
-        {
-            get { return _cPrint; }
-            set
-            {
-                _cPrint = value;
-
-                RaisePropertyChanged(nameof(CPrint));
-            }
-        }
-
-        private string _eqPrint;
-        public string EqPrint
-        {
-            get { return _eqPrint; }
-            set
-            {
-                _eqPrint = value;
-
-                RaisePropertyChanged(nameof(EqPrint));
-            }
-        }
-
-        private string _abPrint;
-        public string AbPrint
-        {
-            get { return _abPrint; }
-            set
-            {
-                _abPrint = value;
-
-                RaisePropertyChanged(nameof(AbPrint));
-            }
-        }
-
-        private string _hiPrint;
-        public string HiPrint
-        {
-            get { return _hiPrint; }
-            set
-            {
-                _hiPrint = value;
-
-                RaisePropertyChanged(nameof(HiPrint));
+                RaisePropertyChanged(nameof(Print));
             }
         }
 
@@ -1106,8 +950,11 @@ namespace GamingDnV
         int temp = -1;
 
         ObservableCollection<EventsModel> ListEvent = new ObservableCollection<EventsModel>();
+        ObservableCollection<AbilitiesModel> ListAbilities = new ObservableCollection<AbilitiesModel>();
+        ObservableCollection<AbilitiesModel> ListUlta = new ObservableCollection<AbilitiesModel>();
         ObservableCollection<PersonModel> ListNpc = new ObservableCollection<PersonModel>();
         ObservableCollection<PersonModel> ListHero = new ObservableCollection<PersonModel>();
+        ObservableCollection<PersonModel> ListHeroProof = new ObservableCollection<PersonModel>();
         ObservableCollection<PersonModel> ListPerson= new ObservableCollection<PersonModel>();
         ObservableCollection<PersonModel> Versus = new ObservableCollection<PersonModel>();
 
@@ -1130,25 +977,20 @@ namespace GamingDnV
             }
         }
 
-        public void Print()
+        public void Export()
         {
             if (CurrentUser != null)
             {
-                ImagPrint = PathHero + CurrentUser.Imag;
-                NamePrint = CurrentUser.Name;
-                ClassPrint = CurrentUser.Species + " " + CurrentUser.Class;
-                DFPrint = CurrentUser.Defence.ToString();
-                HPPrint = CurrentUser.Health.ToString();
-                PPrint = CurrentUser.Power.ToString();
-                DPrint = CurrentUser.Dexterity.ToString();
-                EPrint = CurrentUser.Endurance.ToString();
-                WPrint = CurrentUser.Wisdom.ToString();
-                IPrint = CurrentUser.Intelligence.ToString();
-                CPrint = CurrentUser.Charisma.ToString();
-                EqPrint = "Оружие:\n" + CurrentUser.Arms + "\n\rСнаряжение:\n" + CurrentUser.Equip;
-                AbPrint = "Способности:\n" + CurrentUser.Abilities + "\n\rЗаклинания:\n" + CurrentUser.Ulta;
-                HiPrint = "История: Я " + CurrentUser.Species + " " + CurrentUser.Class + " по имени " + CurrentUser.Name + ". " + CurrentUser.History;
-                VisibilityPrint = Visibility.Visible;
+                PersonModel CurrHeroProof = ListHeroProof.First(x => x.Id == CurrentUser.Id);
+
+                if (UpdataBD.UpdateHero(CurrHeroProof, ListAbilities.Where(x => x.IdPerson == CurrHeroProof.Id).ToList(), ListUlta.Where(x => x.IdPerson == CurrHeroProof.Id).ToList(), ListItems.Where(x => x.IdPerson == CurrHeroProof.Id).ToList()) == TypeResult.Ok)
+                {
+                    MessageBox.Show("Готово");
+                }
+                //string Sql = "INSERT INTO (Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, History, Imag, Arms, Equip, Description, Sound, Person, Gold, Ervaring, P, D, E, W, I, C) FROM tHeros ";
+
+                //Print = Sql;
+                //VisibilityPrint = Visibility.Visible;
             }
         }
         public void PrintItem()
@@ -1241,17 +1083,58 @@ namespace GamingDnV
                 Rooms = ReadBD.ReadRoomsInDb("SELECT Id, Name, TextRoom, Images, Sounts FROM tRooms WHERE HistoryId = " + SelectItem.Id + " ORDER BY tRooms.Order;");
                 ListEvent = ReadBD.ReadEventInDb("SELECT Id, Name, TextEvent, Images, Sounds, Order, RoomId FROM tEvents WHERE RoomId in (" + WhereIn() + ");");
 
-                ListPerson = ReadBD.ReadPersonInDb(" SELECT a.Id, a.Name, a.RoomId, a.Notee, a.Defence, a.Health, a.Power, a.Dexterity, a.Endurance, a.Wisdom, a.Intelligence, a.Charisma, a.Passiv, a.Species, a.Class, a.Abilities, a.Ulta, a.History, a.Imag, a.Arms, a.Equip, a.Description, a.Sound, a.Person, a.Gold, b.Id, a.Ervaring FROM tHeros as a inner join tErvaring as b on a.Ervaring >= b.Ervaring and a.Ervaring < b.ErvaringUp WHERE HistoryId =" + SelectItem.Id +
+                ListPerson = ReadBD.ReadPersonInDb(" SELECT a.Id, a.Name, a.RoomId, a.Notee, a.Defence, a.Health, a.Power, a.Dexterity, a.Endurance, a.Wisdom, a.Intelligence, a.Charisma, a.Passiv, a.Species, a.Class, a.Abilities, a.Ulta, a.History, a.Imag, a.Arms, a.Equip, a.Description, a.Sound, a.Person, a.Gold, b.Id, a.Ervaring, a.P, a.D, a.E, a.W, a.I, a.C FROM tHeros as a inner join tErvaring as b on a.Ervaring >= b.Ervaring and a.Ervaring < b.ErvaringUp WHERE HistoryId =" + SelectItem.Id +
                                                    " union all" +
-                                                   " SELECT Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, Abilities, Ulta, History, Imag, Arms, Equip, Description, Sound, Person, Gold, LevelUp, Ervaring FROM tNPC WHERE HistoryId =" + SelectItem.Id);
+                                                   " SELECT Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, Abilities, Ulta, History, Imag, Arms, Equip, Description, Sound, Person, Gold, LevelUp, Ervaring, P, D, E, W, I, C FROM tNPC WHERE HistoryId =" + SelectItem.Id);
                 ListNpc = new ObservableCollection<PersonModel>(ListPerson.Where(x => x.Person == 2).ToList());
-                ListHero = new ObservableCollection<PersonModel>(ListPerson.Where(x => x.Person == 1).ToList());
+                ListHeroProof = new ObservableCollection<PersonModel>(ListPerson.Where(x => x.Person == 1).ToList());
+                ListAbilities = ReadBD.ReadAbilitiesInDb("SELECT Id, Name, Notee, IdPerson, Enabled, Order FROM tAbilities WHERE IdPerson in (" + WhereInHeros(ListHeroProof) + ") order by `Order`;");
+                ListUlta = ReadBD.ReadAbilitiesInDb("SELECT Id, Name, Notee, IdPerson, Enabled, Order FROM tUlta WHERE IdPerson in (" + WhereInHeros(ListHeroProof) + ");");
+                ListHero = HeroEdit(ListHeroProof);
                 HerosTable = ListHero;
                 ListItems = WhereItems();
                 ListNote = ReadBD.ReadNoteInDb("SELECT Id, Name, Notee, HistoryId FROM tNote WHERE HistoryId in (0, " + SelectItem.Id + ");");
                 TextNote = Note(ListNote);
                 TextWriteNode = ReadBD.ReadWriteNoteInDb("SELECT Text FROM tWriteNode WHERE id = 1");
             }
+        }
+
+        public ObservableCollection<PersonModel> HeroEdit(ObservableCollection<PersonModel> heroProof)
+        {
+            foreach (var h in heroProof)
+            {
+                h.Po = ConvertorSpecificatie(h.Power, h.P);
+                h.De = ConvertorSpecificatie(h.Dexterity, h.D);
+                h.En = ConvertorSpecificatie(h.Endurance, h.E);
+                h.Wi = ConvertorSpecificatie(h.Wisdom, h.W);
+                h.In = ConvertorSpecificatie(h.Intelligence, h.I);
+                h.Ch = ConvertorSpecificatie(h.Charisma, h.C);
+            }
+
+            return heroProof;
+        }
+
+        public int ConvertorSpecificatie(int s, int d)
+        {
+            int spec = 0;
+            if (s == 1) { spec = -5; }
+            if (s == 2 || s == 3) { spec = -4; }
+            if (s == 4 || s == 5) { spec = -3; }
+            if (s == 6 || s == 7) { spec = -2; }
+            if (s == 8 || s == 9) { spec = -1; }
+            if (s == 10 || s == 11) { spec = 0; }
+            if (s == 12 || s == 13) { spec = 1; }
+            if (s == 14 || s == 15) { spec = 2; }
+            if (s == 16 || s == 17) { spec = 3; }
+            if (s == 18 || s == 19) { spec = 4; }
+            if (s == 20 || s == 21) { spec = 5; }
+            if (s == 22 || s == 23) { spec = 6; }
+            if (s == 24 || s == 25) { spec = 7; }
+            if (s == 26 || s == 27) { spec = 8; }
+            if (s == 28 || s == 29) { spec = 9; }
+            if (s == 30) { spec = 10; }
+            spec += d;
+            return spec;
         }
 
         public string Note (List<NoteModel> s)
@@ -1273,7 +1156,7 @@ namespace GamingDnV
         {
             shop = true;
             List<ItemsModel> ListShop = new List<ItemsModel>();
-            ListShop = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Price FROM tShop;");
+            ListShop = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Price, Imag FROM tShop;");
             Items = ListShop;
         }
 
@@ -1362,7 +1245,7 @@ namespace GamingDnV
                 id += n.Id + ", "; 
             }
             if (id != "")
-                item1 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count FROM tItems WHERE IdPerson in (" + id + ") and Person = 1;");
+                item1 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count, Imag FROM tItems WHERE IdPerson in (" + id + ") and Person = 1;");
 
             id = "";
             foreach (var n in ListNpc)
@@ -1370,7 +1253,7 @@ namespace GamingDnV
                 id += n.Id + ", ";
             }
             if (id != "")
-                item2 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count FROM tItems WHERE IdPerson in (" + id + ") and Person = 2;");
+                item2 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count, Imag FROM tItems WHERE IdPerson in (" + id + ") and Person = 2;");
 
             id = "";
             foreach (var n in Rooms)
@@ -1378,11 +1261,21 @@ namespace GamingDnV
                 id += n.Id + ", ";
             }
             if (id != "")
-                item3 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count FROM tItems WHERE IdPerson in (" + id + ") and Person = 3;");
+                item3 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count, Imag FROM tItems WHERE IdPerson in (" + id + ") and Person = 3;");
 
-            item4 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count FROM tItems WHERE IdPerson = 0 and Person = 0;");
+            item4 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count, Imag FROM tItems WHERE IdPerson = 0 and Person = 0;");
             item = new List<ItemsModel>(item1.Concat(item2.Concat(item3.Concat(item4))));
             return item;
+        }
+
+        public string WhereInHeros(ObservableCollection<PersonModel> hero)
+        {
+            string str = "";
+            foreach (var d in hero)
+            {
+                str += d.Id + ", ";
+            }
+            return str;
         }
 
         public string WhereIn()
@@ -1629,7 +1522,8 @@ namespace GamingDnV
                         });
                     }
                 }
-                Versus = new ObservableCollection<PersonModel>(VSs.OrderByDescending(x => x.Atac).ToList());
+                Versus = new ObservableCollection<PersonModel>(VSs.OrderByDescending(e => e.Atac)); //Надо разобраться почему не работает сортировка
+
                 int i = 0;
                 int a = -1;
                 int ie = 1;
@@ -2151,7 +2045,8 @@ namespace GamingDnV
             {
                 shop = false;
                 ToolTipU = "id = " + CurrentUser.Id.ToString();
-                UserInfo = "Оружие:\r\n" + CurrentUser.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentUser.Equip + "\r\n\r\nИнвинтарь:\r\n" + ListViewItem(CurrentUser) + "\r\n\r\nСпособности:\r\n" + CurrentUser.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentUser.Ulta + "\r\n\r\nОписание:\r\n" + CurrentUser.Description;
+                UserInfo = "Оружие:\r\n" + CurrentUser.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentUser.Equip + "\r\n\r\nСпособности:\r\n" + AbilitiesText(CurrentUser.Id, ListAbilities) + "\r\n\r\nЗаклинания:\r\n" + AbilitiesText(CurrentUser.Id, ListUlta);
+
                 if (CurrentUser.RoomId == 0)
                 {
                     UserIcon = PathHero + CurrentUser.Imag;
@@ -2163,11 +2058,23 @@ namespace GamingDnV
                 Items = ListItems.Where(x => x.IdPerson == CurrentUser.Id && x.Person == 1).ToList();
             }
         }
+
+        public string AbilitiesText(int id, ObservableCollection<AbilitiesModel> abil)
+        {
+            string text = "";
+            // + CurrentUser.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentUser.Ulta + "\r\n\r\nОписание:\r\n" + CurrentUser.Description;
+            foreach (var d in abil.Where(x => x.IdPerson == id))
+            {
+                text += d.Name + " - " + d.Notee + "\r\n\r\n";
+            }
+            return text;
+        }
+
         public void ViewVersus()
         {
             if (CurrentVersus != null)
             {
-                UserInfo = "Оружие:\r\n" + CurrentVersus.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentVersus.Equip + "\r\n\r\nИнвинтарь:\r\n" + ListViewItem(CurrentVersus) + "\r\n\r\nСпособности:\r\n" + CurrentVersus.Abilities + "\r\n\r\nЗаклинания:\r\n" + CurrentVersus.Ulta + "\r\n\r\nОписание:\r\n" + CurrentVersus.Description;
+                UserInfo = "Оружие:\r\n" + CurrentVersus.Arms + "\r\n\r\nЭкипировка:\r\n" + CurrentVersus.Equip + "\r\n\r\nИнвинтарь:\r\n" + ListViewItem(CurrentVersus) + "\r\n\r\nСпособности:\r\n" + AbilitiesText(CurrentVersus.Id, ListAbilities) + "\r\n\r\nЗаклинания:\r\n" + AbilitiesText(CurrentVersus.Id, ListUlta);
                 if (CurrentVersus.RoomId == 0)
                 {
                     UserIcon = PathHero + CurrentVersus.Imag;
@@ -2306,7 +2213,7 @@ namespace GamingDnV
         public ICommand CloseVersus { get; set; }
         public ICommand BtnL { get; set; }
         public ICommand BtnR { get; set; }
-        public ICommand IntoBattlePrint { get; set; }
+        public ICommand ExportBtn { get; set; }
         public ICommand ItemBattlePrint { get; set; }
         public ICommand Logo { get; set; }
         public ICommand Transfer { get; set; }

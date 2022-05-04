@@ -35,16 +35,28 @@ namespace GamingDnV.Models
         }
         //Сила
         public int Power { get; set; }
+        public int P { get; set; }
+        public int Po { get; set; }
         //Ловкость
         public int Dexterity { get; set; }
+        public int D { get; set; }
+        public int De { get; set; }
         //Выносливость
         public int Endurance { get; set; }
+        public int E { get; set; }
+        public int En { get; set; }
         //Мудрость
         public int Wisdom { get; set; }
+        public int W { get; set; }
+        public int Wi { get; set; }
         //Интелект
         public int Intelligence { get; set; }
+        public int I { get; set; }
+        public int In { get; set; }
         //Харизма
         public int Charisma { get; set; }
+        public int C { get; set; }
+        public int Ch { get; set; }
         //Зассивное внимание
         public int Passiv { get; set; }
         //Раса

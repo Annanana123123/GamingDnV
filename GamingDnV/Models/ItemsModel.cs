@@ -20,5 +20,6 @@ namespace GamingDnV.Models
         public int Person { get; set; }
         //Количество
         public int Count { get; set; }
+        public string Imag { get; set; }
     }
 }

@@ -33,7 +33,8 @@ namespace GamingDnV.Services
                     Notee = Convert.ToString(reader[2].ToString()),
                     IdPerson = Convert.ToInt32(reader[3].ToString()),
                     Person = Convert.ToInt32(reader[4].ToString()),
-                    Count = Convert.ToInt32(reader[5].ToString())
+                    Count = Convert.ToInt32(reader[5].ToString()),
+                    Imag = Convert.ToString(reader[6].ToString())
                 });
             }
             myConnect.Close();
@@ -78,6 +79,30 @@ namespace GamingDnV.Services
             }
             myConnect.Close();
             return Events;
+        }
+
+        public static ObservableCollection<AbilitiesModel> ReadAbilitiesInDb(string sql)
+        {
+            //Id, Name, TextEvent, Images, Sounds, Order
+            ObservableCollection<AbilitiesModel> Abil = new ObservableCollection<AbilitiesModel>();
+            OleDbConnection myConnect = new OleDbConnection(constr);
+            myConnect.Open();
+            OleDbCommand myCommand = new OleDbCommand(sql, myConnect);
+            OleDbDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                Abil.Add(new AbilitiesModel()
+                {
+                    Id = Convert.ToInt32(reader[0].ToString()),
+                    Name = Convert.ToString(reader[1].ToString()),
+                    Notee = Convert.ToString(reader[2].ToString()),
+                    IdPerson = Convert.ToInt32(reader[3].ToString()),
+                    Enabled = Convert.ToInt32(reader[4].ToString()),
+                    Order = Convert.ToInt32(reader[5].ToString()),
+                });
+            }
+            myConnect.Close();
+            return Abil;
         }
 
         public static ObservableCollection<RoomsModel> ReadRoomsInDb(string sql)
@@ -158,7 +183,13 @@ namespace GamingDnV.Services
                     Person = Convert.ToInt32(reader[23].ToString()),
                     Gold = Convert.ToInt32(reader[24].ToString()),
                     LevelUp = Convert.ToInt32(reader[25].ToString()),
-                    Ervaring = Convert.ToInt32(reader[26].ToString())
+                    Ervaring = Convert.ToInt32(reader[26].ToString()),
+                    P = Convert.ToInt32(reader[27].ToString()),
+                    D = Convert.ToInt32(reader[28].ToString()),
+                    E = Convert.ToInt32(reader[29].ToString()),
+                    W = Convert.ToInt32(reader[30].ToString()),
+                    I = Convert.ToInt32(reader[31].ToString()),
+                    C = Convert.ToInt32(reader[32].ToString()),
                 });
             }
             myConnect.Close();
