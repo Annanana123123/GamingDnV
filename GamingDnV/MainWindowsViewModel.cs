@@ -65,9 +65,9 @@ namespace GamingDnV
             BtnL = new RelayCommand(() => CurrentV(1));
             BtnR = new RelayCommand(() => CurrentV(2));
             ExportBtn = new RelayCommand(() => Export());
-            ItemBattlePrint = new RelayCommand(() => PrintItem());
+            ExportShopBtn = new RelayCommand(() => ExportShop());
             Logo = new RelayCommand(() => VisibilitzLogo());
-            Transfer = new RelayCommand(() => TransferItem());
+            Transfer = new RelayCommand(() => TransferItem(false));
             Delete = new RelayCommand(() => DeleteItem());
             Shop = new RelayCommand(() => ShopItem());
             Garbage = new RelayCommand(() => GarbageItem());
@@ -77,10 +77,18 @@ namespace GamingDnV
             CanсelNode = new RelayCommand(() => EditNote());
             DbConnectBtn = new RelayCommand(() => ConnectDB());
             SaveBtn = new RelayCommand(() => SaveDb());
+            ArmorItemBtn = new RelayCommand(() => FilterShop(TypeItem.Armor));
+            EqipItemBtn = new RelayCommand(() => FilterShop(TypeItem.Eqip));
+            MuniItemBtn = new RelayCommand(() => FilterShop(TypeItem.Muni));
+            VersItemBtn = new RelayCommand(() => FilterShop(TypeItem.Vers));
+            UnieItemBtn = new RelayCommand(() => FilterShop(TypeItem.Unie));
+            BladItemBtn = new RelayCommand(() => FilterShop(TypeItem.Blad));
+            TransferPrice = new RelayCommand(() => TransferItem(true));
+            CloseShopBtn = new RelayCommand(() => CloseShop());
             VisibilityInfo = Visibility.Hidden;
             VisibilityLoad = Visibility.Visible;
             VisibilityVersus = Visibility.Hidden;
-            VisibilityPrint = Visibility.Hidden;
+            VisibilityShop = Visibility.Hidden;
             VisibilityPrintI = Visibility.Hidden;
             VisibilityWriteNote = Visibility.Hidden;
             DColorL = "#1C1C25";
@@ -107,8 +115,8 @@ namespace GamingDnV
         public bool shop = false;
         public string History = "";
         public PreViewModel PreVeiwWindow { get; set; }
-
-        List<NoteModel> ListNote = new List<NoteModel>();
+        public LoaderViewModel Loader { get; } = new LoaderViewModel();
+        List < NoteModel > ListNote = new List<NoteModel>();
         List<HistoryModel> ListHistory = new List<HistoryModel>();
         //ObservableCollection<UsersModel> Users = new ObservableCollection<UsersModel>();
         //ObservableCollection<NPCModel> NPC = new ObservableCollection<NPCModel>();
@@ -322,14 +330,14 @@ namespace GamingDnV
                 RaisePropertyChanged(nameof(TrackSEn));
             }
         }
-        private Visibility _visibilityPrint;
-        public Visibility VisibilityPrint
+        private Visibility _visibilityShop;
+        public Visibility VisibilityShop
         {
-            get { return _visibilityPrint; }
+            get { return _visibilityShop; }
             set
             {
-                _visibilityPrint = value;
-                RaisePropertyChanged(nameof(VisibilityPrint));
+                _visibilityShop = value;
+                RaisePropertyChanged(nameof(VisibilityShop));
             }
         }
         private Visibility _visibilityPrintI;
@@ -478,6 +486,8 @@ namespace GamingDnV
             }
         }
 
+        
+
         private List<ItemsModel> _listitems;
         public List<ItemsModel> ListItems
         {
@@ -562,6 +572,18 @@ namespace GamingDnV
             }
         }
 
+        private List<ItemsModel> _itemShopTable;
+        public List<ItemsModel> ItemShopTable
+        {
+            get { return _itemShopTable; }
+            set
+            {
+                _itemShopTable = value;
+
+                RaisePropertyChanged(nameof(ItemShopTable));
+            }
+        }
+
         private string _imageInfo;
         public string ImageInfo
         {
@@ -571,6 +593,18 @@ namespace GamingDnV
                 _imageInfo = value;
 
                 RaisePropertyChanged(nameof(ImageInfo));
+            }
+        }
+
+        private string _imageItem;
+        public string ImageItem
+        {
+            get { return _imageItem; }
+            set
+            {
+                _imageItem = value;
+
+                RaisePropertyChanged(nameof(ImageItem));
             }
         }
 
@@ -957,7 +991,7 @@ namespace GamingDnV
         ObservableCollection<PersonModel> ListHeroProof = new ObservableCollection<PersonModel>();
         ObservableCollection<PersonModel> ListPerson= new ObservableCollection<PersonModel>();
         ObservableCollection<PersonModel> Versus = new ObservableCollection<PersonModel>();
-
+        List<ItemsModel> ListShop = new List<ItemsModel>();
         public PersonModel LCurr = new PersonModel();
         public PersonModel RCurr = new PersonModel();
 
@@ -977,30 +1011,153 @@ namespace GamingDnV
             }
         }
 
-        public void Export()
+        public async void Export()
         {
-            if (CurrentUser != null)
+            try
             {
+                Loader.LoaderVisibility = Visibility.Visible;
+                int CountOperation = 0;
+                int prog = 0;
                 PersonModel CurrHeroProof = ListHeroProof.First(x => x.Id == CurrentUser.Id);
-
-                if (UpdataBD.UpdateHero(CurrHeroProof, ListAbilities.Where(x => x.IdPerson == CurrHeroProof.Id).ToList(), ListUlta.Where(x => x.IdPerson == CurrHeroProof.Id).ToList(), ListItems.Where(x => x.IdPerson == CurrHeroProof.Id).ToList()) == TypeResult.Ok)
+                CountOperation += ListAbilities.Where(x => x.IdPerson == CurrHeroProof.Id).Count();
+                CountOperation += ListUlta.Where(x => x.IdPerson == CurrHeroProof.Id).Count();
+                CountOperation += ListItems.Where(x => x.IdPerson == CurrHeroProof.Id && x.Person == 1).Count();
+                Loader.ProgressView(0, CountOperation);
+                
+                if (await ExportHero(CurrHeroProof) == TypeResult.Ok)
                 {
-                    MessageBox.Show("Готово");
+                    prog++;
+                    Loader.ProgressView(prog, CountOperation);
                 }
-                //string Sql = "INSERT INTO (Id, Name, RoomId, Notee, Defence, Health, Power, Dexterity, Endurance, Wisdom, Intelligence, Charisma, Passiv, Species, Class, History, Imag, Arms, Equip, Description, Sound, Person, Gold, Ervaring, P, D, E, W, I, C) FROM tHeros ";
 
-                //Print = Sql;
-                //VisibilityPrint = Visibility.Visible;
+                foreach (AbilitiesModel a in ListAbilities.Where(x => x.IdPerson == CurrHeroProof.Id).ToList())
+                {
+                    if (await ExportAbil(a, "wp_abilities", CurrHeroProof.Id) == TypeResult.Ok)
+                    {
+                        prog++;
+                        Loader.ProgressView(prog, CountOperation);
+                    }
+                }
+                foreach (AbilitiesModel a in ListUlta.Where(x => x.IdPerson == CurrHeroProof.Id).ToList())
+                {
+                    if (await ExportAbil(a, "wp_ulta", CurrHeroProof.Id) == TypeResult.Ok)
+                    {
+                        prog++;
+                        Loader.ProgressView(prog, CountOperation);
+                    }
+                }
+                await ExportItem("wp_items", CurrHeroProof.Id);
+                foreach (ItemsModel a in ListItems.Where(x => x.IdPerson == CurrHeroProof.Id && x.Person == 1).ToList())
+                {
+                    if (await ExportItem(a, "wp_items", CurrHeroProof.Id) == TypeResult.Ok)
+                    {
+                        prog++;
+                        Loader.ProgressView(prog, CountOperation);
+                    }
+                }
+                Loader.LoaderVisibility = Visibility.Hidden;
+                UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1");
+            }
+            catch
+            {
+                MessageBox.Show("Что-то не так!");
             }
         }
-        public void PrintItem()
+
+        public async Task<TypeResult> ExportItem(string table, int IdHero)
         {
-            if (CurrentUser != null)
+            TypeResult result = new TypeResult();
+            await Task.Run(async () =>
             {
-                ItemTextPrint = ListViewItem(CurrentUser);
-                AbTextPrint = CurrentUser.Description;
-                VisibilityPrintI = Visibility.Visible;
+                result = await UpdataBD.UpdateItem_0(table, IdHero);
+            });
+            return result;
+        }
+
+        public async Task<TypeResult> ExportItem(ItemsModel CurrItem, string table, int IdHero)
+        {
+            TypeResult result = new TypeResult();
+            await Task.Run(async () =>
+            {
+                result = await UpdataBD.UpdateItem(CurrItem, table, IdHero);
+            });
+            return result;
+        }
+
+        public async Task<TypeResult> ExportAbil(AbilitiesModel CurrAbil, string table, int IdHero)
+        {
+            TypeResult result = new TypeResult();
+            await Task.Run(async () =>
+            {
+                result = await UpdataBD.UpdateAbil(CurrAbil, table, IdHero);
+            });
+            return result;
+        }
+
+        public async Task<TypeResult> ExportHero(PersonModel CurrHeroProof)
+        {
+            TypeResult result = new TypeResult();
+            await Task.Run(async () =>
+            {
+                result =  await UpdataBD.UpdateHero(CurrHeroProof);
+            });
+            return result;
+        }
+
+        public async void ExportShop()
+        {
+            ShopItem();
+            try
+            {
+                Loader.LoaderVisibility = Visibility.Visible;
+                int CountOperation = -1;
+                int prog = 0;
+                CountOperation += ListShop.Count();
+                CountOperation += ListItems.Where(x => x.IdPerson == 0 || x.Person != 1).Count();
+                Loader.ProgressView(0, CountOperation);
+
+                foreach (ItemsModel a in ListShop)
+                {
+                    if (await ExportShop(a, "wp_shop") == TypeResult.Ok)
+                    {
+                        prog++;
+                        Loader.ProgressView(prog, CountOperation);
+                    }
+                }
+                foreach (ItemsModel a in ListItems.Where(x => x.IdPerson == 0 || x.Person != 1).ToList())
+                {
+                    if (await ExportItem(a, "wp_items") == TypeResult.Ok)
+                    {
+                        prog++;
+                        Loader.ProgressView(prog, CountOperation);
+                    }
+                }
+                Loader.LoaderVisibility = Visibility.Hidden;
             }
+            catch
+            {
+                MessageBox.Show("Что-то не так!");
+            }
+        }
+
+        public async Task<TypeResult> ExportItem(ItemsModel CurrItem, string table)
+        {
+            TypeResult result = new TypeResult();
+            await Task.Run(async () =>
+            {
+                result = await UpdataBD.UpdateItem(CurrItem, table);
+            });
+            return result;
+        }
+
+        public async Task<TypeResult> ExportShop(ItemsModel CurrItem, string table)
+        {
+            TypeResult result = new TypeResult();
+            await Task.Run(async () =>
+            {
+                result = await UpdataBD.UpdateShop(CurrItem, table);
+            });
+            return result;
         }
 
         public void Recrutirivanie()
@@ -1059,7 +1216,6 @@ namespace GamingDnV
         public void CloseVersusWin()
         {
             VisibilityVersus = Visibility.Hidden;
-            VisibilityPrint = Visibility.Hidden;
             VisibilityPrintI = Visibility.Hidden;
         }
 
@@ -1154,32 +1310,70 @@ namespace GamingDnV
 
         public void ShopItem()
         {
+            VisibilityShop = Visibility.Visible;
             shop = true;
-            List<ItemsModel> ListShop = new List<ItemsModel>();
-            ListShop = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Price, Imag FROM tShop;");
-            Items = ListShop;
+            ListShop = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count, Imag, Type, Price, Id FROM tShop;");
+            ItemShopTable = ListShop.OrderBy(c => c.Name).ToList();
         }
 
-        public void TransferItem()
+        public void CloseShop()
         {
-            if (CurrentUser != null)
+            VisibilityShop = Visibility.Hidden;
+            shop = false;
+        }
+
+        public void FilterShop(TypeItem type)
+        {
+            switch(type)
+            {
+                case TypeItem.Armor:
+                    ItemShopTable = ListShop.Where(x => x.Type == 1).OrderBy(c => c.Name).ToList();
+                    break;
+                case TypeItem.Eqip:
+                    ItemShopTable = ListShop.Where(x => x.Type == 2).OrderBy(c => c.Name).ToList();
+                    break;
+                case TypeItem.Muni:
+                    ItemShopTable = ListShop.Where(x => x.Type == 3).OrderBy(c => c.Name).ToList();
+                    break;
+                case TypeItem.Vers:
+                    ItemShopTable = ListShop.Where(x => x.Type == 0).OrderBy(c => c.Name).ToList();
+                    break;
+                case TypeItem.Unie:
+                    ItemShopTable = ListShop.Where(x => x.Type == 4).OrderBy(c => c.Name).ToList();
+                    break;
+                case TypeItem.Blad:
+                    ItemShopTable = ListShop.Where(x => x.Type == 5).OrderBy(c => c.Name).ToList();
+                    break;
+            }
+        }
+
+        public void TransferItem(bool prise)
+        {
+            if (CurrentUser != null && CurrentItems != null)
             {
                 if (shop)
                 {
                     int currPer = CurrentItems.Person;
                     int currId = CurrentItems.IdPerson;
-                    if (ReadBD.GetId("SELECT `id` FROM `tItems` WHERE Name = '" + CurrentItems.Name + "';") > 0)
+                    if (ReadBD.GetId("SELECT `Id` FROM `tItems` WHERE IdItemShop = " + CurrentItems.Id + " AND IdPerson = "+ CurrentUser.Id +";") > 0)
                     {
-                        int IdEdit = ReadBD.GetId("SELECT `id` FROM `tItems` WHERE Name = '" + CurrentItems.Name + "';");
-                        int CountEdit = ReadBD.GetId("SELECT `Count` FROM `tItems` WHERE Name = '" + CurrentItems.Name + "';");
+                        int IdEdit = ReadBD.GetId("SELECT `id` FROM `tItems` WHERE IdItemShop = " + CurrentItems.Id + " AND IdPerson = " + CurrentUser.Id + ";");
+                        int CountEdit = ReadBD.GetId("SELECT `Count` FROM `tItems` WHERE Id = " + IdEdit + ";");
                         CountEdit++;
                         ReadBD.WriteBD("UPDATE tItems SET `Count` = " + CountEdit + " WHERE Id = " + IdEdit);
                         var Edit = ListItems.Where(x => x.Id == IdEdit).ToList();
                         Edit[0].Count = CountEdit;
+                        if (prise)
+                        {
+                            int GoldEdit = ReadBD.GetId("SELECT `Gold` FROM `tHeros` WHERE Id = " + CurrentUser.Id + ";");
+                            GoldEdit -= CurrentItems.Price;
+                            ReadBD.WriteBD("UPDATE tHeros SET `Gold` = " + GoldEdit + " WHERE Id = " + CurrentUser.Id);
+                            HerosTable.First(x => x.Id == CurrentUser.Id).Gold = GoldEdit;
+                        }
                     }
                     else
                     {
-                        ReadBD.WriteBD("INSERT INTO `tItems` (`Name`, `Notee`, `IdPerson`, `Person`, `Count`) VALUES ('" + CurrentItems.Name + "', '" + CurrentItems.Notee + "', '" + CurrentUser.Id + "', '1', '1')");
+                        ReadBD.WriteBD("INSERT INTO `tItems` (`IdItemShop`, `IdPerson`, `Person`, `Count`) VALUES (" + CurrentItems.Id + ", " + CurrentUser.Id + ", '1', "+ CurrentItems.Count + ")");
                         int MaxId = ReadBD.GetMaxId("SELECT max(id) FROM `tItems`");
                         ListItems.Add(new ItemsModel()
                         {
@@ -1188,48 +1382,120 @@ namespace GamingDnV
                             Notee = CurrentItems.Notee,
                             IdPerson = CurrentUser.Id,
                             Person = 1,
-                            Count = 1,
+                            Count = CurrentItems.Count,
+                            Imag = CurrentItems.Imag,
+                            Type = CurrentItems.Type,
+                            Price = CurrentItems.Price,
+                            IdItemShop = CurrentItems.IdItemShop
                         });
+                        if (prise)
+                        {
+                            int GoldEdit = ReadBD.GetId("SELECT `Gold` FROM `tHeros` WHERE Id = " + CurrentUser.Id + ";");
+                            GoldEdit -= CurrentItems.Price;
+                            ReadBD.WriteBD("UPDATE tHeros SET `Gold` = " + GoldEdit + " WHERE Id = " + CurrentUser.Id);
+                            HerosTable.First(x => x.Id == CurrentUser.Id).Gold = GoldEdit;
+                        }
                     }
-                    //ReadBD.WriteBD("UPDATE tItems SET IdPerson = " + CurrentUser.Id + ", Person = " + 1 + " WHERE Id = " + CurrentItems.Id);
                 }
                 else
                 {
-                    int currPer = CurrentItems.Person;
-                    int currId = CurrentItems.IdPerson;
-                    ReadBD.WriteBD("UPDATE tItems SET IdPerson = " + CurrentUser.Id + ", Person = " + 1 + " WHERE Id = " + CurrentItems.Id);
-                    UpdataBD.Update("UPDATE wp_items SET IdPerson = " + CurrentUser.Id + " WHERE Id = " + CurrentItems.Id);
-                    UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1 WHERE `IpPerson`= " + CurrentUser.Id);
-                    CurrentItems.IdPerson = CurrentUser.Id;
-                    CurrentItems.Person = 1;
-                    Items = ListItems.Where(x => x.IdPerson == currId && x.Person == currPer).ToList();
+                    if (ReadBD.GetId("SELECT `Id` FROM `tItems` WHERE IdItemShop = " + CurrentItems.IdItemShop + " AND IdPerson = " + CurrentUser.Id + ";") > 0)
+                    {
+                        int IdEdit = ReadBD.GetId("SELECT `id` FROM `tItems` WHERE IdItemShop = " + CurrentItems.IdItemShop + " AND IdPerson = " + CurrentUser.Id + ";");
+                        int CountEdit = ReadBD.GetId("SELECT `Count` FROM `tItems` WHERE Id = " + IdEdit + ";");
+                        CountEdit++;
+                        ReadBD.WriteBD("UPDATE tItems SET `Count` = " + CountEdit + " WHERE Id = " + IdEdit);
+                        var Edit = ListItems.Where(x => x.Id == IdEdit).ToList();
+                        Edit[0].Count = CountEdit;
+                    }
+                    else
+                    {
+                        ReadBD.WriteBD("INSERT INTO `tItems` (`IdItemShop`, `IdPerson`, `Person`, `Count`) VALUES (" + CurrentItems.Id + ", " + CurrentUser.Id + ", '1', " + CurrentItems.Count + ")");
+                        int MaxId = ReadBD.GetMaxId("SELECT max(id) FROM `tItems`");
+                        ListItems.Add(new ItemsModel()
+                        {
+                            Id = MaxId,
+                            Name = CurrentItems.Name,
+                            Notee = CurrentItems.Notee,
+                            IdPerson = CurrentUser.Id,
+                            Person = 1,
+                            Count = CurrentItems.Count,
+                            Imag = CurrentItems.Imag,
+                            Type = CurrentItems.Type,
+                            Price = CurrentItems.Price,
+                            IdItemShop = CurrentItems.IdItemShop
+                        });
+                        //int currPer = CurrentItems.Person;
+                        //int currId = CurrentItems.IdPerson;
+                        //ReadBD.WriteBD("UPDATE tItems SET IdPerson = " + CurrentUser.Id + ", Person = 1 WHERE Id = " + CurrentItems.Id);
+                        //UpdataBD.Update("UPDATE wp_items SET IdPerson = " + CurrentUser.Id + " WHERE Id = " + CurrentItems.Id);
+                        //UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1 WHERE `IpPerson`= " + CurrentUser.Id);
+                        //CurrentItems.IdPerson = CurrentUser.Id;
+                        //CurrentItems.Person = 1;
+                        //Items = ListItems.Where(x => x.IdPerson == currId && x.Person == currPer).ToList();
+                    }
                 }
             }
             else
             {
-                MessageBox.Show("Выбери героя!");
+                MessageBox.Show("Выбери героя или вещь!");
             }
         }
         public void SaveDb()
         {
             foreach (var d in ListHero)
             {
+                d.Ervaring += d.PlusErvaring;
+                d.PlusErvaring = 0;
+                //HerosTable.First(x => x.Id == d.Id).Ervaring = d.Ervaring;
+                d.LevelUp = LevelMath(d.Ervaring);
                 UpdataBD.Update("UPDATE `wp_heros` SET `Defence`="+d.Defence+",`Health`="+d.Health+",`Power`="+d.Power+ ",`Dexterity`=" + d.Dexterity + ",`Endurance`=" + d.Endurance + ",`Wisdom`=" + d.Wisdom + ",`Intelligence`=" + d.Intelligence + ",`Charisma`=" + d.Charisma + ", `Gold`=" + d.Gold + ", `Ervaring`=" + d.Ervaring + " WHERE `Id`=" + d.Id);
-                UpdataBD.UpdataInDb("UPDATE `theros` SET `Gold`=" + d.Gold + ", `Ervaring`=" + d.Ervaring + " WHERE `Id`=" + d.Id);
+                if (d.Id == 11)
+                {
+                    int s = 1;
+                }
+                UpdataBD.UpdataInDb("UPDATE `theros` SET `Defence`=" + d.Defence + ",`Health`=" + d.Health + ",`Power`=" + d.Power + ",`Dexterity`=" + d.Dexterity + ",`Endurance`=" + d.Endurance + ",`Wisdom`=" + d.Wisdom + ",`Intelligence`=" + d.Intelligence + ",`Charisma`=" + d.Charisma + ", `Gold`=" + d.Gold + ", `Ervaring`=" + d.Ervaring + " WHERE `Id`=" + d.Id);
                 UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1");
             }
         }
+
+        public int LevelMath(int erv)
+        {
+            int lvl = 1;
+
+            if (erv >= 0 && erv <= 299)
+                lvl = 1;
+            if (erv >= 300 && erv <= 899)
+                lvl = 2;
+            if (erv >= 900 && erv <= 2699)
+                lvl = 3;
+            if (erv >= 2700 && erv <= 6499)
+                lvl = 4;
+            if (erv >= 6500 && erv <= 13999)
+                lvl = 5;
+            if (erv >= 14000 && erv <= 22999)
+                lvl = 6;
+            if (erv >= 23000 && erv <= 33999)
+                lvl = 7;
+            if (erv >= 34000 && erv <= 47999)
+                lvl = 8;
+
+            return lvl;
+        }
+
         public void DeleteItem()
         {
-            int currPer = CurrentItems.Person;
-            int currId = CurrentItems.IdPerson;
-            ReadBD.WriteBD("UPDATE tItems SET IdPerson = 0, Person = 0 WHERE Id = " + CurrentItems.Id);
-            UpdataBD.Update("UPDATE wp_items SET IdPerson = 0 WHERE Id = " + CurrentItems.Id);
-            UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1");
-            CurrentItems.IdPerson = 0;
-            CurrentItems.Person = 0;
-            //Items = ListItems;
-            Items = ListItems.Where(x => x.IdPerson == currId && x.Person == currPer).ToList();
+            if (CurrentItems != null)
+            {
+                int currPer = CurrentItems.Person;
+                int currId = CurrentItems.IdPerson;
+                ReadBD.WriteBD("UPDATE tItems SET IdPerson = 0, Person = 0 WHERE Id = " + CurrentItems.Id);
+                UpdataBD.Update("UPDATE wp_items SET IdPerson = 0 WHERE Id = " + CurrentItems.Id);
+                UpdataBD.Update("UPDATE `wp_updata` SET `Item`=1");
+                CurrentItems.IdPerson = 0;
+                CurrentItems.Person = 0;
+                Items = ListItems.Where(x => x.IdPerson == currId && x.Person == currPer).ToList();
+            }
         }
 
         public List<ItemsModel> WhereItems()
@@ -1245,7 +1511,7 @@ namespace GamingDnV
                 id += n.Id + ", "; 
             }
             if (id != "")
-                item1 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count, Imag FROM tItems WHERE IdPerson in (" + id + ") and Person = 1;");
+                item1 = ReadBD.ReadItemsInDb("SELECT t.Id, s.Name, s.Notee, t.IdPerson, t.Person, t.Count, s.Imag, s.Type, s.Price, s.Id FROM tItems as t inner join tShop as s on t.IdItemShop = s.Id WHERE t.IdPerson in (" + id + ") and t.Person = 1;");
 
             id = "";
             foreach (var n in ListNpc)
@@ -1253,7 +1519,7 @@ namespace GamingDnV
                 id += n.Id + ", ";
             }
             if (id != "")
-                item2 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count, Imag FROM tItems WHERE IdPerson in (" + id + ") and Person = 2;");
+                item2 = ReadBD.ReadItemsInDb("SELECT s.Id, s.Name, s.Notee, s.IdPerson, s.Person, s.Count, s.Imag, s.Type, s.Price, s.Id FROM tShop as s WHERE s.IdPerson in (" + id + ") and s.Person = 2;");
 
             id = "";
             foreach (var n in Rooms)
@@ -1261,9 +1527,9 @@ namespace GamingDnV
                 id += n.Id + ", ";
             }
             if (id != "")
-                item3 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count, Imag FROM tItems WHERE IdPerson in (" + id + ") and Person = 3;");
+                item3 = ReadBD.ReadItemsInDb("SELECT s.Id, s.Name, s.Notee, s.IdPerson, s.Person, s.Count, s.Imag, s.Type, s.Price, s.Id FROM tShop as s WHERE s.IdPerson in (" + id + ") and s.Person = 3;");
 
-            item4 = ReadBD.ReadItemsInDb("SELECT Id, Name, Notee, IdPerson, Person, Count, Imag FROM tItems WHERE IdPerson = 0 and Person = 0;");
+            item4 = ReadBD.ReadItemsInDb("SELECT t.Id, s.Name, s.Notee, t.IdPerson, t.Person, t.Count, s.Imag, s.Type, s.Price, s.Id FROM tItems as t inner join tShop as s on t.IdItemShop = s.Id WHERE t.IdPerson = 0 and t.Person = 0;");
             item = new List<ItemsModel>(item1.Concat(item2.Concat(item3.Concat(item4))));
             return item;
         }
@@ -1414,11 +1680,11 @@ namespace GamingDnV
             
             foreach (var w in HerosTable)
             {
-                w.Atac = null;
+                w.Atac = 0;
             }
             foreach (var w in NPCTable)
             {
-                w.Atac = null;
+                w.Atac = 0;
             }
         }
 
@@ -1561,11 +1827,11 @@ namespace GamingDnV
                 }
                 foreach (var w in Versus.Where(x => x.Person == 1))
                 {
-                    HerosTable.First(x => x.Id == w.Id).Atac = w.Order.ToString();
+                    HerosTable.First(x => x.Id == w.Id).Atac = w.Order;
                 }
                 foreach (var w in Versus.Where(x => x.Person == 2))
                 {
-                    NPCTable.First(x => x.Id == w.Id).Atac = w.Order.ToString();
+                    NPCTable.First(x => x.Id == w.Id).Atac = w.Order;
                 }
             }
             else
@@ -1970,11 +2236,15 @@ namespace GamingDnV
         public void CurrentI()
         {
             if (CurrentItems != null)
+            {
                 UserInfo = CurrentItems.Notee;
+                ImageItem = AppDomain.CurrentDomain.BaseDirectory + "Media\\Items\\" + CurrentItems.Imag;
+            }
         }
 
         public void CurrentR()
         {
+            ImageItem = "";
             BackSEn = false;
             AtacSEn = false;
             TrackSEn = false;
@@ -1994,6 +2264,7 @@ namespace GamingDnV
 
         public void CurrentE()
         {
+            ImageItem = "";
             if (CurrentEvent != null)
             {
                 BackSEn = false;
@@ -2041,6 +2312,7 @@ namespace GamingDnV
         }
         public void ViewUser()
         {
+            ImageItem = "";
             if (CurrentUser != null)
             {
                 shop = false;
@@ -2214,7 +2486,7 @@ namespace GamingDnV
         public ICommand BtnL { get; set; }
         public ICommand BtnR { get; set; }
         public ICommand ExportBtn { get; set; }
-        public ICommand ItemBattlePrint { get; set; }
+        public ICommand ExportShopBtn { get; set; }
         public ICommand Logo { get; set; }
         public ICommand Transfer { get; set; }
         public ICommand Garbage { get; set; }
@@ -2225,6 +2497,14 @@ namespace GamingDnV
         public ICommand WriteNodeText { get; set; }
         public ICommand CanсelNode { get; set; }
         public ICommand SaveBtn { get; set; }
+        public ICommand ArmorItemBtn { get; set; }
+        public ICommand EqipItemBtn { get; set; }
+        public ICommand MuniItemBtn { get; set; }
+        public ICommand VersItemBtn { get; set; }
+        public ICommand UnieItemBtn { get; set; }
+        public ICommand BladItemBtn { get; set; }
+        public ICommand CloseShopBtn { get; set; }
+        public ICommand TransferPrice { get; set; }
         private ICommand _push1Btn;
         public ICommand Push1Btn
         {

@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:c="clr-namespace:GamingDnV.Views"
         xmlns:local="clr-namespace:GamingDnV"
         mc:Ignorable="d"
         Title="MainWindow" 
         WindowState="Maximized"
         Width="1920" Height="1080"
         WindowStyle="None">
-    <!--WindowState="Maximized"-->
     <Window.InputBindings>
         <KeyBinding Command="{Binding Push1Btn}" Key="NumPad1"/>
         <KeyBinding Command="{Binding Push2Btn}" Key="NumPad2"/>
@@ -152,7 +152,6 @@
             </Style.Triggers>
         </Style>
 
-        <!-- SimpleStyles: ComboBoxItem -->
         <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
             <Setter Property="SnapsToDevicePixels" Value="true"/>
             <Setter Property="Foreground" Value="White"/>
@@ -242,6 +241,7 @@
                 <DataGridTextColumn Header="Имя" Width="auto" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="УР" Width="35" Binding="{Binding LevelUp}"/>
                 <DataGridTextColumn Header="Опыт" Width="*" Binding="{Binding Ervaring}"/>
+                <DataGridTextColumn Header="+Опыт" Width="*" Binding="{Binding PlusErvaring}"/>
                 <DataGridTextColumn Header="DF" Width="35" Binding="{Binding Defence}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
                 <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Po}" CellStyle="{StaticResource NameCellStyle}"/>
@@ -274,12 +274,21 @@
                     </Style>
                 </ScrollViewer.Resources>
                 <TextBlock Text="{Binding UserInfo}"
-                               Foreground="#999999"
-                               FontSize="20"
-                               TextWrapping="Wrap"
-                               Margin="10"
-                               ScrollViewer.CanContentScroll="True"/>
+                           Foreground="#999999"
+                           FontSize="20"
+                           TextWrapping="Wrap"
+                           Margin="10"
+                           ScrollViewer.CanContentScroll="True"/>
+                
             </ScrollViewer>
+            <Image  Margin="10"
+                    Grid.Column="1"
+                    Grid.RowSpan="2"
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Bottom" 
+                    Width="200"
+                    Height="200"
+                    Source="{Binding ImageItem}"/>
             <StackPanel Grid.Row="1"
                         Grid.Column="0">
                 <Button Content="Бой"
@@ -302,6 +311,7 @@
                         HorizontalContentAlignment="Center"
                         Foreground="#2A72E9"
                         Margin="5 5 5 0"
+                        ToolTip="Сохранить данные о всех героях в БД и Инет"
                         Command="{Binding SaveBtn}"/>
                 <Label Content="На печать"
                        Margin="0 20 0 0"
@@ -319,8 +329,9 @@
                         HorizontalContentAlignment="Center"
                         Foreground="#2A72E9"
                         Margin="5 5 5 0"
+                        ToolTip="Перенести данные по герою и вещам из БД в Инет"
                         Command="{Binding ExportBtn}"/>
-                <Button Content="Инвентарь"
+                <Button Content="ЭксМагазин"
                         FontSize="20"
                         Grid.Row="1"
                         Height="40"
@@ -332,7 +343,8 @@
                         HorizontalContentAlignment="Center"
                         Foreground="#2A72E9"
                         Margin="5 5 5 0"
-                        Command="{Binding ItemBattlePrint}"/>
+                        ToolTip="Перенести данные нулевым вещам и магазину из БД в Инет"
+                        Command="{Binding ExportShopBtn}"/>
             </StackPanel>
         </Grid>
         <Grid Grid.Column="5"
@@ -488,7 +500,8 @@
                                 </Style>
                             </DataGridTextColumn.CellStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Кол." Width="auto" Binding="{Binding Count}"/>
+                        <DataGridTextColumn Header="К" Width="auto" Binding="{Binding Count}"/>
+                        <DataGridTextColumn Header="Ц" Width="auto" Binding="{Binding Price}"/>
                     </DataGrid.Columns>
             </DataGrid>
                 <StackPanel Grid.Row="1"
@@ -839,7 +852,6 @@
             </Grid>
         </Grid>
 
-
         <Grid Grid.Row="3"
               Grid.Column="1">
             <Grid.ColumnDefinitions>
@@ -1007,18 +1019,34 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-
         </Grid>
-
+        <Grid Grid.Column="0"
+              Grid.Row="0"
+              Grid.ColumnSpan="7"
+              Grid.RowSpan="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <c:LoaderView Grid.Column="1"
+                          Grid.Row="2"
+                          Visibility="{Binding LoaderVisibility, FallbackValue=Hidden}"
+                          DataContext="{Binding Loader}"/>
+        </Grid>
 
         <Grid Grid.Row="0"
               Grid.RowSpan="5"
               Grid.Column="0"
               Grid.ColumnSpan="7"
               Visibility="{Binding VisibilityLoad, FallbackValue=Hidden}">
-        <!--<Grid Grid.Row="0"
-              Grid.RowSpan="3"
-              Visibility="Hidden">-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="600"/>
                 <ColumnDefinition Width="*"/>
@@ -1086,11 +1114,6 @@
               Grid.ColumnSpan="5"
               Visibility="{Binding VisibilityInfo, FallbackValue=Hidden}">
 
-        <!--<Grid Grid.Row="1"
-              Grid.RowSpan="3"
-              Grid.Column="1"
-              Grid.ColumnSpan="5"
-              Visibility="Hidden">-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
@@ -1296,12 +1319,6 @@
               Grid.Column="0"
               Grid.ColumnSpan="7"
               Visibility="{Binding VisibilityVersus, FallbackValue=Hidden}">
-            <!--<Grid Grid.Row="0"
-              Grid.RowSpan="4"
-              Grid.Column="0"
-              Grid.ColumnSpan="7"
-              Visibility="Hidden">-->
-
                 <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
@@ -1716,10 +1733,11 @@
               Grid.RowSpan="4"
               Grid.Column="0"
               Grid.ColumnSpan="7"
-              Visibility="{Binding VisibilityPrint, FallbackValue=Hidden}">
+              Visibility="{Binding VisibilityShop, FallbackValue=Hidden}">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
@@ -1728,73 +1746,173 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-
-            <TextBox Text="{Binding Print}"
-                     FontSize="10"
-                     Background="#000000"
-                     Foreground="#ffebbb"
-                     Grid.Row="1" 
-                     Grid.Column="1"
-                     BorderThickness="0"
-                     FontFamily="Arial"/>
-        </Grid>
-        <Grid Grid.Row="0"
-              Grid.RowSpan="4"
-              Grid.Column="0"
-              Grid.ColumnSpan="7"
-              Visibility="{Binding VisibilityPrintI, FallbackValue=hidden}">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="50"/>
-            </Grid.RowDefinitions>
-            <Border Background="#12131A"
-                    Grid.Row="0"
-                    Grid.RowSpan="3"
-                    Grid.ColumnSpan="3"
-                    Grid.Column="0"/>
-            <Border Background="#ffffff"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    BorderBrush="#2A72E9"
-                    BorderThickness="2"/>
-            <Button Content="Х" 
-                    Grid.Column="2"
-                    Grid.Row="0"
-                    FontSize="20"
-                    BorderBrush="#2A72E9" 
-                    Background="#12131A" 
-                    Foreground="#2A72E9"
-                    BorderThickness="2 2 2 2"
-                    VerticalContentAlignment="Center"
-                    Command="{Binding CloseVersus}"/>
-            <StackPanel Grid.Column="1"
-                        Grid.Row="1">
-            <Label FontSize="25"
-                   Foreground="#444444"
-                   FontWeight="Bold"
-                   Margin="15 0 0 0"
-                   Content="Инфентарь:"/>
-            <TextBlock FontSize="15"
-                       TextWrapping="Wrap"
-                       Margin="20 0 0 20"
-                       Text="{Binding ItemTextPrint}"/>
-            <Label FontSize="25"
-                   Foreground="#444444"
-                   FontWeight="Bold"
-                   Margin="15 0 0 0"
-                   Content="Описание способностей:"/>
-            <TextBlock FontSize="15"
-                       TextWrapping="Wrap"
-                       Margin="20 0 0 0"
-                       Text="{Binding AbTextPrint}"/>
-            </StackPanel>
+            <Grid Grid.Row="1" 
+                  Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="10"/>
+                </Grid.RowDefinitions>
+                <Border Background="#000000"
+                        Grid.RowSpan="5"/>
+                <TextBlock Text="Магазин"
+                           FontSize="30"
+                           HorizontalAlignment="Center"
+                           Foreground="#ffebbb"/>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Оружие"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="0 10 0 10"
+                            Width="150"
+                            Command="{Binding ArmorItemBtn}"/>
+                    <Button Content="Экипировка"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding EqipItemBtn}"/>
+                    <Button Content="Боезапасы"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding MuniItemBtn}"/>
+                    <Button Content="Разное"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding VersItemBtn}"/>
+                    <Button Content="Уникальные"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding UnieItemBtn}"/>
+                    <Button Content="Свитки"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding BladItemBtn}"/>
+                </StackPanel>
+                
+                <DataGrid Grid.Row="3"
+                          Margin="10 0 10 0"
+                          Background="#12131A"
+                          x:Name="GridItemShop"
+                          ItemsSource="{Binding ItemShopTable}"
+                          AutoGenerateColumns="False"
+                          ScrollViewer.CanContentScroll="True"
+                          SelectionMode="Single"
+                          CanUserAddRows="False"
+                          IsReadOnly="false"
+                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          GridLinesVisibility="all"
+                          VerticalGridLinesBrush="#32323d"
+                          SelectedItem="{Binding CurrentItems, Mode=TwoWay}"
+                          RowEditEnding="GridUser_RowEditEnding"
+                          FontSize="15">
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type DataGrid}">
+                            <Setter Property="HeadersVisibility" Value="Column" />
+                        </Style>
+                        <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="#1C1C25" />
+                            <Setter Property="Foreground" Value="#888888"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderBrush" Value="#32323d"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Style>
+                        <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                            <Setter Property="Background" Value="#12131A"/>
+                            <Setter Property="Foreground" Value="#999999"/>
+                            <Setter Property="BorderBrush" Value="#32323d"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            
+                        </Style>
+                        <Style x:Key="NameCellStyle" TargetType="{x:Type DataGridCell}">
+                            <Style.Setters>
+                                <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                            </Style.Setters>
+                        </Style>
+                        <Style TargetType="{x:Type TextBlock}" x:Key="DataGridCellTextWrap">
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Картинка" Width="100" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding ImagUrl}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Название" Width="auto" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Notee}" ElementStyle="{StaticResource DataGridCellTextWrap}"/>
+                        <DataGridTextColumn Header="Кол" Width="auto" Binding="{Binding Count}" CellStyle="{StaticResource NameCellStyle}"/>
+                            <DataGridTextColumn Header="Цена" Width="auto" Binding="{Binding Price}" CellStyle="{StaticResource NameCellStyle}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Отдать" 
+                            Width="100"
+                            FontSize="20"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 10 0 10"
+                            Command="{Binding Transfer}"/>
+                    <Button Content="Продать" 
+                            Width="100"
+                            FontSize="20"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Command="{Binding TransferPrice}"/>
+                    <Button Content="Закрыть" 
+                            Width="100"
+                            FontSize="20"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Command="{Binding CloseShopBtn}"/>
+                </StackPanel>
+            </Grid>
         </Grid>
         <Grid Grid.Column="3"
               Grid.Row="1"

@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="GamingDnV.Views.LoaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GamingDnV.Views"
+             
+             mc:Ignorable="d" 
+             Height="auto" Width="auto">
+    <Grid>
+
+        <Border CornerRadius="5"
+                Background="#1C1C25"
+                BorderBrush="#2A72E9"
+                BorderThickness="2" 
+                Height="60">
+            <StackPanel>
+                <TextBox FontSize="20"
+                 Background="#00000000"
+                 Foreground="#ffffff"
+                 HorizontalAlignment="Center"
+                 Text="Синхронизация"
+                 BorderThickness="0"
+                 Margin="0 5 0 5"/>
+                <Rectangle Width="{Binding Progress, FallbackValue=616}"
+                       Height="5"
+                       HorizontalAlignment="Left"
+                       Margin="10 0 10 0"
+                       Fill="#2A72E9"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

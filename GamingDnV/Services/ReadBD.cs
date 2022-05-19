@@ -34,7 +34,11 @@ namespace GamingDnV.Services
                     IdPerson = Convert.ToInt32(reader[3].ToString()),
                     Person = Convert.ToInt32(reader[4].ToString()),
                     Count = Convert.ToInt32(reader[5].ToString()),
-                    Imag = Convert.ToString(reader[6].ToString())
+                    Imag = Convert.ToString(reader[6].ToString()),
+                    Type = Convert.ToInt32(reader[7].ToString()),
+                    Price = Convert.ToInt32(reader[8].ToString()),
+                    IdItemShop = Convert.ToInt32(reader[9].ToString()),
+                    ImagUrl = AppDomain.CurrentDomain.BaseDirectory + "Media\\Items\\" + Convert.ToString(reader[6].ToString()),
                 });
             }
             myConnect.Close();
@@ -190,6 +194,7 @@ namespace GamingDnV.Services
                     W = Convert.ToInt32(reader[30].ToString()),
                     I = Convert.ToInt32(reader[31].ToString()),
                     C = Convert.ToInt32(reader[32].ToString()),
+                    PlusErvaring = 0
                 });
             }
             myConnect.Close();

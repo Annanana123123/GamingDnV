@@ -72,8 +72,8 @@ namespace GamingDnV.Models
         //Ава
         public string Imag { get; set; }
         //Инициатива
-        private string _atac;
-        public string Atac
+        private int? _atac;
+        public int? Atac
         {
             get { return _atac; }
             set
@@ -108,7 +108,17 @@ namespace GamingDnV.Models
             }
         }
         //Уровень
-        public int LevelUp { get; set; }
+        private int _levelUp;
+        public int LevelUp
+        {
+            get { return _levelUp; }
+            set
+            {
+                _levelUp = value;
+
+                RaisePropertyChanged(nameof(LevelUp));
+            }
+        }
         //Опыт
         private int _ervaring;
         public int Ervaring
@@ -119,6 +129,18 @@ namespace GamingDnV.Models
                 _ervaring = value;
 
                 RaisePropertyChanged(nameof(Ervaring));
+            }
+        }
+        //+Опыт
+        private int _plusErvaring;
+        public int PlusErvaring
+        {
+            get { return _plusErvaring; }
+            set
+            {
+                _plusErvaring = value;
+
+                RaisePropertyChanged(nameof(PlusErvaring));
             }
         }
     }

@@ -20,6 +20,10 @@ namespace GamingDnV.Models
         public int Person { get; set; }
         //Количество
         public int Count { get; set; }
+        public int Type { get; set; }
+        public int Price { get; set; }
         public string Imag { get; set; }
+        public string ImagUrl { get; set; }
+        public int IdItemShop { get; set; }
     }
 }

@@ -69,6 +69,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Enums\TypeEven.cs" />
+    <Compile Include="Enums\TypeItem.cs" />
     <Compile Include="Enums\TypeResult.cs" />
     <Compile Include="MainWindowsViewModel.cs" />
     <Compile Include="Models\AbilitiesModel.cs" />
@@ -87,9 +88,13 @@
     <Compile Include="Services\ReadBD.cs" />
     <Compile Include="Services\UpdataBD.cs" />
     <Compile Include="Enums\TypeSound.cs" />
+    <Compile Include="ViewModels\LoaderViewModel.cs" />
     <Compile Include="ViewModels\PreViewModel.cs" />
     <Compile Include="Views\PreView.xaml.cs">
       <DependentUpon>PreView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoaderView.xaml.cs">
+      <DependentUpon>LoaderView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -104,6 +109,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\PreView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
