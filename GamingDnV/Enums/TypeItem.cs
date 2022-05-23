@@ -13,6 +13,7 @@ namespace GamingDnV.Enums
         Eqip = 2,
         Muni = 3,
         Unie = 4,
-        Blad = 5
+        Blad = 5,
+        Water = 6
     }
 }

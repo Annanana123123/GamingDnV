@@ -74,6 +74,7 @@
     <Compile Include="MainWindowsViewModel.cs" />
     <Compile Include="Models\AbilitiesModel.cs" />
     <Compile Include="Models\ActionModel.cs" />
+    <Compile Include="Models\ComboBoxBD.cs" />
     <Compile Include="Models\ComboBoxModel.cs" />
     <Compile Include="Models\EventsModel.cs" />
     <Compile Include="Models\HistoryModel.cs" />

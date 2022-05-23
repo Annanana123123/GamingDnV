@@ -279,7 +279,7 @@
                            TextWrapping="Wrap"
                            Margin="10"
                            ScrollViewer.CanContentScroll="True"/>
-                
+
             </ScrollViewer>
             <Image  Margin="10"
                     Grid.Column="1"
@@ -318,9 +318,9 @@
                        HorizontalAlignment="Center"
                        Foreground="#999999"/>
                 <Button Content="Экспорт"
-                        FontSize="20"
+                        FontSize="15"
                         Grid.Row="1"
-                        Height="40"
+                        Height="30"
                         Grid.Column="0"
                         Background="#1C1C25"
                         BorderBrush="#2A72E9"
@@ -332,9 +332,9 @@
                         ToolTip="Перенести данные по герою и вещам из БД в Инет"
                         Command="{Binding ExportBtn}"/>
                 <Button Content="ЭксМагазин"
-                        FontSize="20"
+                        FontSize="15"
                         Grid.Row="1"
-                        Height="40"
+                        Height="30"
                         Grid.Column="0"
                         Background="#1C1C25"
                         BorderBrush="#2A72E9"
@@ -345,6 +345,12 @@
                         Margin="5 5 5 0"
                         ToolTip="Перенести данные нулевым вещам и магазину из БД в Инет"
                         Command="{Binding ExportShopBtn}"/>
+                <ComboBox Height="30"
+                          FontSize="15"
+                          Margin="5 5 5 0"
+                          ItemsSource="{Binding ComboBoxBDItem}"
+                          SelectedItem="{Binding SelectBD, Mode=TwoWay}">
+                </ComboBox>
             </StackPanel>
         </Grid>
         <Grid Grid.Column="5"
@@ -453,7 +459,7 @@
             <StackPanel Grid.Row="1"
                         Grid.Column="0"
                         Grid.ColumnSpan="2">
-            <DataGrid Background="#12131A"
+                <DataGrid Background="#12131A"
                       x:Name="GridItem"
                       ItemsSource="{Binding Items, Mode=TwoWay}"
                       AutoGenerateColumns="False"
@@ -503,7 +509,7 @@
                         <DataGridTextColumn Header="К" Width="auto" Binding="{Binding Count}"/>
                         <DataGridTextColumn Header="Ц" Width="auto" Binding="{Binding Price}"/>
                     </DataGrid.Columns>
-            </DataGrid>
+                </DataGrid>
                 <StackPanel Grid.Row="1"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
@@ -519,6 +525,26 @@
                             Foreground="#2A72E9"
                             Margin="0 10 0 10"
                             Command="{Binding Garbage}"/>
+                    <Button Content="-" 
+                            Height="35"
+                            Width="35"
+                            FontSize="13"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="5 10 0 10"
+                            Command="{Binding MinusBtn}"/>
+                    <Button Content="+" 
+                            Height="35"
+                            Width="35"
+                            FontSize="13"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="5 10 0 10"
+                            Command="{Binding PlusBtn}"/>
                     <Button Content="Передать" 
                             Height="35"
                             Width="65"
@@ -1009,12 +1035,13 @@
                     <DataGridTextColumn Header="Имя" Width="*" Binding="{Binding Name}"/>
                     <DataGridTextColumn Header="DF" Width="35" Binding="{Binding Defence}" CellStyle="{StaticResource NameCellStyle}"/>
                     <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
-                    <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Power}" CellStyle="{StaticResource NameCellStyle}"/>
-                    <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding Dexterity}" CellStyle="{StaticResource NameCellStyle}"/>
-                    <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding Endurance}" CellStyle="{StaticResource NameCellStyle}"/>
-                    <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wisdom}" CellStyle="{StaticResource NameCellStyle}"/>
-                    <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding Intelligence}" CellStyle="{StaticResource NameCellStyle}"/>
-                    <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Charisma}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Po}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding De}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding En}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wi}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding In}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Ch}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ОП" Width="50" Binding="{Binding Ervaring}" CellStyle="{StaticResource NameCellStyle}"/>
                     <DataGridTextColumn Header="AT" Width="35" Binding="{Binding Atac}" CellStyle="{StaticResource NameCellStyle}"/>
                 </DataGrid.Columns>
             </DataGrid>
@@ -1318,8 +1345,8 @@
               Grid.RowSpan="4"
               Grid.Column="0"
               Grid.ColumnSpan="7"
-              Visibility="{Binding VisibilityVersus, FallbackValue=Hidden}">
-                <Grid.ColumnDefinitions>
+              Visibility="{Binding VisibilityVersus, FallbackValue=idden}">
+            <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="100"/>
@@ -1403,12 +1430,12 @@
                         <DataGridTextColumn Header="Имя" Width="*" Binding="{Binding Name}"/>
                         <DataGridTextColumn Header="DF" Width="35" Binding="{Binding Defence}" CellStyle="{StaticResource NameCellStyle}"/>
                         <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
-                        <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Power}" CellStyle="{StaticResource NameCellStyle}"/>
-                        <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding Dexterity}" CellStyle="{StaticResource NameCellStyle}"/>
-                        <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding Endurance}" CellStyle="{StaticResource NameCellStyle}"/>
-                        <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wisdom}" CellStyle="{StaticResource NameCellStyle}"/>
-                        <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding Intelligence}" CellStyle="{StaticResource NameCellStyle}"/>
-                        <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Charisma}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Po}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding De}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding En}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wi}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding In}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Ch}" CellStyle="{StaticResource NameCellStyle}"/>
                         <DataGridTextColumn Header="AT" Width="35" Binding="{Binding Order}" CellStyle="{StaticResource NameCellStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
@@ -1441,11 +1468,11 @@
                 </Grid>
                 <StackPanel Grid.Row="4"
                             Grid.Column="1">
-                <StackPanel Orientation="Horizontal"
+                    <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center"
                             Margin="0 10 0 0">
-                    <StackPanel>
-                        <Button Content="Л" 
+                        <StackPanel>
+                            <Button Content="Л" 
                                 Grid.Column="1"
                                 Grid.Row="3"
                                 Width="200"
@@ -1458,9 +1485,9 @@
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"
                                 Command="{Binding BtnL}"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <Button Content="П" 
+                        </StackPanel>
+                        <StackPanel>
+                            <Button Content="П" 
                                 Grid.Column="1"
                                 Grid.Row="3"
                                 Width="200"
@@ -1473,7 +1500,7 @@
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"
                                 Command="{Binding BtnR}"/>
-                    </StackPanel>
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="4"
                                 Grid.Column="1"
@@ -1739,6 +1766,8 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -1747,12 +1776,13 @@
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="1" 
-                  Grid.Column="2">
+                  Grid.Column="2"
+                  Grid.ColumnSpan="3">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="10"/>
-                    <RowDefinition Height="70"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
                     <RowDefinition Height="70"/>
                     <RowDefinition Height="10"/>
                 </Grid.RowDefinitions>
@@ -1762,7 +1792,9 @@
                            FontSize="30"
                            HorizontalAlignment="Center"
                            Foreground="#ffebbb"/>
-                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Grid.Row="2" 
+                            Orientation="Horizontal" 
+                            HorizontalAlignment="Center">
                     <Button Content="Оружие"
                             Grid.Row="2"
                             FontSize="20"
@@ -1823,8 +1855,18 @@
                             Margin="10 10 0 10"
                             Width="130"
                             Command="{Binding BladItemBtn}"/>
+                    <Button Content="Жидкости"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding WaterItemBtn}"/>
                 </StackPanel>
-                
+
                 <DataGrid Grid.Row="3"
                           Margin="10 0 10 0"
                           Background="#12131A"
@@ -1858,7 +1900,7 @@
                             <Setter Property="Foreground" Value="#999999"/>
                             <Setter Property="BorderBrush" Value="#32323d"/>
                             <Setter Property="BorderThickness" Value="1"/>
-                            
+
                         </Style>
                         <Style x:Key="NameCellStyle" TargetType="{x:Type DataGridCell}">
                             <Style.Setters>
@@ -1880,7 +1922,7 @@
                         <DataGridTextColumn Header="Название" Width="auto" Binding="{Binding Name}"/>
                         <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Notee}" ElementStyle="{StaticResource DataGridCellTextWrap}"/>
                         <DataGridTextColumn Header="Кол" Width="auto" Binding="{Binding Count}" CellStyle="{StaticResource NameCellStyle}"/>
-                            <DataGridTextColumn Header="Цена" Width="auto" Binding="{Binding Price}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="Цена" Width="auto" Binding="{Binding Price}" CellStyle="{StaticResource NameCellStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
@@ -1961,12 +2003,12 @@
                          TextWrapping="Wrap"
                          Margin="20 20 5 20"/>
             </ScrollViewer>
-                <StackPanel Grid.Row="1"
+            <StackPanel Grid.Row="1"
                             Orientation="Horizontal"
                         Margin="0 10 0 10"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Center">
-                    <Button Content="Записать" 
+                <Button Content="Записать" 
                         Height="50" 
                         Width="100" 
                         FontSize="20"
@@ -1976,7 +2018,7 @@
                         Foreground="#2A72E9"
                         Command="{Binding WriteNodeText}"
                         Margin=" 0 0 10 0"/>
-                    <Button Content="Отмена" 
+                <Button Content="Отмена" 
                         Height="50" 
                         Width="100"
                         FontSize="20"
@@ -1985,7 +2027,7 @@
                         Background="#12131A" 
                         Foreground="#2A72E9"
                         Command="{Binding CanсelNode}"/>
-                </StackPanel>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
