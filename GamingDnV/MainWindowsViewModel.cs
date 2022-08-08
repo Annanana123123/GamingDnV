@@ -77,6 +77,7 @@ namespace GamingDnV
             CanсelNode = new RelayCommand(() => EditNote());
             DbConnectBtn = new RelayCommand(() => ConnectDB());
             SaveBtn = new RelayCommand(() => SaveDb());
+            EditBtn = new RelayCommand(() => EditUser());
             ArmorItemBtn = new RelayCommand(() => FilterShop(TypeItem.Armor));
             EqipItemBtn = new RelayCommand(() => FilterShop(TypeItem.Eqip));
             MuniItemBtn = new RelayCommand(() => FilterShop(TypeItem.Muni));
@@ -1027,6 +1028,10 @@ namespace GamingDnV
 
         #region Методы
 
+        public void EditUser()
+        {
+
+        }
         public void ConnectBD()
         {
             if (SelectBD is null)
@@ -2034,6 +2039,12 @@ namespace GamingDnV
                     HColorR = "#2b4c00";
                 }
                 VisibilityVersus = Visibility.Visible;
+                IL = null;
+                DL = "";
+                HL = "";
+                IR = null;
+                DR = "";
+                HR = "";
             }
             else
             {
@@ -2665,6 +2676,7 @@ namespace GamingDnV
         public ICommand WriteNodeText { get; set; }
         public ICommand CanсelNode { get; set; }
         public ICommand SaveBtn { get; set; }
+        public ICommand EditBtn { get; set; }
         public ICommand ArmorItemBtn { get; set; }
         public ICommand EqipItemBtn { get; set; }
         public ICommand MuniItemBtn { get; set; }

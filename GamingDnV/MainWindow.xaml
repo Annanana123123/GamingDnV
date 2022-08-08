@@ -63,6 +63,37 @@
             <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
         </ControlTemplate>
 
+        <Style TargetType="TextBox" x:Key="TextBoxStyle" >
+            <Setter Property="Background" Value="#12131A"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#2A72E9"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="Foreground" Value="#2A72E9"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+        <Style TargetType="TextBox" x:Key="TextBoxStyleRec" >
+            <Setter Property="Background" Value="#12131A"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#2A72E9"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="Foreground" Value="#2A72E9"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+        <Style TargetType="Label" x:Key="LabelStyle">
+            <Setter Property="Foreground" Value="#2A72E9"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            
+        </Style>
+
         <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
             <Setter Property="SnapsToDevicePixels" Value="true"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -313,10 +344,17 @@
                         Margin="5 5 5 0"
                         ToolTip="Сохранить данные о всех героях в БД и Инет"
                         Command="{Binding SaveBtn}"/>
-                <Label Content="На печать"
-                       Margin="0 20 0 0"
-                       HorizontalAlignment="Center"
-                       Foreground="#999999"/>
+                <Button Content="Изменить"
+                        FontSize="20"
+                        VerticalAlignment="Top"
+                        Background="#1C1C25"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="2"
+                        HorizontalContentAlignment="Center"
+                        Foreground="#2A72E9"
+                        Margin="5 5 5 0"
+                        ToolTip="Сохранить данные о всех героях в БД и Инет"
+                        Command="{Binding EditBtn}"/>
                 <Button Content="Экспорт"
                         FontSize="15"
                         Grid.Row="1"
@@ -843,15 +881,15 @@
                                 Command="{Binding D100}"
                                 Margin=" 0 0 5 0"/>
                     <TextBox Text="{Binding Rnd}"
-                                 Width="191"
-                                 IsReadOnly="True"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 BorderBrush="#2A72E9" 
-                                 BorderThickness="3" 
-                                 Background="#12131A" 
-                                 Foreground="#2A72E9"
-                                 FontSize="50"/>
+                             Width="191"
+                             IsReadOnly="True"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             BorderBrush="#2A72E9" 
+                             BorderThickness="3" 
+                             Background="#12131A" 
+                             Foreground="#2A72E9"
+                             FontSize="50"/>
                 </StackPanel>
             </StackPanel>
             <Grid Grid.Row="4"
@@ -1073,7 +1111,7 @@
               Grid.RowSpan="5"
               Grid.Column="0"
               Grid.ColumnSpan="7"
-              Visibility="{Binding VisibilityLoad, FallbackValue=Hidden}">
+              Visibility="{Binding VisibilityLoad, FallbackValue=hidden}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="600"/>
                 <ColumnDefinition Width="*"/>
@@ -1134,6 +1172,168 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
+
+        <Grid Grid.Row="0"
+              Grid.RowSpan="5"
+              Grid.Column="0"
+              Grid.ColumnSpan="7"
+              ShowGridLines="True"
+              Visibility="{Binding VisibilityEditUser, FallbackValue=idden}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Border Background="#12131A"
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="5"
+                    Grid.Column="0"/>
+            <Border Background="#1C1C25"
+                    Grid.Row="1"
+                    CornerRadius="10"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="3"
+                    BorderBrush="#2A72E9"
+                    BorderThickness="2"/>
+            <StackPanel
+                Grid.Column="1"
+                Grid.Row="1"
+                Margin="10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Label Content="Имя пользователя" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditUserName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Имя героя" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Расса" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Класс" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="ID Истории" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Примечание" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Золото" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Column="2"
+                Grid.Row="1"
+                Margin="10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Label Content="Класс брони" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditUserName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Здоровье" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Сила" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Ловкость" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Телосложение" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Мудрость" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Интелект" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Харизма" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
 
         <Grid Grid.Row="1"
               Grid.RowSpan="3"
@@ -1345,7 +1545,7 @@
               Grid.RowSpan="4"
               Grid.Column="0"
               Grid.ColumnSpan="7"
-              Visibility="{Binding VisibilityVersus, FallbackValue=idden}">
+              Visibility="{Binding VisibilityVersus, FallbackValue=hidden}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
@@ -1558,10 +1758,10 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBox Background="#1C1C25"
                                  BorderBrush="#00000000"
+                                 Foreground="#2A72E9"
                                  IsReadOnly="True"
                                  VerticalContentAlignment="Center"
                                  HorizontalContentAlignment="Center"
-                                 Foreground="#2A72E9"
                                  Width="205"
                                  Margin="0 0 20 0"
                                  FontSize="30"
