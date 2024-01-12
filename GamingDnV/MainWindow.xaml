@@ -1,0 +1,2233 @@
+﻿<Window x:Class="GamingDnV.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:c="clr-namespace:GamingDnV.Views"
+        xmlns:local="clr-namespace:GamingDnV"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        WindowState="Maximized"
+        Width="1920" Height="1080"
+        WindowStyle="None">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding Push1Btn}" Key="NumPad1"/>
+        <KeyBinding Command="{Binding Push2Btn}" Key="NumPad2"/>
+        <KeyBinding Command="{Binding Push3Btn}" Key="NumPad3"/>
+        <KeyBinding Command="{Binding Push4Btn}" Key="NumPad4"/>
+        <KeyBinding Command="{Binding Push5Btn}" Key="NumPad5"/>
+        <KeyBinding Command="{Binding Push6Btn}" Key="NumPad6"/>
+        <KeyBinding Command="{Binding Push7Btn}" Key="NumPad7"/>
+        <KeyBinding Command="{Binding Push8Btn}" Key="NumPad8"/>
+        <KeyBinding Command="{Binding Push9Btn}" Key="NumPad9"/>
+        <KeyBinding Command="{Binding Push0Btn}" Key="NumPad0"/>
+        <KeyBinding Command="{Binding PushDivideBtn}" Key="Divide"/>
+        <KeyBinding Command="{Binding PushMultiplyBtn}" Key="Multiply"/>
+        <KeyBinding Command="{Binding PushSubtractBtn}" Key="Subtract"/>
+        <KeyBinding Command="{Binding PushAddBtn}" Key="Add"/>
+        <KeyBinding Command="{Binding PushDeleteBtn}" Key="Delete"/>
+    </Window.InputBindings>
+    <Window.Resources>
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Border
+                  x:Name="Border" 
+                  Grid.ColumnSpan="2"
+                  CornerRadius="0"
+                  Background="#2A72E9"
+                  BorderBrush="#2A72E9"
+                  BorderThickness="1" />
+                <Border 
+                  Grid.Column="0"
+                  CornerRadius="0" 
+                  Margin="1" 
+                  Background="#1C1C25" 
+                  BorderBrush="#1C1C25"
+                  BorderThickness="0,0,0,0" />
+                <Path 
+                  x:Name="Arrow"
+                  Grid.Column="1"     
+                  Fill="White"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
+                />
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+            <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
+        </ControlTemplate>
+
+        <Style TargetType="TextBox" x:Key="TextBoxStyle" >
+            <Setter Property="Background" Value="#12131A"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#2A72E9"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="Foreground" Value="#2A72E9"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+        <Style TargetType="TextBox" x:Key="TextBoxStyleRec" >
+            <Setter Property="Background" Value="#12131A"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#2A72E9"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="Foreground" Value="#2A72E9"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+        <Style TargetType="Label" x:Key="LabelStyle">
+            <Setter Property="Foreground" Value="#2A72E9"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            
+        </Style>
+
+        <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid>
+                            <ToggleButton 
+                            Name="ToggleButton" 
+                            Template="{StaticResource ComboBoxToggleButton}" 
+                            Grid.Column="2" 
+                            Focusable="false"
+                            IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                            ClickMode="Press">
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False"  Content="{TemplateBinding SelectionBoxItem}"
+                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                            Margin="3,3,23,3"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left" />
+                            <TextBox x:Name="PART_EditableTextBox"
+                            Style="{x:Null}" 
+                            Template="{StaticResource ComboBoxTextBox}" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Center" 
+                            Margin="3,3,23,3"
+                            Focusable="True" 
+                            Background="#1C1C25"
+                            Foreground="Green"
+                            Visibility="Hidden"
+                            IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                            <Popup 
+                            Name="Popup"
+                            Placement="Bottom"
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            AllowsTransparency="True" 
+                            Focusable="False"
+                            PopupAnimation="Slide">
+
+                                <Grid Name="DropDown"
+                              SnapsToDevicePixels="True"                
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border 
+                                x:Name="DropDownBorder"
+                                Background="#1C1C25"
+
+                                BorderThickness="1"
+                                BorderBrush="#2A72E9"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                                <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0"/>
+                                <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable"  Value="true">
+                                <Setter Property="IsTabStop" Value="false"/>
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                        <Border Name="Border"
+                              Padding="2"
+                              SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="#FF4F4F4F"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#12131A">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="2.2*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+        <Border Background="#1C1C25"
+                Grid.Column="3"
+                Grid.Row="1"/>
+        <DataGrid Grid.Row="1"
+                  Grid.Column="1"
+                  Background="#12131A"
+                  x:Name="GridUser"
+                  ItemsSource="{Binding HerosTable}"
+                  AutoGenerateColumns="False"
+                  ScrollViewer.CanContentScroll="True"
+                  SelectionMode="Single"
+                  CanUserAddRows="False"
+                  IsReadOnly="false"
+                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                  GridLinesVisibility="all"
+                  VerticalGridLinesBrush="#32323d"
+                  SelectedItem="{Binding CurrentUser}"
+                  RowEditEnding="GridUser_RowEditEnding"
+                  FontSize="20">
+            <DataGrid.Resources>
+                <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type DataGrid}">
+                    <Setter Property="HeadersVisibility" Value="Column" />
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="#1C1C25" />
+                    <Setter Property="Foreground" Value="#888888"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="BorderBrush" Value="#32323d"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="#12131A"/>
+                    <Setter Property="Foreground" Value="#999999"/>
+                    <Setter Property="BorderBrush" Value="#32323d"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                </Style>
+                <Style x:Key="NameCellStyle" TargetType="{x:Type DataGridCell}">
+                    <Style.Setters>
+                        <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                    </Style.Setters>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Имя" Width="auto" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="УР" Width="35" Binding="{Binding LevelUp}"/>
+                <DataGridTextColumn Header="Опыт" Width="*" Binding="{Binding Ervaring}"/>
+                <DataGridTextColumn Header="+Опыт" Width="*" Binding="{Binding PlusErvaring}"/>
+                <DataGridTextColumn Header="DF" Width="35" Binding="{Binding Defence}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Po}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding De}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding En}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wi}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding In}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Ch}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ПА" Width="35" Binding="{Binding Passiv}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="ЗМ" Width="40" Binding="{Binding Gold}" CellStyle="{StaticResource NameCellStyle}"/>
+                <DataGridTextColumn Header="AT" Width="35" Binding="{Binding Atac, Mode=TwoWay}" CellStyle="{StaticResource NameCellStyle}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Grid.Column="3"
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Image Margin="10" Source="{Binding UserIcon}" ToolTip="{Binding ToolTipU}"/>
+            <ScrollViewer Grid.Column="1"
+                          Grid.RowSpan="2">
+                <ScrollViewer.Resources>
+                    <Style BasedOn="{StaticResource {x:Type ScrollBar}}" TargetType="{x:Type ScrollBar}">
+                        <Setter Property="Opacity" Value="0"/>
+                    </Style>
+                </ScrollViewer.Resources>
+                <TextBlock Text="{Binding UserInfo}"
+                           Foreground="#999999"
+                           FontSize="20"
+                           TextWrapping="Wrap"
+                           Margin="10"
+                           ScrollViewer.CanContentScroll="True"/>
+
+            </ScrollViewer>
+            <Image  Margin="10"
+                    Grid.Column="1"
+                    Grid.RowSpan="2"
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Bottom" 
+                    Width="200"
+                    Height="200"
+                    Source="{Binding ImageItem}"/>
+            <StackPanel Grid.Row="1"
+                        Grid.Column="0">
+                <Button Content="Бой"
+                        FontSize="20"
+                        Height="70"
+                        VerticalAlignment="Top"
+                        Background="#1C1C25"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="2"
+                        HorizontalContentAlignment="Center"
+                        Foreground="#2A72E9"
+                        Margin="5 0 5 0"
+                        Command="{Binding IntoBattleL}"/>
+                <Button Content="Сохранить"
+                        FontSize="20"
+                        VerticalAlignment="Top"
+                        Background="#1C1C25"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="2"
+                        HorizontalContentAlignment="Center"
+                        Foreground="#2A72E9"
+                        Margin="5 5 5 0"
+                        ToolTip="Сохранить данные о всех героях в БД и Инет"
+                        Command="{Binding SaveBtn}"/>
+                <Button Content="Изменить"
+                        FontSize="20"
+                        VerticalAlignment="Top"
+                        Background="#1C1C25"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="2"
+                        HorizontalContentAlignment="Center"
+                        Foreground="#2A72E9"
+                        Margin="5 5 5 0"
+                        ToolTip="Сохранить данные о всех героях в БД и Инет"
+                        Command="{Binding EditBtn}"/>
+                <Button Content="Экспорт"
+                        FontSize="15"
+                        Grid.Row="1"
+                        Height="30"
+                        Grid.Column="0"
+                        Background="#1C1C25"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="2"
+                        VerticalAlignment="Bottom"
+                        HorizontalContentAlignment="Center"
+                        Foreground="#2A72E9"
+                        Margin="5 5 5 0"
+                        ToolTip="Перенести данные по герою и вещам из БД в Инет"
+                        Command="{Binding ExportBtn}"/>
+                <Button Content="ЭксМагазин"
+                        FontSize="15"
+                        Grid.Row="1"
+                        Height="30"
+                        Grid.Column="0"
+                        Background="#1C1C25"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="2"
+                        VerticalAlignment="Bottom"
+                        HorizontalContentAlignment="Center"
+                        Foreground="#2A72E9"
+                        Margin="5 5 5 0"
+                        ToolTip="Перенести данные нулевым вещам и магазину из БД в Инет"
+                        Command="{Binding ExportShopBtn}"/>
+                <ComboBox Height="30"
+                          FontSize="15"
+                          Margin="5 5 5 0"
+                          ItemsSource="{Binding ComboBoxBDItem}"
+                          SelectedItem="{Binding SelectBD, Mode=TwoWay}">
+                </ComboBox>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="5"
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0">
+                <StackPanel>
+                    <TextBox Text="{Binding Damag}"
+                             Margin="0 0 3 3"
+                             Width="187"
+                             Height="73"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             BorderBrush="#2A72E9" 
+                             BorderThickness="3" 
+                             Background="#12131A" 
+                             Foreground="#2A72E9"
+                             FontSize="50"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Защита" FontSize="15" Margin="0 0 3 3" Width="88" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding ResultDefence}"/>
+                    <Button Content="|" FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding ResultHealth1}"/>
+                    <Button Content="|||" FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding ResultHealth2}"/>
+                    <Button Content="( )" FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding ResultHealth3}"/>
+                </StackPanel>
+                <StackPanel>
+
+                    <Button Content="Очистить" 
+                            Width="187"
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 3 3"
+                            Command="{Binding ClianTextBox}"/>
+                    <Button Content="{Binding TextButton, FallbackValue=Ход героя}" 
+                            Margin="0 0 3 3" 
+                            Height="35" 
+                            BorderBrush="#2A72E9" 
+                            BorderThickness="3" 
+                            Background="#12131A" 
+                            Foreground="#2A72E9"
+                            Command="{Binding NPCStep}"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <Button Content="Подскаски" 
+                        Height="35"
+                        FontSize="15"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="3"
+                        Background="#12131A"
+                        Foreground="#2A72E9"
+                        Margin="0 0 0 3"
+                        Command="{Binding ShowNote}"/>
+                <Button Content="Заметки" 
+                        Height="35"
+                        FontSize="15"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="3"
+                        Background="#12131A"
+                        Foreground="#2A72E9"
+                        Margin="0 0 0 3"
+                        Command="{Binding EditNoteBtn}"/>
+                <Button Content="Логотип" 
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 0 3"
+                            Command="{Binding Logo}"/>
+                <Button Content="{Binding ViewBattle, FallbackValue=Показать}" 
+                        Height="35"
+                        FontSize="15"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="3"
+                        Background="#12131A"
+                        Foreground="#2A72E9"
+                        Margin="0 0 0 3"
+                        Command="{Binding ShowWindow}"/>
+                <Button Content="{Binding DbConnect, FallbackValue=Подключиться}" 
+                        Height="35"
+                        FontSize="15"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="3"
+                        Background="#12131A"
+                        Foreground="#2A72E9"
+                        Margin="0 0 0 3"
+                        Command="{Binding DbConnectBtn}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2">
+                <DataGrid Background="#12131A"
+                      x:Name="GridItem"
+                      ItemsSource="{Binding Items, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      ScrollViewer.CanContentScroll="True"
+                      SelectionMode="Single"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      GridLinesVisibility="all"
+                      VerticalGridLinesBrush="#32323d"
+                      RowEditEnding="GridNPC_RowEditEnding"
+                      Height="178"
+                      SelectedItem="{Binding CurrentItems, Mode=TwoWay}"
+                      FontSize="20">
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type DataGrid}">
+                            <Setter Property="HeadersVisibility" Value="Column" />
+                        </Style>
+                        <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="#1C1C25" />
+                            <Setter Property="Foreground" Value="#888888"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderBrush" Value="#32323d"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Style>
+                        <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                            <Setter Property="Background" Value="#12131A"/>
+                            <Setter Property="Foreground" Value="#999999"/>
+                            <Setter Property="BorderBrush" Value="#32323d"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Style>
+                        <Style x:Key="NameCellStyle" TargetType="{x:Type DataGridCell}">
+                            <Style.Setters>
+                                <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                            </Style.Setters>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Предмет" Width="*" Binding="{Binding Name}">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="ToolTip" Value="{Binding Name}"/>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="К" Width="auto" Binding="{Binding Count}"/>
+                        <DataGridTextColumn Header="Ц" Width="auto" Binding="{Binding Price}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <Button Content="Корзина" 
+                            Height="35"
+                            Width="60"
+                            FontSize="13"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 10 0 10"
+                            Command="{Binding Garbage}"/>
+                    <Button Content="-" 
+                            Height="35"
+                            Width="35"
+                            FontSize="13"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="5 10 0 10"
+                            Command="{Binding MinusBtn}"/>
+                    <Button Content="+" 
+                            Height="35"
+                            Width="35"
+                            FontSize="13"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="5 10 0 10"
+                            Command="{Binding PlusBtn}"/>
+                    <Button Content="Передать" 
+                            Height="35"
+                            Width="65"
+                            FontSize="13"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="5 10 0 10"
+                            Command="{Binding Transfer}"/>
+                    <Button Content="Удалить" 
+                            Height="35"
+                            Width="60"
+                            FontSize="13"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="5 10 0 10"
+                            Command="{Binding Delete}"/>
+                    <Button Content="Магазин" 
+                            Height="35"
+                            Width="60"
+                            FontSize="13"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="5 10 0 10"
+                            Command="{Binding Shop}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="3"
+                  Grid.Column="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Background="#1C1C25"
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="2">
+            </Border>
+            <Grid Grid.Column="0"
+                      Grid.Row="0" ShowGridLines="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Image Margin="10" 
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           Grid.Row="0"
+                           Grid.RowSpan="2"
+                           HorizontalAlignment="Right" 
+                           VerticalAlignment="Top" 
+                           Width="200"
+                           ToolTip="{Binding TollTipNPS}"
+                           Source="{Binding ImageInfo}"/>
+                <TextBox Margin="10"
+                         Grid.Row="0"
+                         IsReadOnly="True"
+                         Width="50"
+                         Height="50"
+                         ToolTip="{Binding ToolTipN}"
+                         Background="#1C1C25"
+                         Text="{Binding HP}"
+                         Foreground="#ffffff"
+                         FontSize="20"
+                         VerticalContentAlignment="Center"
+                         HorizontalContentAlignment="Center"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Top"/>
+            </Grid>
+            <ScrollViewer Grid.Column="0" 
+                              Grid.Row="1"
+                              Grid.ColumnSpan="2">
+                <ScrollViewer.Resources>
+                    <Style BasedOn="{StaticResource {x:Type ScrollBar}}" TargetType="{x:Type ScrollBar}">
+                        <Setter Property="Opacity" Value="0"/>
+                    </Style>
+                </ScrollViewer.Resources>
+                <TextBlock Text="{Binding TextNPC}"
+                               FontSize="15"
+                               Margin="10"
+                               TextWrapping="Wrap"
+                               Background="#1C1C25"
+                               Foreground="#2A72E9"
+                               ScrollViewer.CanContentScroll="True"/>
+            </ScrollViewer>
+            <Grid Grid.Row="0"
+                      Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0"
+                                Grid.Column="1">
+
+
+                    <Button Content="{Binding ViewImagText}"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            HorizontalContentAlignment="Center"
+                            Foreground="#2A72E9"
+                            Margin="0 10 10 5"
+                            Command="{Binding ViewImag}"/>
+                    <Button Content="Информация"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Margin="0 0 10 0"
+                            HorizontalContentAlignment="Center"
+                            Foreground="#2A72E9"
+                            Command="{Binding ViewInfo}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="0"
+                            Grid.Column="0">
+                    <Button Content="Бой"
+                            FontSize="20"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            HorizontalContentAlignment="Center"
+                            Foreground="#2A72E9"
+                            Margin="0 10 5 5"
+                            Command="{Binding IntoBattleR}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Фон"
+                                    FontSize="20"
+                                    Width="50"
+                                    Background="#1C1C25"
+                                    BorderBrush="#2A72E9"
+                                    BorderThickness="2"
+                                    HorizontalContentAlignment="Center"
+                                    Foreground="#2A72E9"
+                                    Margin="0 0 5 0"
+                                    IsEnabled="{Binding BackSEn}"
+                                    Command="{Binding BackSound}"/>
+                        <Button Content="Рекрут"
+                                    FontSize="20"
+                                    Width="70"
+                                    Background="#1C1C25"
+                                    BorderBrush="#2A72E9"
+                                    BorderThickness="2"
+                                    HorizontalContentAlignment="Center"
+                                    Foreground="#2A72E9"
+                                    Margin="0 0 5 0"
+                                    Command="{Binding RecrutBtn}"/>
+                    </StackPanel>
+                </StackPanel>
+
+
+                <ScrollViewer Grid.Column="0"
+                                  Grid.Row="1"
+                                  Grid.ColumnSpan="2">
+                    <ScrollViewer.Resources>
+                        <Style BasedOn="{StaticResource {x:Type ScrollBar}}" TargetType="{x:Type ScrollBar}">
+                            <Setter Property="Opacity" Value="0"/>
+                        </Style>
+                    </ScrollViewer.Resources>
+                    <TextBlock Grid.Column="0"
+                               Grid.Row="1"
+                               Text="{Binding ItemText}"
+                               TextWrapping="Wrap"
+                               Background="#1C1C25"
+                               Foreground="#2A72E9"
+                               FontSize="15"/>
+                </ScrollViewer>
+            </Grid>
+
+        </Grid>
+        <Grid Grid.Column="5"
+                  Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0">
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Width="auto">
+                    <Button Content="Инициатива" 
+                                Height="40" 
+                                Width="167"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                FontSize="20"
+                                Margin="0 0 5 0"
+                                Command="{Binding ActionBtn}"/>
+                    <Button Content="Очистить" 
+                                Height="40" 
+                                Width="118"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                FontSize="20"
+                                Command="{Binding CleanActionBtn}"/>
+                </StackPanel>
+            </Grid>
+            <StackPanel Grid.Row="2" Width="auto">
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                    <Button Content="1D20" 
+                                Height="80" 
+                                Width="94" 
+                                FontSize="25"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D20}"
+                                Margin=" 0 0 5 0"/>
+                    <Button Content="1D6" 
+                                Height="80" 
+                                Width="93" 
+                                FontSize="30"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D6}"
+                                Margin=" 0 0 5 0"/>
+                    <Button Content="1D4" 
+                                Height="80" 
+                                Width="93" 
+                                FontSize="30"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D4}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                    <Button Content="1D8" 
+                                Height="80" 
+                                Width="94" 
+                                FontSize="30"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D8}"
+                                Margin=" 0 0 5 0"/>
+                    <Button Content="1D10" 
+                                Height="80" 
+                                Width="93" 
+                                FontSize="25"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D10}"
+                                Margin=" 0 0 5 0"/>
+                    <Button Content="1D12" 
+                                Height="80" 
+                                Width="93" 
+                                FontSize="25"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D12}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="1D100" 
+                                Height="80" 
+                                Width="94" 
+                                FontSize="20"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D100}"
+                                Margin=" 0 0 5 0"/>
+                    <TextBox Text="{Binding Rnd}"
+                             Width="191"
+                             IsReadOnly="True"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             BorderBrush="#2A72E9" 
+                             BorderThickness="3" 
+                             Background="#12131A" 
+                             Foreground="#2A72E9"
+                             FontSize="50"/>
+                </StackPanel>
+            </StackPanel>
+            <Grid Grid.Row="4"
+                      Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding SqlText}"
+                             Background="#12131A"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             FontSize="20"
+                             Foreground="White"
+                             HorizontalScrollBarVisibility="Disabled"
+                             VerticalScrollBarVisibility="Auto"
+                             Grid.Column="0"/>
+                <Button Content="OK"
+                            FontSize="25"
+                            Foreground="White"
+                            Background="#12131A"
+                            Grid.Column="1"
+                            Command="{Binding StartSql}"/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="3"
+              Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <DataGrid Grid.Row="0"
+                      Grid.Column="0"
+                      Background="#12131A"
+                      x:Name="GridRoom"
+                      ItemsSource="{Binding Rooms, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      ScrollViewer.CanContentScroll="True"
+                      SelectionMode="Single"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      GridLinesVisibility="all"
+                      VerticalGridLinesBrush="#32323d"
+                      RowEditEnding="GridNPC_RowEditEnding"
+                      SelectedItem="{Binding CurrentRoom, Mode=TwoWay}"
+                      FontSize="20">
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type DataGrid}">
+                        <Setter Property="HeadersVisibility" Value="Column" />
+                    </Style>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="#1C1C25" />
+                        <Setter Property="Foreground" Value="#888888"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="BorderBrush" Value="#32323d"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                    </Style>
+                    <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background" Value="#12131A"/>
+                        <Setter Property="Foreground" Value="#999999"/>
+                        <Setter Property="BorderBrush" Value="#32323d"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                    </Style>
+                    <Style x:Key="NameCellStyle" TargetType="{x:Type DataGridCell}">
+                        <Style.Setters>
+                            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                        </Style.Setters>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Название комнаты" Width="*" Binding="{Binding Name}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="ToolTip" Value="{Binding Name}"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid Grid.Row="0"
+                      Grid.Column="3"
+                      Background="#12131A"
+                      x:Name="GridEvent"
+                      ItemsSource="{Binding Events, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      ScrollViewer.CanContentScroll="True"
+                      SelectionMode="Single"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      GridLinesVisibility="all"
+                      VerticalGridLinesBrush="#32323d"
+                      RowEditEnding="GridNPC_RowEditEnding"
+                      SelectedItem="{Binding CurrentEvent}"
+                      FontSize="20">
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type DataGrid}">
+                        <Setter Property="HeadersVisibility" Value="Column" />
+                    </Style>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="#1C1C25" />
+                        <Setter Property="Foreground" Value="#888888"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="BorderBrush" Value="#32323d"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                    </Style>
+                    <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background" Value="#12131A"/>
+                        <Setter Property="Foreground" Value="#999999"/>
+                        <Setter Property="BorderBrush" Value="#32323d"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                    </Style>
+                    <Style x:Key="NameCellStyle" TargetType="{x:Type DataGridCell}">
+                        <Style.Setters>
+                            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                        </Style.Setters>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Событие" Width="*" Binding="{Binding Name}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="ToolTip" Value="{Binding Name}"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid Grid.Row="2"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="3"
+                      Background="#12131A"
+                      x:Name="GridNPC"
+                      ItemsSource="{Binding NPCTable, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      ScrollViewer.CanContentScroll="True"
+                      SelectionMode="Single"
+                      CanUserAddRows="False"
+                      IsReadOnly="False"
+                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      GridLinesVisibility="all"
+                      VerticalGridLinesBrush="#32323d"
+                      RowEditEnding="GridNPC_RowEditEnding"
+                      SelectedItem="{Binding CurrentNPC, Mode=TwoWay}"
+                      FontSize="20">
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type DataGrid}">
+                        <Setter Property="HeadersVisibility" Value="Column" />
+                    </Style>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="#1C1C25" />
+                        <Setter Property="Foreground" Value="#888888"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="BorderBrush" Value="#32323d"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                    </Style>
+                    <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background" Value="#12131A"/>
+                        <Setter Property="Foreground" Value="#999999"/>
+                        <Setter Property="BorderBrush" Value="#32323d"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                    </Style>
+                    <Style x:Key="NameCellStyle" TargetType="{x:Type DataGridCell}">
+                        <Style.Setters>
+                            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                        </Style.Setters>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Имя" Width="*" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="DF" Width="35" Binding="{Binding Defence}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Po}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding De}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding En}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wi}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding In}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Ch}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="ОП" Width="50" Binding="{Binding Ervaring}" CellStyle="{StaticResource NameCellStyle}"/>
+                    <DataGridTextColumn Header="AT" Width="35" Binding="{Binding Atac}" CellStyle="{StaticResource NameCellStyle}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+        <Grid Grid.Column="0"
+              Grid.Row="0"
+              Grid.ColumnSpan="7"
+              Grid.RowSpan="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <c:LoaderView Grid.Column="1"
+                          Grid.Row="2"
+                          Visibility="{Binding LoaderVisibility, FallbackValue=Hidden}"
+                          DataContext="{Binding Loader}"/>
+        </Grid>
+
+        <Grid Grid.Row="0"
+              Grid.RowSpan="5"
+              Grid.Column="0"
+              Grid.ColumnSpan="7"
+              Visibility="{Binding VisibilityLoad, FallbackValue=hidden}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="600"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="600"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="290"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="270"/>
+            </Grid.RowDefinitions>
+            <Border Background="#12131A"
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="3"
+                    Grid.Column="0"/>
+            <Border Background="#1C1C25"
+                    Grid.Row="1"
+                    CornerRadius="10"
+                    Grid.Column="1"
+                    BorderBrush="#2A72E9"
+                    BorderThickness="2"/>
+            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+                <StackPanel Margin="0 0 0 10">
+                    <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       Background="#1C1C25"
+                       Foreground="#2A72E9"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                       FontSize="30"
+                       Margin="0 50 0 0"
+                       Text="Истории"/>
+                </StackPanel>
+                <StackPanel Margin="0 0 0 10">
+                    <ComboBox Grid.Row="1"
+                      Grid.Column="1"
+                      Height="40"
+                      Width="300"
+                      FontSize="20"
+                      ItemsSource="{Binding ComboBoxItem}"
+                      SelectedItem="{Binding SelectItem, Mode=TwoWay}">
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Margin="0 0 0 0">
+                    <Button Grid.Row="1"
+                    Grid.Column="1"
+                    Content="ОК"
+                    Width="300"
+                    Height="40"
+                    FontSize="25"
+                    VerticalAlignment="Bottom"
+                    Margin="0 0 0 50"
+                    BorderBrush="#2A72E9"
+                    Foreground="#2A72E9"
+                    Background="#00000000"
+                    IsEnabled="{Binding EnComboOk}"
+                    Command="{Binding ComboOk}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="0"
+              Grid.RowSpan="5"
+              Grid.Column="0"
+              Grid.ColumnSpan="7"
+              ShowGridLines="True"
+              Visibility="{Binding VisibilityEditUser, FallbackValue=idden}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Border Background="#12131A"
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="5"
+                    Grid.Column="0"/>
+            <Border Background="#1C1C25"
+                    Grid.Row="1"
+                    CornerRadius="10"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="3"
+                    BorderBrush="#2A72E9"
+                    BorderThickness="2"/>
+            <StackPanel
+                Grid.Column="1"
+                Grid.Row="1"
+                Margin="10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Label Content="Имя пользователя" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditUserName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Имя героя" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Расса" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Класс" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="ID Истории" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Примечание" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Золото" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Column="2"
+                Grid.Row="1"
+                Margin="10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Label Content="Класс брони" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditUserName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Здоровье" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Сила" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Ловкость" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Телосложение" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Мудрость" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Интелект" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="0 5 0 0">
+                    <Label Content="Харизма" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"/>
+                    <TextBox Style="{StaticResource TextBoxStyleRec}"
+                             Text="{Binding EditHeroName}"
+                             Margin="5 0 0 0"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+
+        <Grid Grid.Row="1"
+              Grid.RowSpan="3"
+              Grid.Column="1"
+              Grid.ColumnSpan="5"
+              Visibility="{Binding VisibilityInfo, FallbackValue=Hidden}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+            <Border Background="#1C1C25"
+                    Grid.Row="1"
+                    Grid.RowSpan="3"
+                    CornerRadius="10"
+                    Grid.Column="1"
+                    BorderBrush="#2A72E9"
+                    BorderThickness="2"/>
+            <StackPanel Grid.Row="1"
+                            Grid.Column="1"
+                            Orientation="Horizontal">
+                <StackPanel Grid.Column="1"
+                            Grid.Row="1"
+                            Orientation="Horizontal"
+                            Margin="20 5 20 5"
+                            HorizontalAlignment="Center">
+                    <Grid Margin="0 0 10 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Width="150"
+                               Source="{Binding Imag1}"/>
+                        <Button Grid.Row="1"
+                                Content="Показать"
+                                Width="150"
+                                BorderBrush="#2A72E9"
+                                Foreground="#2A72E9"
+                                Background="#00000000"
+                                IsEnabled="{Binding EnBtn1}"
+                                Command="{Binding ImagBtn1}"/>
+                    </Grid>
+                    <Grid Margin="0 0 10 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Width="150"
+                               Source="{Binding Imag2}"/>
+                        <Button Grid.Row="1"
+                                Content="Показать"
+                                Width="150"
+                                BorderBrush="#2A72E9"
+                                Foreground="#2A72E9"
+                                Background="#00000000" 
+                                IsEnabled="{Binding EnBtn2}"
+                                Command="{Binding ImagBtn2}"/>
+                    </Grid>
+                    <Grid Margin="0 0 10 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Width="150"
+                               Source="{Binding Imag3}"/>
+                        <Button Grid.Row="1"
+                                Content="Показать"
+                                Width="150"
+                                BorderBrush="#2A72E9"
+                                Foreground="#2A72E9"
+                                Background="#00000000" 
+                                IsEnabled="{Binding EnBtn3}"
+                                Command="{Binding ImagBtn3}"/>
+                    </Grid>
+                    <Grid Margin="0 0 10 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Width="150"
+                               Source="{Binding Imag4}"/>
+                        <Button Grid.Row="1"
+                                Content="Показать"
+                                Width="150"
+                                BorderBrush="#2A72E9"
+                                Foreground="#2A72E9"
+                                Background="#00000000" 
+                                IsEnabled="{Binding EnBtn4}"
+                                Command="{Binding ImagBtn4}"/>
+                    </Grid>
+                    <Grid Margin="0 0 10 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Width="150"
+                               Source="{Binding Imag5}"/>
+                        <Button Grid.Row="1"
+                                Content="Показать"
+                                Width="150"
+                                BorderBrush="#2A72E9"
+                                Foreground="#2A72E9"
+                                Background="#00000000" 
+                                IsEnabled="{Binding EnBtn5}"
+                                Command="{Binding ImagBtn5}"/>
+                    </Grid>
+                    <Grid Margin="0 0 10 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Width="150"
+                               Source="{Binding Imag6}"/>
+                        <Button Grid.Row="1"
+                                Content="Показать"
+                                Width="150" 
+                                Background="#00000000"
+                                BorderBrush="#2A72E9"
+                                Foreground="#2A72E9"
+                                IsEnabled="{Binding EnBtn6}"
+                                Command="{Binding ImagBtn6}"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Margin="20 5 20 5">
+
+                    <Button Content="Фон"
+                                    FontSize="20"
+                                    Width="70"
+                                    Background="#1C1C25"
+                                    BorderBrush="#2A72E9"
+                                    BorderThickness="2"
+                                    HorizontalContentAlignment="Center"
+                                    Foreground="#2A72E9"
+                                    Margin="0 0 0 0"
+                                    IsEnabled="{Binding BackSEn}"
+                                    Command="{Binding BackSound}"/>
+                    <Button Content="Бой"
+                                    FontSize="20"
+                                    Width="70"
+                                    Background="#1C1C25"
+                                    BorderBrush="#2A72E9"
+                                    BorderThickness="2"
+                                    HorizontalContentAlignment="Center"
+                                    Foreground="#2A72E9"
+                                    Margin="0 5 0 0"
+                                    IsEnabled="{Binding AtacSEn}"
+                                    Command="{Binding AtacSound}"/>
+                    <Button Content="Трек1"
+                                    FontSize="20"
+                                    Width="72"
+                                    Background="#1C1C25"
+                                    BorderBrush="#2A72E9"
+                                    BorderThickness="2"
+                                    HorizontalContentAlignment="Center"
+                                    Foreground="#2A72E9"
+                                    Margin="0 5 0 0"
+                                    IsEnabled="{Binding TrackSEn}"
+                                    Command="{Binding TrackSound}"/>
+                </StackPanel>
+            </StackPanel>
+            <ScrollViewer Grid.Column="1"
+                       Grid.Row="2">
+                <ScrollViewer.Resources>
+                    <Style BasedOn="{StaticResource {x:Type ScrollBar}}" TargetType="{x:Type ScrollBar}">
+                        <Setter Property="Opacity" Value="0"/>
+                    </Style>
+                </ScrollViewer.Resources>
+                <TextBlock Background="#1C1C25"
+                           Foreground="#2A72E9"
+                           TextWrapping="Wrap"
+                           FontSize="30"
+                           Margin="20 0 20 0"
+                           Text="{Binding HistoryText}"/>
+            </ScrollViewer>
+            <Button Content="OK" 
+                    Grid.Column="1"
+                    Grid.Row="3"
+                    Width="200"
+                    FontSize="30"
+                    BorderBrush="#2A72E9" 
+                    BorderThickness="3" 
+                    Background="#12131A" 
+                    Foreground="#2A72E9"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Command="{Binding CloseInfoBtn}"/>
+        </Grid>
+        <Grid Grid.Row="0"
+              Grid.RowSpan="4"
+              Grid.Column="0"
+              Grid.ColumnSpan="7"
+              Visibility="{Binding VisibilityVersus, FallbackValue=hidden}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+            <Border Background="#12131A"
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="3"
+                    Grid.Column="0"/>
+            <Border Background="#1C1C25"
+                    Grid.Row="1"
+                    CornerRadius="10"
+                    Grid.Column="1"
+                    BorderBrush="#2A72E9"
+                    BorderThickness="2"/>
+            <Grid Grid.Row="1"
+                  Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="10"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="10"/>
+                </Grid.RowDefinitions>
+                <DataGrid Grid.Row="1"
+                          Grid.Column="1"
+                          Grid.RowSpan="2"
+                          Background="#12131A"
+                          x:Name="GridVS"
+                          ItemsSource="{Binding VersusTable, Mode=TwoWay}"
+                          AutoGenerateColumns="False"
+                          ScrollViewer.CanContentScroll="True"
+                          SelectionMode="Single"
+                          CanUserAddRows="False"
+                          IsReadOnly="False"
+                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          GridLinesVisibility="all"
+                          VerticalGridLinesBrush="#32323d"
+                          RowEditEnding="GridNPC_RowEditEnding"
+                          SelectedItem="{Binding CurrentVersus, Mode=TwoWay}"
+                          FontSize="20">
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type DataGrid}">
+                            <Setter Property="HeadersVisibility" Value="Column" />
+                        </Style>
+                        <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="#1C1C25" />
+                            <Setter Property="Foreground" Value="#888888"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderBrush" Value="#32323d"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Style>
+                        <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                            <Setter Property="Background" Value="#12131A"/>
+                            <Setter Property="Foreground" Value="#999999"/>
+                            <Setter Property="BorderBrush" Value="#32323d"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Style>
+                        <Style x:Key="NameCellStyle" TargetType="{x:Type DataGridCell}">
+                            <Style.Setters>
+                                <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                            </Style.Setters>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Имя" Width="*" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="DF" Width="35" Binding="{Binding Defence}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="HP" Width="35" Binding="{Binding Health}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="СИ" Width="35" Binding="{Binding Po}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="ЛО" Width="35" Binding="{Binding De}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="ТЕ" Width="35" Binding="{Binding En}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="МУ" Width="35" Binding="{Binding Wi}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="ИН" Width="35" Binding="{Binding In}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="ХА" Width="35" Binding="{Binding Ch}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="AT" Width="35" Binding="{Binding Order}" CellStyle="{StaticResource NameCellStyle}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Grid.Column="3"
+                      Grid.Row="1"
+                      Grid.RowSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Image Margin="10" Source="{Binding UserIcon}"/>
+                    <ScrollViewer Grid.Column="1"
+                                  Grid.RowSpan="2">
+                        <ScrollViewer.Resources>
+                            <Style BasedOn="{StaticResource {x:Type ScrollBar}}" TargetType="{x:Type ScrollBar}">
+                                <Setter Property="Opacity" Value="0"/>
+                            </Style>
+                        </ScrollViewer.Resources>
+                        <TextBlock Text="{Binding UserInfo}"
+                               Foreground="#999999"
+                               FontSize="20"
+                               TextWrapping="Wrap"
+                               Margin="10"
+                               ScrollViewer.CanContentScroll="True"/>
+                    </ScrollViewer>
+                </Grid>
+                <StackPanel Grid.Row="4"
+                            Grid.Column="1">
+                    <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0 10 0 0">
+                        <StackPanel>
+                            <Button Content="Л" 
+                                Grid.Column="1"
+                                Grid.Row="3"
+                                Width="200"
+                                Height="40"
+                                FontSize="20"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Command="{Binding BtnL}"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Button Content="П" 
+                                Grid.Column="1"
+                                Grid.Row="3"
+                                Width="200"
+                                Height="40"
+                                FontSize="20"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Command="{Binding BtnR}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="4"
+                                Grid.Column="1"
+                                Margin="0 10 0 0">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <Image Source="{Binding IL}" Height="130" Width="130"/>
+                            <StackPanel Margin="0 0 20 0">
+                                <TextBox Background="{Binding DColorL}"
+                                         BorderBrush="#2A72E9"
+                                         IsReadOnly="True"
+                                         VerticalContentAlignment="Center"
+                                         HorizontalContentAlignment="Center"
+                                         Foreground="#2A72E9"
+                                         Width="65"
+                                         Height="65"
+                                         FontSize="40"
+                                         Text="{Binding DL}"/>
+                                <TextBox Background="{Binding HColorL}"
+                                         BorderBrush="#2A72E9"
+                                         IsReadOnly="True"
+                                         VerticalContentAlignment="Center"
+                                         HorizontalContentAlignment="Center"
+                                         Foreground="#2A72E9"
+                                         Width="65"
+                                         Height="65"
+                                         FontSize="40"
+                                         Text="{Binding HL}"/>
+                            </StackPanel>
+                            <StackPanel Margin="20 0 0 0">
+                                <TextBox Background="{Binding DColorR}"
+                                         BorderBrush="#2A72E9"
+                                         IsReadOnly="True"
+                                         VerticalContentAlignment="Center"
+                                         HorizontalContentAlignment="Center"
+                                         Foreground="#2A72E9"
+                                         Width="65"
+                                         Height="65"
+                                         FontSize="40"
+                                         Text="{Binding DR}"/>
+                                <TextBox Background="{Binding HColorR}"
+                                         BorderBrush="#2A72E9"
+                                         IsReadOnly="True"
+                                         VerticalContentAlignment="Center"
+                                         HorizontalContentAlignment="Center"
+                                         Foreground="#2A72E9"
+                                         Width="65"
+                                         Height="65"
+                                         FontSize="40"
+                                         Text="{Binding HR}"/>
+                            </StackPanel>
+                            <Image Source="{Binding IR}" Height="130" Width="130"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBox Background="#1C1C25"
+                                 BorderBrush="#00000000"
+                                 Foreground="#2A72E9"
+                                 IsReadOnly="True"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 Width="205"
+                                 Margin="0 0 20 0"
+                                 FontSize="30"
+                                 Text="^"
+                                 Visibility="{Binding VL}"/>
+                        <TextBox Background="#1C1C25"
+                                 BorderBrush="#00000000"
+                                 IsReadOnly="True"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 Foreground="#2A72E9"
+                                 Width="205"
+                                 Margin="20 0 0 0"
+                                 FontSize="30"
+                                 Text="^"
+                                 Visibility="{Binding VR}"/>
+                    </StackPanel>
+                </StackPanel>
+                <Button Content="Х" 
+                        Grid.Column="4"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        Grid.RowSpan="2"
+                        FontSize="20"
+                        BorderBrush="#2A72E9" 
+                        Background="#12131A" 
+                        Foreground="#2A72E9"
+                        BorderThickness="2 0 0 2"
+                        VerticalContentAlignment="Center"
+                        Command="{Binding CloseVersus}"/>
+                <Grid Grid.Column="3"
+                      Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <StackPanel>
+                            <TextBox Text="{Binding Damag}"
+                             Margin="0 0 3 3"
+                             Width="187"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             BorderBrush="#2A72E9" 
+                             BorderThickness="3" 
+                             Background="#12131A" 
+                             Foreground="#2A72E9"
+                             FontSize="50"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Защита" FontSize="15" Margin="0 0 3 3" Width="88" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding ResultDefence}"/>
+                            <Button Content="|" FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding ResultHealth1}"/>
+                            <Button Content="|||" FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding ResultHealth2}"/>
+                            <Button Content="( )" FontSize="15" Margin="0 0 3 3" Width="30" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding ResultHealth3}"/>
+                        </StackPanel>
+                        <StackPanel>
+
+                            <Button Content="Очистить" 
+                            Width="187"
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 3 3"
+                            Command="{Binding ClianTextBox}"/>
+                            <Button Content="{Binding TextButton}" Margin="0 0 3 3" Height="35" BorderBrush="#2A72E9" BorderThickness="3" Background="#12131A" Foreground="#2A72E9"
+                                Command="{Binding NPCStep}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <Button Content="Заметки" 
+                        Height="35"
+                        FontSize="15"
+                        BorderBrush="#2A72E9"
+                        BorderThickness="3"
+                        Background="#12131A"
+                        Foreground="#2A72E9"
+                        Margin="0 0 0 3"
+                        Command="{Binding ShowNote}"/>
+                        <Button Content="Логотип" 
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 0 3"
+                            Command="{Binding Logo}"/>
+                        <Button Content="{Binding ViewBattle}" 
+                            Height="35"
+                            FontSize="15"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 0 0 3"
+                            Command="{Binding ShowWindow}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Width="auto" Margin="5 0 0 0">
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                            <Button Content="1D20" 
+                                Height="84" 
+                                Width="94" 
+                                FontSize="25"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D20}"
+                                Margin=" 0 0 5 0"/>
+                            <Button Content="1D6" 
+                                Height="84" 
+                                Width="93" 
+                                FontSize="30"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D6}"
+                                Margin=" 0 0 5 0"/>
+                            <Button Content="1D4" 
+                                Height="84" 
+                                Width="93" 
+                                FontSize="30"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D4}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                            <Button Content="1D8" 
+                                Height="84" 
+                                Width="94" 
+                                FontSize="30"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D8}"
+                                Margin=" 0 0 5 0"/>
+                            <Button Content="1D10" 
+                                Height="84" 
+                                Width="93" 
+                                FontSize="25"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D10}"
+                                Margin=" 0 0 5 0"/>
+                            <Button Content="1D12" 
+                                Height="84" 
+                                Width="93" 
+                                FontSize="25"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D12}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="1D100" 
+                                Height="85" 
+                                Width="94" 
+                                FontSize="20"
+                                BorderBrush="#2A72E9" 
+                                BorderThickness="3" 
+                                Background="#12131A" 
+                                Foreground="#2A72E9"
+                                Command="{Binding D100}"
+                                Margin=" 0 0 5 0"/>
+                            <TextBox Text="{Binding Rnd}"
+                                 Width="191"
+                                 IsReadOnly="True"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 BorderBrush="#2A72E9" 
+                                 BorderThickness="3" 
+                                 Background="#12131A" 
+                                 Foreground="#2A72E9"
+                                 FontSize="50"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="0"
+              Grid.RowSpan="4"
+              Grid.Column="0"
+              Grid.ColumnSpan="7"
+              Visibility="{Binding VisibilityShop, FallbackValue=Hidden}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="1" 
+                  Grid.Column="2"
+                  Grid.ColumnSpan="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="10"/>
+                </Grid.RowDefinitions>
+                <Border Background="#000000"
+                        Grid.RowSpan="5"/>
+                <TextBlock Text="Магазин"
+                           FontSize="30"
+                           HorizontalAlignment="Center"
+                           Foreground="#ffebbb"/>
+                <StackPanel Grid.Row="2" 
+                            Orientation="Horizontal" 
+                            HorizontalAlignment="Center">
+                    <Button Content="Оружие"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="0 10 0 10"
+                            Width="150"
+                            Command="{Binding ArmorItemBtn}"/>
+                    <Button Content="Экипировка"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding EqipItemBtn}"/>
+                    <Button Content="Боезапасы"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding MuniItemBtn}"/>
+                    <Button Content="Разное"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding VersItemBtn}"/>
+                    <Button Content="Уникальные"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding UnieItemBtn}"/>
+                    <Button Content="Свитки"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding BladItemBtn}"/>
+                    <Button Content="Жидкости"
+                            Grid.Row="2"
+                            FontSize="20"
+                            Background="#1C1C25"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="2"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Width="130"
+                            Command="{Binding WaterItemBtn}"/>
+                </StackPanel>
+
+                <DataGrid Grid.Row="3"
+                          Margin="10 0 10 0"
+                          Background="#12131A"
+                          x:Name="GridItemShop"
+                          ItemsSource="{Binding ItemShopTable}"
+                          AutoGenerateColumns="False"
+                          ScrollViewer.CanContentScroll="True"
+                          SelectionMode="Single"
+                          CanUserAddRows="False"
+                          IsReadOnly="false"
+                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          GridLinesVisibility="all"
+                          VerticalGridLinesBrush="#32323d"
+                          SelectedItem="{Binding CurrentItems, Mode=TwoWay}"
+                          RowEditEnding="GridUser_RowEditEnding"
+                          FontSize="15">
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="{x:Type DataGrid}">
+                            <Setter Property="HeadersVisibility" Value="Column" />
+                        </Style>
+                        <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="#1C1C25" />
+                            <Setter Property="Foreground" Value="#888888"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderBrush" Value="#32323d"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Style>
+                        <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                            <Setter Property="Background" Value="#12131A"/>
+                            <Setter Property="Foreground" Value="#999999"/>
+                            <Setter Property="BorderBrush" Value="#32323d"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+
+                        </Style>
+                        <Style x:Key="NameCellStyle" TargetType="{x:Type DataGridCell}">
+                            <Style.Setters>
+                                <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                            </Style.Setters>
+                        </Style>
+                        <Style TargetType="{x:Type TextBlock}" x:Key="DataGridCellTextWrap">
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Картинка" Width="100" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding ImagUrl}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Название" Width="auto" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Notee}" ElementStyle="{StaticResource DataGridCellTextWrap}"/>
+                        <DataGridTextColumn Header="Кол" Width="auto" Binding="{Binding Count}" CellStyle="{StaticResource NameCellStyle}"/>
+                        <DataGridTextColumn Header="Цена" Width="auto" Binding="{Binding Price}" CellStyle="{StaticResource NameCellStyle}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Отдать" 
+                            Width="100"
+                            FontSize="20"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="0 10 0 10"
+                            Command="{Binding Transfer}"/>
+                    <Button Content="Продать" 
+                            Width="100"
+                            FontSize="20"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Command="{Binding TransferPrice}"/>
+                    <Button Content="Закрыть" 
+                            Width="100"
+                            FontSize="20"
+                            BorderBrush="#2A72E9"
+                            BorderThickness="3"
+                            Background="#12131A"
+                            Foreground="#2A72E9"
+                            Margin="10 10 0 10"
+                            Command="{Binding CloseShopBtn}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="3"
+              Grid.Row="1"
+              Visibility="{Binding VisibilityNote, FallbackValue=Hidden}">
+            <Border Background="#1C1C25"
+                    CornerRadius="10"
+                    BorderBrush="#2A72E9"
+                    BorderThickness="2"/>
+            <ScrollViewer>
+                <ScrollViewer.Resources>
+                    <Style BasedOn="{StaticResource {x:Type ScrollBar}}" TargetType="{x:Type ScrollBar}">
+                        <Setter Property="Opacity" Value="0"/>
+                    </Style>
+                </ScrollViewer.Resources>
+                <TextBlock Text="{Binding TextNote}"
+                       Foreground="White"
+                       FontSize="20"
+                       TextWrapping="Wrap"
+                       Margin="20 20 5 20"/>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Column="3"
+              Grid.Row="1"
+              Visibility="{Binding VisibilityWriteNote, FallbackValue=Hidden}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Border Background="#1C1C25"
+                    CornerRadius="10"
+                    BorderBrush="#2A72E9"
+                    BorderThickness="2"
+                    Grid.Row="0"
+                    Grid.RowSpan="2"/>
+            <ScrollViewer Grid.Row="0">
+                <ScrollViewer.Resources>
+                    <Style BasedOn="{StaticResource {x:Type ScrollBar}}" TargetType="{x:Type ScrollBar}">
+                        <Setter Property="Opacity" Value="0"/>
+                    </Style>
+                </ScrollViewer.Resources>
+                <TextBox Text="{Binding TextWriteNode}"
+                         Background="#00000000"
+                         Foreground="White"
+                         FontSize="20"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Margin="20 20 5 20"/>
+            </ScrollViewer>
+            <StackPanel Grid.Row="1"
+                            Orientation="Horizontal"
+                        Margin="0 10 0 10"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center">
+                <Button Content="Записать" 
+                        Height="50" 
+                        Width="100" 
+                        FontSize="20"
+                        BorderBrush="#2A72E9" 
+                        BorderThickness="3" 
+                        Background="#12131A" 
+                        Foreground="#2A72E9"
+                        Command="{Binding WriteNodeText}"
+                        Margin=" 0 0 10 0"/>
+                <Button Content="Отмена" 
+                        Height="50" 
+                        Width="100"
+                        FontSize="20"
+                        BorderBrush="#2A72E9" 
+                        BorderThickness="3" 
+                        Background="#12131A" 
+                        Foreground="#2A72E9"
+                        Command="{Binding CanсelNode}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
